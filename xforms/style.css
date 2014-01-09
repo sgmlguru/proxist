@@ -1,0 +1,75 @@
+<css>
+@namespace xf url("http://www.w3.org/2002/xforms");
+			.code{
+			    font-family:monospace;
+			    white-space:pre;
+			    font-size: 8pt;
+			}
+			body {
+				margin-left: 20px;
+				margin-right: 20px;
+				font-family: Helvetica, sans-serif;
+			}
+			fieldset {
+				width: 280px;
+				height: 120px
+			}
+			fieldset.config {
+				width: 280px;
+				height: 140px;
+			}
+			.debug {
+				font-size: 8pt;
+			}
+			#item-proc, #item-proc-dummy {
+				width: 200px;
+			}
+			#item-pipe, #item-pipe-dummy {
+				width: 200px;
+			}
+			#item-cmd, #item-cmd-dummy {
+				width: 200px;
+			}
+			xf|help {
+				padding-left: 5px;
+			}
+			#help-proc {
+				margin-left: 5px;
+				font-size: 8pt;
+			}
+			#help-pipe {
+				margin-left: 5px;
+				font-size: 8pt;
+			}
+			#help-cmd {
+				margin-left: 5px;
+				font-size: 8pt;
+			}
+			xf|group:disabled {display: none}
+			xf|repeat:disabled {display: none}
+			
+			
+/* formatting rule for all XForms controls elements within a block form.  Each input control is on a separate line */
+.block-form xf|input,
+.block-form xf|item,
+.block-form xf|select,
+.block-form xf|select1,
+.block-form xf|textarea {
+     display: block;
+     margin: 4px;
+}
+
+.block-form xf|select1 {
+    height: 10px;
+}
+ 
+/* formatting rule for all labels in a block form */
+.block-form xf|label {
+    display: inline-block;
+    width: 200px; /* fix the width of all the labels in the block form */
+    float: left;
+    text-align: right;
+    margin-right: 1ex; /* margin to the right of the label */
+}
+			
+</css>

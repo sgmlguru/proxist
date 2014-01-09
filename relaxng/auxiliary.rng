@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <!-- Simple Xlink attributes -->
+  <define name="xlink.basic.att">
+    <optional>
+      <attribute name="xlink:type" a:defaultValue="simple">
+        <value>simple</value>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="xlink:href"/>
+    </optional>
+    <optional>
+      <attribute name="xlink:title"/>
+    </optional>
+  </define>
+  <define name="xlink.subdoc.att">
+    <ref name="xlink.basic.att"/>
+    <optional>
+      <attribute name="xlink:role"/>
+    </optional>
+  </define>
+  <define name="xlink.picture.att">
+    <ref name="xlink.subdoc.att"/>
+    <optional>
+      <attribute name="xlink:show" a:defaultValue="embed">
+        <value>embed</value>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="xlink:actuate" a:defaultValue="onLoad">
+        <value>onLoad</value>
+      </attribute>
+    </optional>
+  </define>
+  <define name="xlink.simple.att">
+    <ref name="xlink.subdoc.att"/>
+    <optional>
+      <attribute name="xlink:show">
+        <choice>
+          <value>new</value>
+          <value>replace</value>
+          <value>embed</value>
+          <value>other</value>
+          <value>none</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="xlink:actuate">
+        <choice>
+          <value>onLoad</value>
+          <value>onRequest</value>
+          <value>other</value>
+          <value>none</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <!-- ID Attribute -->
+  <define name="id.att">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <!-- XML Base URI -->
+  <define name="xmlbase.att">
+    <optional>
+      <attribute name="xml:base"/>
+    </optional>
+  </define>
+  <!-- XML Lang -->
+  <define name="xmllang.att">
+    <optional>
+      <attribute name="xml:lang"/>
+    </optional>
+  </define>
+</grammar>

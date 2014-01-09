@@ -1,0 +1,635 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/home/ari/mystuff/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
+<!--<!DOCTYPE processes SYSTEM "processes.dtd">-->
+<processes 
+   id="processes-2013-4-9-16-53-8-39562387-" 
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+   <!-- Print Publishing Process -->
+   <process id="id-pdf-process">
+      <metadata id="metadata-2013-4-9-16-53-8-39562387-">
+         <title id="title-2013-4-9-16-53-8-39562387-">Print Publishing</title>
+         <description id="description-2013-4-9-16-53-8-39562387-">
+            <p id="p-2013-4-9-16-53-8-39562387-">Print publishing for COSML documents</p>
+         </description>
+      </metadata>
+      <pipelines id="pipelines-2013-4-9-16-53-8-39562387-">
+         
+         <!-- PDF Pipeline -->
+         <pipeline id="id-pipeline-pdf-1">
+            <metadata id="metadata-2013-4-9-16-53-8-39562387-1">
+               <title id="title-2013-4-9-16-53-8-39562387-1">Publish PDF</title>
+               <description id="description-2013-4-9-16-53-8-39562387-1">
+                  <p id="p-2013-4-9-16-53-8-39562387-1">Normalizes, validates and converts a COSML document to PDF</p>
+               </description>
+            </metadata>
+            <script xmlns:xlink="http://www.w3.org/1999/xlink" type="pkg"
+               id="script-2013-4-9-16-53-8-39562387-"
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xproc-pdf"
+               xlink:title=" XProc Pipeline for Normalize, Validate and PDF Normalizes, validates and publishes in PDF a COSML document "/>
+            <cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-">
+               
+               <!-- COSML Internal XSL -->
+               <cmdline id="id-cmdline-cos-internal-pdf">
+                  <metadata id="metadata-2013-4-9-16-53-8-39562387-2">
+                     <title id="title-2013-4-9-16-53-8-39562387-2">COS Internal Template</title>
+                     <description id="description-2013-4-9-16-53-8-39562387-2">
+                        <p id="p-2013-4-9-16-53-8-39562387-2">Configures the pipeline for the "COS Internal" template</p>
+                     </description>
+                  </metadata>
+                  <engine-config>
+                     <config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  </engine-config>
+                  <inputs id="inputs-2013-4-9-16-53-8-39562387-">
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-">
+                        <port id="port-2013-4-9-16-53-8-39562387-">document</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-"
+                           mimetype="application/xml">DOCUMENT-PLACEHOLDER</value>
+                     </input>
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-1">
+                        <port id="port-2013-4-9-16-53-8-39562387-1">stylesheet</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xslfo-cosml"
+                           xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-1"
+                           xlink:title=" XSL-FO Package for COSML PDF Converts COSML documents to XSL-FO format for COS PDF layout "/>
+                        <params id="params-2013-4-9-16-53-8-39562387-">
+                           <!-- Index generation -->
+                           <param 
+                              choice="yes" 
+                              ctype="boolean" 
+                              id="param-2013-4-9-16-53-8-39562387-">
+                              <port id="port-2013-4-9-16-53-8-39562387-2">xslt-params</port>
+                              <name id="name-2013-4-9-16-53-8-39562387-">generate.index</name>
+                              <value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-4-9-16-53-8-39562387-2">false</value>
+                           </param>
+                           <!-- XEP Extensions -->
+                           <param 
+                              choice="no" 
+                              id="param-2013-4-9-16-53-8-39562387-1">
+                              <port id="port-2013-4-9-16-53-8-39562387-3">xslt-params</port>
+                              <name id="name-2013-4-9-16-53-8-39562387-1">xep.extensions</name>
+                              <value xmlns:xlink="http://www.w3.org/1999/xlink" type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-3"
+                                 >0</value>
+                           </param>
+                           <!-- XSL-FO Bookmark Generation -->
+                           <param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39562387-2">
+                              <port id="port-2013-4-9-16-53-8-39562387-4">xslt-params</port>
+                              <name id="name-2013-4-9-16-53-8-39562387-2">xslfo.bookmarks</name>
+                              <value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-4">true</value>
+                           </param>
+                           <!-- TOC Generation -->
+                           <param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39514778-2">
+                              <port id="port-2013-4-9-16-53-8-9653444-4">xslt-params</port>
+                              <name id="name-2013-4-9-16-53-8-1928364-2">create.toc</name>
+                              <value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-3">true</value>
+                           </param>
+                           <!-- TOC Depth -->
+                           <param 
+                              choice="yes" 
+                              ctype="list1"
+                              id="param-2013-4-9-16-53-8-2385485-2"
+                              group="value-2013-7-10-16-53-8-764625737-3">
+                              <port id="port-2013-7-10-16-34-8-9283444-4">xslt-params</port>
+                              <name id="name-2013-7-10-16-50-3-1946564-2">toc.depth</name>
+                              <value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-4">2</value>
+                              <value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-1" 
+                                 type="string">1</value>
+                              <value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-2" 
+                                 type="string">3</value>
+                           </param>
+                        </params>
+                     </input>
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-2">
+                        <port id="port-2013-4-9-16-53-8-39562387-5">stylesheet-norm</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-normalize"
+                           xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-5"
+                           xlink:title=" Normalize XSLT Stylesheet for applics filtering and module normalization for COSML documents "/>
+                     </input>
+                  </inputs>
+                  <options id="options-2013-4-9-16-53-8-39562387-">
+                     <option choice="no" id="option-2013-4-9-16-53-8-39562387-">
+                        <name id="name-2013-4-9-16-53-8-39562387-3">pdf</name>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf</value>
+                     </option>
+                  </options>
+               </cmdline>
+               
+               <!-- COSML Formal XSL -->
+               <cmdline id="id-cmdline-cos-formal-pdf">
+                  <metadata id="metadata-2013-4-9-16-53-8-39562387-3">
+                     <title id="title-2013-4-9-16-53-8-39562387-3">COS Formal Template</title>
+                     <description id="description-2013-4-9-16-53-8-39562387-3">
+                        <p id="p-2013-4-9-16-53-8-39562387-3">Configures the pipeline for the "COS Formal" template</p>
+                     </description>
+                  </metadata>
+                  <engine-config>
+                     <config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  </engine-config>
+                  <inputs id="inputs-2013-4-9-16-53-8-39562387-1">
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-3">
+                        <port id="port-2013-4-9-16-53-8-39562387-6">document</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-7">DOCUMENT-PLACEHOLDER</value>
+                     </input>
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-4">
+                        <port id="port-2013-4-9-16-53-8-39562387-7">stylesheet</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="package-xslfo-cosml.xml#id-xslfo-cosml" 
+                           xlink:type="simple"
+                           id="value-2013-4-9-16-53-8-39562387-8"/>
+                     </input>
+                     <input choice="no" id="input-2013-4-9-16-53-8-39562387-5">
+                        <port id="port-2013-4-9-16-53-8-39562387-8">stylesheet-norm</port>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" type="pkg"
+                           xlink:href="package-normalize.xml#id-normalize" 
+                           xlink:type="simple"
+                           id="value-2013-4-9-16-53-8-39562387-9"/>
+                     </input>
+                  </inputs>
+                  <options id="options-2013-4-9-16-53-8-39562387-1">
+                     <option choice="no" id="option-2013-4-9-16-53-8-39562387-1">
+                        <name id="name-2013-4-9-16-53-8-39562387-4">pdf</name>
+                        <value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-10"
+                           mimetype="application/pdf">PDF-PLACEHOLDER.pdf</value>
+                     </option>
+                  </options>
+               </cmdline>
+            </cmdlines>
+         </pipeline>
+      </pipelines>
+      
+      <!-- Packages for Print -->
+      <packages 
+         xml:base="file:///e:/SGML/DTD/Cassis/Process-XML/"
+         id="packages-2013-4-9-16-53-8-39562387-">
+         
+         <!-- XProc Normalize, Validate, XSLFO Pipeline Package -->
+         <package id="id-xproc-pdf">
+            <metadata id="metadata-2013-4-9-16-53-8-39562387-4">
+               <title id="title-2013-4-9-16-53-8-39562387-4">XProc Pipeline for Normalize, Validate and PDF</title>
+               <description id="description-2013-4-9-16-53-8-39562387-4">
+                  <p id="p-2013-4-9-16-53-8-39562387-4">Normalizes, validates and publishes in PDF a COSML document</p>
+               </description>
+            </metadata>
+            <!-- publish-cosml-pdf.xpl -->
+            <locator 
+               type="main" 
+               xlink:href="urn:x-cassis:r1:cos:00002715:sv-SE:0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               id="locator-2013-4-10-10-32-24-12830403-" />
+         </package>
+         
+         
+         <!-- COSML Internal XSL-FO Package -->
+         <package id="id-xslfo-cosml">
+            <metadata id="metadata-2013-4-9-16-53-8-39562387-5">
+               <title id="title-2013-4-9-16-53-8-39562387-5">XSL-FO Package for COSML PDF</title>
+               <description id="description-2013-4-9-16-53-8-39562387-5">
+                  <p id="p-2013-4-9-16-53-8-39562387-5">Converts COSML documents to XSL-FO format
+                     for COS PDF layout</p>
+               </description>
+            </metadata>
+            
+            <!-- Stylesheet parameters -->
+            <params id="params-2013-4-9-16-53-8-39562387-1">
+               <!-- Index generation -->
+               <param id="param-2013-4-9-16-53-8-39562387-3">
+                  <port id="port-2013-4-9-16-53-8-39562387-9">xslt-params</port>
+                  <name id="name-2013-4-9-16-53-8-39562387-5">generate.index</name>
+                  <value type="string" id="value-2013-4-9-16-53-8-39562387-11">0</value>
+               </param>
+               <!-- XEP Extensions -->
+               <param id="param-2013-4-9-16-53-8-39562387-4">
+                  <port id="port-2013-4-9-16-53-8-39562387-10">xslt-params</port>
+                  <name id="name-2013-4-9-16-53-8-39562387-6">xep.extensions</name>
+                  <value type="string" id="value-2013-4-9-16-53-8-39562387-12">0</value>
+               </param>
+               <!-- XSL-FO Bookmark Generation -->
+               <param id="param-2013-4-9-16-53-8-39562387-5">
+                  <port id="port-2013-4-9-16-53-8-39562387-11">xslt-params</port>
+                  <name id="name-2013-4-9-16-53-8-39562387-7">xslfo.bookmarks</name>
+                  <value type="string" id="value-2013-4-9-16-53-8-39562387-13">1</value>
+               </param>
+            </params>
+            
+            <!-- XSLT -->
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000232:sv-SE:0.6" 
+               xlink:title="COS Internal XSLT"
+               type="main" id="locator-2013-4-9-16-53-8-39562387-1"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000074:sv-SE:0.11"
+               id="locator-2013-4-9-16-53-8-39562387-2"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000059:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-3"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000070:sv-SE:0.15"
+               id="locator-2013-4-9-16-53-8-39562387-4" 
+               xlink:title="Layout"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000876:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-5" 
+               xlink:title="bookmarks.xsl"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000075:sv-SE:0.17"
+               id="locator-2013-4-9-16-53-8-39562387-6"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000072:sv-SE:0.10"
+               id="locator-2013-4-9-16-53-8-39562387-7" 
+               xlink:title="meta-data.xsl"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000078:sv-SE:0.9"
+               id="locator-2013-4-9-16-53-8-39562387-8" 
+               xlink:title="TOC"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000062:sv-SE:0.9"
+               id="locator-2013-4-9-16-53-8-39562387-9"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000233:sv-SE:0.8"
+               id="locator-2013-4-9-16-53-8-39562387-10"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000061:sv-SE:0.29"
+               id="locator-2013-4-9-16-53-8-39562387-11"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000065:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-12"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000071:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-13"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000077:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-14"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000079:sv-SE:0.7"
+               id="locator-2013-4-9-16-53-8-39562387-15"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000060:sv-SE:0.7"
+               id="locator-2013-4-9-16-53-8-39562387-16"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000064:sv-SE:0.8"
+               id="locator-2013-4-9-16-53-8-39562387-17"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000066:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-18"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000069:sv-SE:0.3"
+               id="locator-2013-4-9-16-53-8-39562387-19"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000063:sv-SE:0.3"
+               id="locator-2013-4-9-16-53-8-39562387-20"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000785:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-21"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000076:sv-SE:0.10" type="aux" xlink:title="Strings"
+               id="locator-2013-4-9-16-53-8-39562387-22"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000230:sv-SE:0.1" type="aux"
+               id="locator-2013-4-9-16-53-8-39562387-23"/>
+            <locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000426:sv-SE:0.1" type="aux"
+               id="locator-2013-4-9-16-53-8-39562387-24" xlink:title="tux.jpg"/>
+         </package>
+      </packages>
+   </process>
+   
+   <!-- Wep PublishingProcess -->
+   <process id="id-web-process">
+      <metadata id="metadata-2013-4-9-16-53-8-39562387-6">
+         <title id="title-2013-4-9-16-53-8-39562387-6">Web Publishing</title>
+         <description id="description-2013-4-9-16-53-8-39562387-6">
+            <p id="p-2013-4-9-16-53-8-39562387-6">Publishes COSML documents for web output</p>
+         </description>
+      </metadata>
+      
+      <pipelines id="pipelines-2013-4-9-16-53-8-39562387-1">
+         
+         <!-- Pipeline for HTML -->
+         <pipeline id="id-pipeline-web-1">
+            <metadata id="metadata-2013-4-9-16-53-8-39562387-7">
+               <title id="title-2013-4-9-16-53-8-39562387-7">Publish HTML</title>
+               <description id="description-2013-4-9-16-53-8-39562387-7">
+                  <p id="p-2013-4-9-16-53-8-39562387-7">Normalizes, validates and publishes COSML documents as single-file HTML</p>
+               </description>
+            </metadata>
+            <script id="script-2013-4-9-16-53-8-39562387-1"
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-1"
+               xlink:title="XProc COSML2XHTMLNormalises, validates and converts COSML to XHTML."
+               type="pkg"/>
+            <cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-1">
+               
+               <!-- Single-file HTML Config -->
+               <cmdline id="id-cmdline-single-file-HTML-1">
+                  <metadata id="metadata-2013-4-9-16-53-8-39562387-8">
+                     <title id="title-2013-4-9-16-53-8-39562387-8">COS HTML</title>
+                     <description id="description-2013-4-9-16-53-8-39562387-8">
+                        <p id="p-2013-4-9-16-53-8-39562387-8">Configures the pipeline for single-file HTML</p>
+                     </description>
+                  </metadata>
+                  <engine-config>
+                     <config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  </engine-config>
+                  <inputs>
+                     <input>
+                        <port>document</port>
+                        <value 
+                           id="id-html-docroot"
+                           input-type="doc-root" 
+                           type="external"/>
+                     </input>
+                     <input id="input-2013-5-19-11-12-49-71312191-1">
+                        <port>stylesheet</port>
+                        <value
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-"
+                           xlink:title="COSML XHTML XSLTConverts COSML to XHTML" 
+                           type="pkg"/>
+                     </input>
+                     <input id="input-2013-5-19-11-12-49-71312191-">
+                        <port>stylesheet-norm</port>
+                        <value 
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#id-normalize"
+                           xlink:title=" Normalize XSLT Stylesheet for applics filtering and module normalization for COSML documents "
+                           type="pkg"/>
+                     </input>
+                  </inputs>
+                  <options>
+                     <option>
+                        <name>htm</name>
+                        <value 
+                           id="id-htm-out"
+                           type="external" 
+                           output-type="primary"/>
+                     </option>
+                  </options>
+               </cmdline>
+            </cmdlines>
+         </pipeline>
+      </pipelines>
+      
+      <!-- Web Publishing Packages -->
+      <packages>
+         
+         <!-- XProc for COSML to XHTML -->
+         <package id="package-2013-5-19-11-12-49-71312191-1">
+            <metadata>
+               <title>XProc COSML2XHTML</title>
+               <description>
+                  <p>XProc to normalise, validate and convert COSML to XHTML.</p>
+               </description>
+            </metadata>
+            <locator 
+               id="id-xhtml-xproc"
+               type="main" 
+               xlink:href="urn:x-cassis:r1:cos:00002756:sv-SE:0.2"
+               xlink:title="publish-cosml-html.xpl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink"/>
+         </package>
+         
+         <!-- XSLT for COSML to XHTML -->
+         <package id="package-2013-5-19-11-12-49-71312191-">
+            <metadata>
+               <title>COSML XHTML XSLT</title>
+               <description>
+                  <p>Converts COSML to XHTML</p>
+               </description>
+            </metadata>
+            <locator 
+               id="id-xhtml-xslt"
+               xlink:href="urn:x-cassis:r1:cos:00002755:sv-SE:0.1"
+               xlink:title="cosml2html-ti.xsl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               type="main"/>
+         </package>
+      </packages>
+   </process>
+   
+   <!-- Content Validation Process -->
+   <process id="process-2013-5-19-11-12-49-71312191-">
+      <metadata>
+         <title>Content Validation</title>
+         <description>
+            <p>Content validation processes</p>
+         </description>
+      </metadata>
+      
+      <!-- Content Validation Pipelines -->
+      <pipelines>
+         
+         <!-- Xref Check Pipeline -->
+         <pipeline id="pipeline-2013-5-19-11-12-49-71312191-">
+            <metadata>
+               <title>Cross-reference Check</title>
+               <description>
+                  <p>Pipeline for checking cross-references in COSML documents</p>
+               </description>
+            </metadata>
+            <script
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-3"
+               xlink:title="XProc Xref CheckGenerates a module list for XML in scope, checks the xrefs and produces a report"
+               type="pkg"/>
+            <cmdlines>
+               
+               <!-- Xref Validation Config -->
+               <cmdline id="cmdline-2013-5-19-11-12-49-71312191-">
+                  <metadata>
+                     <title>Xref Check Configuration</title>
+                     <description>
+                        <p>Configures the cross-reference check and report</p>
+                     </description>
+                  </metadata>
+                  <engine-config>
+                     <config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  </engine-config>
+                  <inputs>
+                     <input>
+                        <port>map</port>
+                        <value 
+                           type="external" 
+                           input-type="map"/>
+                     </input>
+                     <input id="input-2013-5-19-11-12-49-71312191-2">
+                        <port>stylesheet</port>
+                        <value
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-2"
+                           xlink:title="XSLT Xref CheckValidates cross-references in publication"
+                           type="pkg"/>
+                     </input>
+                  </inputs>
+                  <options>
+                     <option>
+                        <name>htm</name>
+                        <value id="id-value-xref-htm" type="external" mimetype="text/xhtml"/>
+                     </option>
+                     <option>
+                        <name>file-url</name>
+                        <value id="id-file-url" type="external" mimetype="text/xml"/>
+                     </option>
+                  </options>
+               </cmdline>
+            </cmdlines>
+         </pipeline>
+      </pipelines>
+      
+      <packages>
+         
+         <!-- XProc for Xref Check -->
+         <package id="package-2013-5-19-11-12-49-71312191-3">
+            <metadata>
+               <title>XProc Xref Check</title>
+               <description>
+                  <p>Generates a module list for XML in scope, checks the xrefs and produces a report</p>
+               </description>
+            </metadata>
+            <locator 
+               id="id-xproc-xref"
+               xlink:href="urn:x-cassis:r1:cos:00002757:sv-SE:0.2"
+               xlink:title="xref-check-cosml.xpl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               type="main"/>
+         </package>
+         
+         <!-- XSLT for Xref Check -->
+         <package id="package-2013-5-19-11-12-49-71312191-2">
+            <metadata>
+               <title>XSLT Xref Check</title>
+               <description>
+                  <p>Validates cross-references in publication</p>
+               </description>
+            </metadata>
+            <locator 
+               id="id-xslt-xref"
+               xlink:href="urn:x-cassis:r1:cos:00002754:sv-SE:0.1"
+               xlink:title="link-target-check-multifile.xsl"
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               type="main"/>
+         </package>
+      </packages>
+   </process>
+   
+   <packages id="packages-2013-4-9-16-53-8-39562387-1">
+      
+      <!-- XSLT for Normalizing COSML -->
+      <package id="id-normalize" type="xslt">
+         <metadata id="metadata-2013-4-9-16-53-8-39562387-9">
+            <title id="title-2013-4-9-16-53-8-39562387-9">Normalize XSLT</title>
+            <description id="description-2013-4-9-16-53-8-39562387-9">
+               <p id="p-2013-4-9-16-53-8-39562387-9">Stylesheet for applics filtering and module
+                  normalization for COSML documents</p>
+            </description>
+         </metadata>
+         <!-- No parameters required. -->
+         <locator 
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="urn:x-cassis:r1:cos:00000073:sv-SE:0.4"
+            id="locator-2013-4-9-16-53-8-39562387-26" 
+            type="main" 
+            xlink:title="Normalize XSLT"/>
+      </package>
+      
+      <!-- Calabash Engine Configuration File -->
+      <package id="id-conf-calabash">
+         <metadata id="metadata-2013-5-2-21-40-30-37001288-">
+            <title id="title-2013-5-2-21-40-30-37001288-">Calabash Configuration</title>
+            <description id="description-2013-5-2-21-40-30-37001288-">
+               <p id="p-2013-5-2-21-40-30-37001288-">Configures Calabash</p>
+            </description>
+         </metadata>
+         <locator 
+            xlink:href="urn:x-cassis:r1:cos:00002745:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" 
+            type="main" 
+            id="id-loc-calabash-config"/>
+      </package>
+      
+      
+      
+      <!-- Wrapper ProX Resources -->
+      <package id="id-wrapper-resources">
+         <metadata id="metadata-2013-5-2-21-40-30-37001288-1">
+            <title id="title-2013-5-2-21-40-30-37001288-1">Wrapper Pipeline Processing</title>
+            <description id="description-2013-5-2-21-40-30-37001288-1">
+               <p id="p-2013-5-2-21-40-30-37001288-1">These files are used for running the wrapper pipeline.</p>
+            </description>
+         </metadata>
+
+         <locator xlink:href="urn:x-cassis:r1:cos:00002735:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-wrapper-xpl"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002732:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox-fix"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002733:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-urn2url"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002731:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2bat"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002734:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2shell-config"/>
+      </package>
+      
+      <!-- XForms -->
+      <package id="id-xform">
+         <metadata>
+            <title>ProX XForms Package</title>
+            <description>
+               <p>XForms for selecting and configuring a process, based on a ProX blueprint.</p>
+            </description>
+         </metadata>
+         <locator 
+            xlink:href="urn:prox:xform:0.1" 
+            type="main" 
+            id="id-loc-xform"/>
+      </package>
+   </packages>
+</processes>

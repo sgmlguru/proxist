@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="value.type">
+    <optional>
+      <attribute name="type">
+        <choice>
+          <value>external</value>
+          <value>pkg</value>
+          <value>uri</value>
+          <value>string</value>
+          <value>other</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="mimetype"/>
+    </optional>
+    <optional>
+      <attribute name="output-type"/>
+    </optional>
+    <optional>
+      <attribute name="input-type"/>
+    </optional>
+  </define>
+  <define name="cmdline">
+    <element name="cmdline">
+      <ref name="cmdline.attlist"/>
+      <ref name="metadata"/>
+      <zeroOrMore>
+        <ref name="engine-config"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="inputs"/>
+      </optional>
+      <optional>
+        <ref name="outputs"/>
+      </optional>
+      <optional>
+        <ref name="data-inputs"/>
+      </optional>
+      <optional>
+        <ref name="options"/>
+      </optional>
+      <optional>
+        <ref name="params"/>
+      </optional>
+      <optional>
+        <ref name="libraries"/>
+      </optional>
+      <optional>
+        <ref name="extensions"/>
+      </optional>
+    </element>
+  </define>
+  <define name="cmdline.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <!-- start |= cmdline -->
+  <!-- Engine configuration -->
+  <define name="engine-config">
+    <element name="engine-config">
+      <ref name="engine-config.attlist"/>
+      <optional>
+        <ref name="config"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="saxon"/>
+          <ref name="debug"/>
+          <ref name="schema-aware"/>
+          <ref name="safe-mode"/>
+          <ref name="log-style"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="engine-config.attlist" combine="interleave">
+    <optional>
+      <attribute name="type">
+        <choice>
+          <value>calabash</value>
+          <value>xprocxq</value>
+          <value>other</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="version">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="saxon">
+    <element name="saxon">
+      <ref name="saxon.attlist"/>
+      <optional>
+        <ref name="processor"/>
+      </optional>
+      <optional>
+        <ref name="config"/>
+      </optional>
+    </element>
+  </define>
+  <define name="saxon.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="processor">
+    <element name="processor">
+      <ref name="processor.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="processor.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="choice.att"/>
+    <attribute name="type">
+      <choice>
+        <value>he</value>
+        <value>pe</value>
+        <value>ee</value>
+      </choice>
+    </attribute>
+  </define>
+  <define name="schema-aware">
+    <element name="schema-aware">
+      <ref name="schema-aware.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="schema-aware.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="choice.att"/>
+    <attribute name="process">
+      <data type="boolean"/>
+    </attribute>
+  </define>
+  <define name="debug">
+    <element name="debug">
+      <ref name="debug.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="debug.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="choice.att"/>
+    <attribute name="enable">
+      <data type="boolean"/>
+    </attribute>
+  </define>
+  <define name="safe-mode">
+    <element name="safe-mode">
+      <ref name="safe-mode.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="safe-mode.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="choice.att"/>
+    <attribute name="enable">
+      <data type="boolean"/>
+    </attribute>
+  </define>
+  <define name="log-style">
+    <element name="log-style">
+      <ref name="log-style.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="log-style.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="choice.att"/>
+    <attribute name="style">
+      <choice>
+        <value>wrapped</value>
+        <value>plain</value>
+        <value>directory</value>
+        <value>off</value>
+      </choice>
+    </attribute>
+  </define>
+  <!-- Configuration for Calabash -->
+  <define name="config">
+    <element name="config">
+      <ref name="config.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="config.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <attribute name="type">
+      <value>pkg</value>
+    </attribute>
+    <ref name="choice.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xlink.subdoc.att"/>
+  </define>
+  <define name="inputs">
+    <element name="inputs">
+      <ref name="inputs.attlist"/>
+      <oneOrMore>
+        <ref name="input"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="inputs.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="input">
+    <element name="input">
+      <ref name="choice.att"/>
+      <ref name="id.att"/>
+      <ref name="port"/>
+      <optional>
+        <ref name="value"/>
+      </optional>
+      <optional>
+        <ref name="params"/>
+      </optional>
+    </element>
+  </define>
+  <define name="port">
+    <element name="port">
+      <ref name="port.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="port.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="value">
+    <element name="value">
+      <ref name="value.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="value.attlist" combine="interleave">
+    <optional>
+      <ref name="xlink.subdoc.att"/>
+    </optional>
+    <ref name="xmlbase.att"/>
+    <ref name="value.type"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="outputs">
+    <element name="outputs">
+      <ref name="outputs.attlist"/>
+      <oneOrMore>
+        <ref name="output"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="outputs.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="output">
+    <element name="output">
+      <ref name="output.attlist"/>
+      <ref name="port"/>
+      <zeroOrMore>
+        <ref name="value"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="output.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="data-inputs">
+    <element name="data-inputs">
+      <ref name="data-inputs.attlist"/>
+      <oneOrMore>
+        <ref name="data-input"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="data-inputs.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="data-input">
+    <element name="data-input">
+      <ref name="data-input.attlist"/>
+      <ref name="port"/>
+      <zeroOrMore>
+        <ref name="value"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="data-input.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="options">
+    <element name="options">
+      <ref name="options.attlist"/>
+      <oneOrMore>
+        <ref name="option"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="options.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="option">
+    <element name="option">
+      <ref name="option.attlist"/>
+      <ref name="name"/>
+      <zeroOrMore>
+        <ref name="value"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="params"/>
+      </optional>
+    </element>
+  </define>
+  <define name="option.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="params">
+    <element name="params">
+      <ref name="params.attlist"/>
+      <oneOrMore>
+        <ref name="param"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="params.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="param">
+    <element name="param">
+      <ref name="param.attlist"/>
+      <ref name="port"/>
+      <ref name="name"/>
+      <zeroOrMore>
+        <ref name="value"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="param.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="name">
+    <element name="name">
+      <ref name="name.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="name.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="libraries">
+    <element name="libraries">
+      <ref name="libraries.attlist"/>
+      <oneOrMore>
+        <ref name="library"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="libraries.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xlink.subdoc.att"/>
+  </define>
+  <define name="library">
+    <element name="library">
+      <ref name="library.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="library.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="value.type"/>
+    <ref name="choice.att"/>
+    <ref name="xlink.subdoc.att"/>
+  </define>
+  <!-- Extensions for Calabash -->
+  <define name="extensions">
+    <element name="extensions">
+      <ref name="extensions.attlist"/>
+      <oneOrMore>
+        <ref name="extension"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="extensions.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="extension">
+    <element name="extension">
+      <ref name="extension.attlist"/>
+      <choice>
+        <group>
+          <ref name="name"/>
+          <zeroOrMore>
+            <ref name="value"/>
+          </zeroOrMore>
+        </group>
+        <ref name="string"/>
+      </choice>
+    </element>
+  </define>
+  <define name="extension.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+  </define>
+  <define name="string">
+    <element name="string">
+      <ref name="string.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="string.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+</grammar>

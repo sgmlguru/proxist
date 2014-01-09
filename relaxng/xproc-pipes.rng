@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://relaxng.org/ns/structure/1.0">
+  <define name="pipeline">
+    <element name="pipeline">
+      <ref name="pipeline.attlist"/>
+      <ref name="metadata"/>
+      <optional>
+        <choice>
+          <ref name="script"/>
+          <ref name="pipe"/>
+        </choice>
+      </optional>
+      <optional>
+        <ref name="cmdlines"/>
+      </optional>
+    </element>
+  </define>
+  <define name="pipeline.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <!-- XProc script reference is either package ref as XLink or URI as text -->
+  <define name="script">
+    <element name="script">
+      <ref name="script.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="script.attlist" combine="interleave">
+    <optional>
+      <attribute name="type">
+        <value>pkg</value>
+      </attribute>
+    </optional>
+    <ref name="xlink.simple.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="id.att"/>
+  </define>
+  <!-- Atomic XProc step -->
+  <define name="pipe">
+    <element name="pipe">
+      <ref name="pipe.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="pipe.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <!-- Valid Calabash command lines -->
+  <define name="cmdlines">
+    <element name="cmdlines">
+      <ref name="cmdlines.attlist"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="cmdline"/>
+          <ref name="inset"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="cmdlines.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+  </define>
+  <!-- Calabash command line input -->
+  <include href="xproc-cmdline.rng"/>
+</grammar>
+<!-- start |= pipeline -->

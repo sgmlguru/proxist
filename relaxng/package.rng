@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="" xmlns="http://relaxng.org/ns/structure/1.0">
+  <define name="resource.type">
+    <optional>
+      <attribute name="type">
+        <choice>
+          <value>root</value>
+          <value>main</value>
+          <value>aux</value>
+          <value>other</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="package">
+    <element name="package">
+      <ref name="package.attlist"/>
+      <ref name="metadata"/>
+      <optional>
+        <ref name="params"/>
+      </optional>
+      <oneOrMore>
+        <ref name="locator"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="package.attlist" combine="interleave">
+    <optional>
+      <attribute name="type">
+        <choice>
+          <value>xslt</value>
+          <value>xslfo</value>
+          <value>dtd</value>
+          <value>xsd</value>
+          <value>rnc</value>
+          <value>rng</value>
+          <value>xpl</value>
+          <value>xml</value>
+          <value>binary</value>
+          <value>other</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <!-- URIs of participating resources in a package -->
+  <define name="locator">
+    <element name="locator">
+      <ref name="locator.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="locator.attlist" combine="interleave">
+    <optional>
+      <ref name="xlink.simple.att"/>
+    </optional>
+    <ref name="xmlbase.att"/>
+    <ref name="resource.type"/>
+    <ref name="id.att"/>
+  </define>
+  <!-- start |= package -->
+  <include href="auxiliary.rng"/>
+</grammar>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <!-- Processes -->
+  <define name="processes">
+    <element name="processes">
+      <ref name="processes.attlist"/>
+      <oneOrMore>
+        <choice>
+          <ref name="process"/>
+          <ref name="inset"/>
+        </choice>
+      </oneOrMore>
+      <optional>
+        <ref name="packages"/>
+      </optional>
+    </element>
+  </define>
+  <define name="processes.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <!-- Linking Mechanism -->
+  <define name="inset">
+    <element name="inset">
+      <ref name="inset.attlist"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="inset.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xlink.subdoc.att"/>
+  </define>
+  <!-- Common Attrs for Choices -->
+  <define name="choice.att">
+    <optional>
+      <attribute name="choice">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <!-- [ a:defaultValue = "no" ] -->
+      <attribute name="group">
+        <data type="IDREF"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="ctype">
+        <choice>
+          <value>boolean</value>
+          <value>list</value>
+          <value>list1</value>
+          <data type="string"/>
+          <data type="decimal"/>
+          <data type="date"/>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="req">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <!-- Process -->
+  <define name="process">
+    <element name="process">
+      <ref name="process.attlist"/>
+      <ref name="metadata"/>
+      <optional>
+        <ref name="pipelines"/>
+      </optional>
+      <optional>
+        <ref name="packages"/>
+      </optional>
+    </element>
+  </define>
+  <define name="process.attlist" combine="interleave">
+    <ref name="choice.att"/>
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <!-- Metadata (common for all main structures) -->
+  <define name="metadata">
+    <element name="metadata">
+      <ref name="metadata.attlist"/>
+      <ref name="title"/>
+      <ref name="description"/>
+    </element>
+  </define>
+  <define name="metadata.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="title">
+    <element name="title">
+      <ref name="title.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="title.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="description">
+    <element name="description">
+      <ref name="description.attlist"/>
+      <oneOrMore>
+        <ref name="p"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="description.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <define name="p">
+    <element name="p">
+      <ref name="p.attlist"/>
+      <text/>
+    </element>
+  </define>
+  <define name="p.attlist" combine="interleave">
+    <ref name="id.att"/>
+  </define>
+  <!-- Pipelines associated with a process -->
+  <define name="pipelines">
+    <element name="pipelines">
+      <ref name="pipelines.attlist"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="pipeline"/>
+          <ref name="inset"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="pipelines.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <include href="xproc-pipes.rng"/>
+  <!-- Packages (XML, XSL, etc) associated with a process -->
+  <define name="packages">
+    <element name="packages">
+      <ref name="packages.attlist"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="package"/>
+          <ref name="inset"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="packages.attlist" combine="interleave">
+    <ref name="id.att"/>
+    <ref name="xmlbase.att"/>
+    <ref name="xmllang.att"/>
+  </define>
+  <include href="package.rng"/>
+  <start>
+    <choice>
+      <ref name="processes"/>
+      <ref name="process"/>
+      <ref name="pipeline"/>
+      <ref name="package"/>
+      <ref name="cmdline"/>
+    </choice>
+  </start>
+</grammar>
+<!-- start |= process -->

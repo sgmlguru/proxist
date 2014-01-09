@@ -1,0 +1,141 @@
+<processes><process id="process-2013-5-19-11-12-49-71312191-">
+      <metadata>
+         <title>Content Validation</title>
+         <description>
+            <p>Content validation processes</p>
+         </description>
+      </metadata>
+      
+      <!-- Content Validation Pipelines -->
+      <pipelines>
+         
+         <!-- Xref Check Pipeline -->
+         <pipeline id="pipeline-2013-5-19-11-12-49-71312191-">
+            <metadata>
+               <title>Cross-reference Check</title>
+               <description>
+                  <p>Pipeline for checking cross-references in COSML documents</p>
+               </description>
+            </metadata>
+            <script xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-3" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:title="XProc Xref CheckGenerates a module list for XML in scope, checks the xrefs and produces a report" type="pkg"/>
+            <cmdlines>
+               
+               <!-- Xref Validation Config -->
+               <cmdline id="cmdline-2013-5-19-11-12-49-71312191-">
+                  <metadata>
+                     <title>Xref Check Configuration</title>
+                     <description>
+                        <p>Configures the cross-reference check and report</p>
+                     </description>
+                  </metadata>
+                  <engine-config>
+                     <config type="pkg" xlink:href="#id-conf-calabash" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+                  </engine-config>
+                  <inputs>
+                     <input>
+                        <port>map</port>
+                        <value type="external" input-type="map"/>
+                     </input>
+                     <input id="input-2013-5-19-11-12-49-71312191-2">
+                        <port>stylesheet</port>
+                        <value xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-2" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:title="XSLT Xref CheckValidates cross-references in publication" type="pkg"/>
+                     </input>
+                  </inputs>
+                  <options>
+                     <option>
+                        <name>htm</name>
+                        <value id="id-value-xref-htm" type="external" mimetype="text/xhtml"/>
+                     </option>
+                     <option>
+                        <name>file-url</name>
+                        <value id="id-file-url" type="external" mimetype="text/xml"/>
+                     </option>
+                  </options>
+               </cmdline>
+            </cmdlines>
+         </pipeline>
+      </pipelines>
+      
+      <packages>
+         
+         <!-- XProc for Xref Check -->
+         <package id="package-2013-5-19-11-12-49-71312191-3">
+            <metadata>
+               <title>XProc Xref Check</title>
+               <description>
+                  <p>Generates a module list for XML in scope, checks the xrefs and produces a report</p>
+               </description>
+            </metadata>
+            <locator id="id-xproc-xref" xlink:href="urn:x-cassis:r1:cos:00002757:sv-SE:0.2" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:title="xref-check-cosml.xpl" type="main"/>
+         </package>
+         
+         <!-- XSLT for Xref Check -->
+         <package id="package-2013-5-19-11-12-49-71312191-2">
+            <metadata>
+               <title>XSLT Xref Check</title>
+               <description>
+                  <p>Validates cross-references in publication</p>
+               </description>
+            </metadata>
+            <locator id="id-xslt-xref" xlink:href="urn:x-cassis:r1:cos:00002754:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:title="link-target-check-multifile.xsl" type="main"/>
+         </package>
+      </packages>
+   </process><packages id="packages-2013-4-9-16-53-8-39562387-1">
+      
+      <!-- XSLT for Normalizing COSML -->
+      <package id="id-normalize" type="xslt">
+         <metadata id="metadata-2013-4-9-16-53-8-39562387-9">
+            <title id="title-2013-4-9-16-53-8-39562387-9">Normalize XSLT</title>
+            <description id="description-2013-4-9-16-53-8-39562387-9">
+               <p id="p-2013-4-9-16-53-8-39562387-9">Stylesheet for applics filtering and module
+                  normalization for COSML documents</p>
+            </description>
+         </metadata>
+         <!-- No parameters required. -->
+         <locator xlink:href="urn:x-cassis:r1:cos:00000073:sv-SE:0.4" xmlns:xlink="http://www.w3.org/1999/xlink" id="locator-2013-4-9-16-53-8-39562387-26" type="main" xlink:title="Normalize XSLT"/>
+      </package>
+      
+      <!-- Calabash Engine Configuration File -->
+      <package id="id-conf-calabash">
+         <metadata id="metadata-2013-5-2-21-40-30-37001288-">
+            <title id="title-2013-5-2-21-40-30-37001288-">Calabash Configuration</title>
+            <description id="description-2013-5-2-21-40-30-37001288-">
+               <p id="p-2013-5-2-21-40-30-37001288-">Configures Calabash</p>
+            </description>
+         </metadata>
+         <locator xlink:href="urn:x-cassis:r1:cos:00002745:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" type="main" id="id-loc-calabash-config"/>
+      </package>
+      
+      
+      
+      <!-- Wrapper ProX Resources -->
+      <package id="id-wrapper-resources">
+         <metadata id="metadata-2013-5-2-21-40-30-37001288-1">
+            <title id="title-2013-5-2-21-40-30-37001288-1">Wrapper Pipeline Processing</title>
+            <description id="description-2013-5-2-21-40-30-37001288-1">
+               <p id="p-2013-5-2-21-40-30-37001288-1">These files are used for running the wrapper pipeline.</p>
+            </description>
+         </metadata>
+
+         <locator xlink:href="urn:x-cassis:r1:cos:00002735:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="id-wrapper-xpl"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002732:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox-fix"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002733:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="id-urn2url"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002731:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2bat"/>
+         
+         <locator xlink:href="urn:x-cassis:r1:cos:00002734:sv-SE:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2shell-config"/>
+      </package>
+      
+      <!-- XForms -->
+      <package id="id-xform">
+         <metadata>
+            <title>ProX XForms Package</title>
+            <description>
+               <p>XForms for selecting and configuring a process, based on a ProX blueprint.</p>
+            </description>
+         </metadata>
+         <locator xlink:href="urn:prox:xform:0.1" xmlns:xlink="http://www.w3.org/1999/xlink" type="main" id="id-loc-xform"/>
+      </package>
+   </packages></processes>

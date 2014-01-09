@@ -1,0 +1,31 @@
+default namespace = ""
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+# Simple Xlink attributes
+xlink.basic.att =
+  [ a:defaultValue = "simple" ] attribute xlink:type { "simple" }?,
+  attribute xlink:href { text }?,
+  attribute xlink:title { text }?
+xlink.subdoc.att =
+  xlink.basic.att,
+  attribute xlink:role { text }?
+xlink.picture.att =
+  xlink.subdoc.att,
+  [ a:defaultValue = "embed" ] attribute xlink:show { "embed" }?,
+  [ a:defaultValue = "onLoad" ] attribute xlink:actuate { "onLoad" }?
+xlink.simple.att =
+  xlink.subdoc.att,
+  attribute xlink:show {
+    "new" | "replace" | "embed" | "other" | "none"
+  }?,
+  attribute xlink:actuate { "onLoad" | "onRequest" | "other" | "none" }?
+
+# ID Attribute
+id.att = attribute id { xsd:ID }?
+
+# XML Base URI
+xmlbase.att = attribute xml:base { text }?
+
+# XML Lang
+xmllang.att = attribute xml:lang { text }?

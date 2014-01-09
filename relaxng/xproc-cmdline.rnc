@@ -1,0 +1,178 @@
+default namespace = ""
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+value.type = 
+    attribute type { "external" | "pkg" | "uri" | "string" | "other" }?,
+    attribute mimetype { text }?,
+    attribute output-type { text }?,
+    attribute input-type { text }?
+
+
+cmdline =
+    element cmdline {
+        cmdline.attlist,
+        metadata,
+        engine-config*,
+        inputs?,
+        outputs?,
+        data-inputs?,
+        options?,
+        params?,
+        libraries?,
+        extensions?
+    }
+cmdline.attlist &= 
+    choice.att,
+    id.att, 
+    xmlbase.att, 
+    xmllang.att
+
+#start |= cmdline
+
+
+# Engine configuration
+
+engine-config = element engine-config {
+    engine-config.attlist,
+    config?,
+    ( saxon | debug | schema-aware | safe-mode | log-style )*
+}
+engine-config.attlist &=
+    attribute type { "calabash" | "xprocxq" | "other" }?,
+    attribute version { string }?,
+    attribute role { string }?,
+    choice.att,
+    id.att
+
+saxon = element saxon { saxon.attlist, processor?, config? }
+saxon.attlist &= 
+    choice.att,
+    id.att
+
+processor = element processor { processor.attlist, empty }
+processor.attlist &=
+    id.att,
+    choice.att,
+    attribute type { "he" | "pe" | "ee" }
+
+schema-aware = element schema-aware { schema-aware.attlist, empty }
+schema-aware.attlist &=
+    id.att,
+    choice.att,
+    attribute process { xsd:boolean }
+
+debug = element debug { debug.attlist, empty }
+debug.attlist &=
+    id.att,
+    choice.att,
+    attribute enable { xsd:boolean }
+
+safe-mode = element safe-mode { safe-mode.attlist, empty }
+safe-mode.attlist &=
+    id.att,
+    choice.att,
+    attribute enable { xsd:boolean }
+
+log-style = element log-style { log-style.attlist, empty }
+log-style.attlist &=
+    id.att,
+    choice.att,
+    attribute style { "wrapped" | "plain" | "directory" | "off" }
+
+# Configuration for Calabash
+
+config = element config { config.attlist, empty }
+config.attlist &= 
+    id.att,
+    attribute type { "pkg" },
+    choice.att,
+    xmlbase.att, 
+    xlink.subdoc.att
+
+
+
+inputs = element inputs { 
+    inputs.attlist, 
+    input+ }
+inputs.attlist &= id.att
+
+input = element input { 
+    choice.att, 
+    id.att, 
+    port, 
+    value?, 
+    params? }
+
+port = element port { port.attlist, text }
+port.attlist &= id.att
+
+value = element value { value.attlist, text }
+value.attlist &= 
+    xlink.subdoc.att?, 
+    xmlbase.att, 
+    value.type,
+    id.att
+
+outputs = element outputs { outputs.attlist, output+ }
+outputs.attlist &= id.att
+
+output = element output { output.attlist, port, value* }
+output.attlist &= 
+    choice.att, 
+    id.att
+
+data-inputs = element data-inputs { data-inputs.attlist, data-input+ }
+data-inputs.attlist &= id.att
+
+data-input = element data-input { data-input.attlist, port, value* }
+data-input.attlist &= 
+    choice.att, 
+    id.att
+
+options = element options { options.attlist, option+ }
+options.attlist &= id.att
+
+option = element option { option.attlist, name, value*, params? }
+option.attlist &= 
+    choice.att, 
+    id.att
+
+params = element params { params.attlist, param+ }
+params.attlist &= id.att
+
+param = element param { param.attlist, port, name, value* }
+param.attlist &= 
+    choice.att, 
+    id.att
+
+name = element name { name.attlist, text }
+name.attlist &= id.att
+
+libraries = element libraries { libraries.attlist, library+ }
+libraries.attlist &= 
+    id.att, 
+    xlink.subdoc.att
+
+library = element library { library.attlist, text }
+library.attlist &= 
+    id.att,
+    value.type,
+    choice.att,
+    xlink.subdoc.att
+
+# Extensions for Calabash
+extensions = element extensions { extensions.attlist, extension+ }
+extensions.attlist &= id.att
+
+extension =
+    element extension {
+        extension.attlist,
+        ((name, value*) | \string)
+    }
+extension.attlist &= 
+    choice.att, 
+    id.att
+
+\string = element string { string.attlist, text }
+string.attlist &= id.att

@@ -1,0 +1,84 @@
+default namespace = ""
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+
+# Processes
+
+processes = element processes { processes.attlist, (process | inset)+, packages? }
+processes.attlist &= 
+    id.att, 
+    xmlbase.att,
+    xmllang.att
+
+
+# Linking Mechanism
+
+inset = element inset { inset.attlist, empty }
+inset.attlist &=
+    id.att,
+    xmlbase.att,
+    xlink.subdoc.att
+
+
+
+# Common Attrs for Choices
+
+choice.att =
+    attribute choice { "yes" | "no" }?,  # [ a:defaultValue = "no" ] 
+    attribute group { xsd:IDREF }?,
+    attribute ctype { "boolean" | "list" | "list1" | xsd:string | xsd:decimal | xsd:date }?,
+    attribute req { "yes" | "no" }?
+    
+    
+
+# Process
+
+process =
+    element process { process.attlist, metadata, pipelines?, packages? }
+process.attlist &=
+    choice.att,
+    id.att, 
+    xmlbase.att,
+    xmllang.att
+
+
+# Metadata (common for all main structures)
+
+metadata = element metadata { metadata.attlist, title, description }
+metadata.attlist &= id.att
+
+title = element title { title.attlist, text }
+title.attlist &= id.att
+
+description = element description { description.attlist, p+ }
+description.attlist &= id.att
+
+p = element p { p.attlist, text }
+p.attlist &= id.att
+
+
+# Pipelines associated with a process
+
+pipelines =
+    element pipelines { pipelines.attlist, (pipeline | inset)* }
+pipelines.attlist &= 
+    id.att, 
+    xmlbase.att,
+    xmllang.att
+
+include "xproc-pipes.rnc"
+
+
+# Packages (XML, XSL, etc) associated with a process
+
+packages = element packages { packages.attlist, (package | inset)* }
+packages.attlist &= 
+    id.att, 
+    xmlbase.att,
+    xmllang.att
+
+include "package.rnc"
+
+
+start = processes | process | pipeline | package | cmdline 
+#start |= process
