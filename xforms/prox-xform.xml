@@ -1,4 +1,11 @@
-<?xml-model href="file:///c:/Program%20Files/Oxygen%20XML%20Editor%2015/samples/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><?xml-stylesheet href="xsltforms/xsltforms-1.0RC/xsltforms/xsltforms.xsl" type="text/xsl"?><?xsltforms-options debug="no"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
+<?xml-model href="http://www.sgmlguru.org/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
+<!--<?xml-stylesheet href="xsltforms/xsltforms-1.0RC/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<?xsltforms-options debug="no"?>-->
+<html 
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xf="http://www.w3.org/2002/xforms">
 	<head>
 		<link type="text/css" rel="stylesheet" href="style.css"/>
 		<title>Cassis Process Configuration</title>

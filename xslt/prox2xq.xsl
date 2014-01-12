@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+<xsl:stylesheet 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    version="2.0">
 
     <xsl:output method="text" indent="no"/>
     <xsl:strip-space 
@@ -33,7 +35,9 @@
     </xsl:template>
 
     <xsl:template match="processes">
-        <xsl:apply-templates/>
+        <xq>
+            <xsl:apply-templates/>
+        </xq>
     </xsl:template>
 
     <xsl:template match="process">
