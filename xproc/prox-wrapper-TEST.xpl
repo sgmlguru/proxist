@@ -48,6 +48,10 @@
         <p:pipe port="result" step="med"/>
     </p:output>
     
+    <p:output port="result-xq" sequence="true">
+        <p:pipe port="result" step="xq"/>
+    </p:output>
+    
     
     
     <!-- ProX Blueprint URL -->
@@ -371,11 +375,23 @@
             <p:sink/>
         </p:when>
         <p:when test="$os='exist'">
-            <p:store>
-                <p:with-option name="href" select="'xmldb:exist:///db/work/docs/test/out2.xq'"/>
+            <p:store method="text">
+                <p:with-option name="href" select="'/mnt/win7-work/SGML/DTD/cosml/out2.xq'"/>
+                <!-- xmldb:exist:///db/work/docs/test/out2.xq -->
             </p:store>
+            
+<!--            <p:sink/>-->
         </p:when>
     </p:choose>
+    
+    <p:xquery name="xq">
+        <p:input port="source">
+            <p:empty/>
+        </p:input>
+        <p:input port="query">
+            <p:data href="/mnt/win7-work/SGML/DTD/cosml/out3.xq"/>
+        </p:input>
+    </p:xquery>
     
     
     <!-- Return Results -->
