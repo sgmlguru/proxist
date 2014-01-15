@@ -19,7 +19,7 @@
     <!-- Mapping document -->
     <!-- Contains all URN/URL for XSLT, XPL, XML modules, targets, etc -->
     <p:input port="map">
-        <p:document href="http://www.sgmlguru.org/exist/rest/db/work/system/common/xml/resource-map.xml"/>
+        <p:document href="http://localhost:8080/exist/rest/db/work/system/common/xml/resource-map.xml"/>
     </p:input>
     
     
@@ -51,6 +51,15 @@
     <p:output port="result-xq" sequence="true">
         <p:pipe port="result" step="xq"/>
     </p:output>
+    
+    <p:output port="result" sequence="true">
+        
+    </p:output>
+    
+    
+    
+    <!-- Extension steps -->
+    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     
     
     
@@ -138,7 +147,7 @@
             <p:empty></p:empty>
         </p:input>
         <p:input port="query">
-            <p:data href="http://www.sgmlguru.org/exist/rest/db/apps/form.xq?form=prox-xform.xml" content-type="text/plain"/>
+            <p:data href="http://www.sgmlguru.org/exist/rest/db/apps/form.xq?form=http://www.sgmlguru.org/exist/rest/db/apps/prox-xform.xml" content-type="text/plain"/>
         </p:input>
     </p:xquery>-->
     
@@ -203,12 +212,15 @@
                 </p:input>
                 <p:with-option 
                     name="args" 
-                    select="concat('-P &quot;XForms&quot; -no-remote ','http://www.sgmlguru.org/exist/rest/db/apps/form.xq?form=prox-xform.xml')"/>
+                    select="concat('-P &quot;XForms&quot; -no-remote ','http://localhost:8080/exist/rest/db/apps/form.xq?form=prox-xform.xml')"/>
             </p:exec>
             <p:sink/>
         </p:when>
     </p:choose>
     
+    
+    <!--<cx:wait-for-update href="http://localhost:8080/exist/webdav/db/work/docs/test/prox-instance.xml" cx:depends-on="browse" pause-before="5"/>
+    -->
     
     
     <!-- Map URNs to URLs in roots and modules -->
