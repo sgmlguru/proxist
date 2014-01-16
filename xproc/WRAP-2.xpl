@@ -35,22 +35,32 @@
     
     
     <!-- ProX Blueprint URL -->
-    <p:variable name="prox-blueprint" select="//prox/blueprints/resource[@id='id-prox-blueprint']/url/text()">
+    <p:variable name="prox-blueprint" select="//prox/blueprints/resource[@id='id-prox-blueprint']/url/normalize-space(text())">
         <p:pipe port="map" step="main"/>
     </p:variable>
     
-    <!-- ProX Instance URL -->
-    <p:variable name="prox-instance" select="//prox/instances/resource[@id='id-prox-saved-instance']/url/text()">
+    <!-- ProX XForm Target Instance URL (webdav) -->
+    <p:variable name="target-prox-instance" select="//prox/instances/resource[@id='id-prox-xform-target-instance']/url/normalize-space(text())">
+        <p:pipe port="map" step="main"/>
+    </p:variable>
+    
+    <!-- ProX XForm Target Instance URL (xmldb) -->
+    <p:variable name="xmldb-target-prox-instance" select="//prox/instances/resource[@id='id-prox-xform-xmldb-instance']/url/normalize-space(text())">
+        <p:pipe port="map" step="main"/>
+    </p:variable>
+    
+    <!-- ProX Saved Instance URL (rest) -->
+    <p:variable name="saved-prox-instance" select="//prox/instances/resource[@id='id-prox-saved-instance']/url/normalize-space(text())">
         <p:pipe port="map" step="main"/>
     </p:variable>
     
     <!-- XForm URL -->
-    <p:variable name="xform-url" select="//wrapper-pipeline//resource[prox-id='id-loc-xform']/url/text()">
+    <p:variable name="xform-url" select="//wrapper-pipeline//resource[prox-id='id-loc-xform']/url/normalize-space(text())">
         <p:pipe port="map" step="main"/>
     </p:variable>
     
     <!-- prox2shell config URL -->
-    <p:variable name="prox2shell-config" select="//wrapper-pipeline//resource[prox-id='id-prox2shell-config']/url">
+    <p:variable name="prox2shell-config" select="//wrapper-pipeline//resource[prox-id='id-prox2shell-config']/url/normalize-space(text())">
         <p:pipe port="map" step="main"/>
     </p:variable>
     
@@ -58,6 +68,7 @@
     <p:variable name="tmp-url" select="'xmldb:exist:///db/work/docs/test/'">
         <!-- substring-before(base-uri(/*),tokenize(base-uri(.),'/')[last()]) -->
         <!--<p:pipe port="map" step="main"/>-->
+        <!-- Should use base URI of a target output (ensures writable collection) -->
     </p:variable>
     
     <!-- OS ('osx', 'win', 'linux' allowed) -->
@@ -86,30 +97,36 @@
                 <p:input port="source">
                     <p:empty/>
                 </p:input>
+                <!-- Add variable ref to the following? -->
                 <p:with-option name="args" select="concat('-P &#34;xforms&#34; -no-remote ','http://localhost:8080/exist/rest/db/apps/form.xq?form=prox-xform.xml')"/>
             </p:exec>
-            <cx:wait-for-update href="http://localhost:8080/exist/webdav/db/work/docs/test/prox-instance.xml" pause-after="3"/>
+            <cx:wait-for-update pause-after="3">
+                <!--<p:with-option name="href" select="'http://localhost:8080/exist/webdav/db/work/docs/test/prox-instance.xml'"/>-->
+                <p:with-option name="href" select="$target-prox-instance"/>
+            </cx:wait-for-update>
             <p:sink/>
         </p:when>
     </p:choose>
     
     
     
-    <!-- Update ProX Instance -->
+    <!-- Update ProX Instance with URLs -->
     <!-- Runtime values inserted from resource map. -->
     <p:xslt name="prox-urn2url" cx:depends-on="browse">
-        <!--<p:input port="source" select="doc(//prox/instances/resource[@id='id-prox-saved-instance']/url/text())">
+        <p:input port="source" select="doc(//prox/instances/resource[@id='id-prox-saved-instance']/url/normalize-space(text()))">
             <p:pipe port="map" step="main"/>
-        </p:input>-->
-        <p:input port="source">
+        </p:input>
+        <!--<p:input port="source">
             <p:document href="http://localhost:8080/exist/rest/db/work/docs/test/prox-instance.xml"/>
-        </p:input>
-        <!--<p:input port="stylesheet" select="doc(//wrapper-pipeline/package/resources/resource[prox-id='id-prox-fix']/url/text())">
-            <p:pipe port="map" step="main"/>
         </p:input>-->
-        <p:input port="stylesheet">
-            <p:document href="http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox-fix.xsl"/>
+        
+        <p:input port="stylesheet" select="doc(//wrapper-pipeline/package/resources/resource[prox-id='id-prox-fix']/url/normalize-space(text()))">
+            <p:pipe port="map" step="main"/>
         </p:input>
+        <!--<p:input port="stylesheet">
+            <p:document href="http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox-fix.xsl"/>
+        </p:input>-->
+        
         <!--<p:with-param name="map-url" select="base-uri()">
             <p:pipe port="map" step="main"/>
         </p:with-param>-->
@@ -127,13 +144,25 @@
         </p:input>
     </p:identity>
     
-    <p:store name="save-prox">
-        <p:with-option name="href" select="concat($tmp-url,'tmp-instance-prox-with-urls.xml')"/>
+    <!-- Store ProX instance with URLs -->
+    <p:store name="save-prox" cx:depends-on="id">
+        <!--<p:with-option name="href" select="concat($tmp-url,'tmp-instance-prox-with-urls.xml')"/>-->
+        <p:with-option name="href" select="'xmldb:exist:///db/work/docs/test/tmp-prox-instance.xml'"/>
     </p:store>
     
     
-
-    <!-- Add ProX instance validation here? -->
+    <!-- Convert instance to XQ -->
+    <p:xslt name="xsltbat" cx:depends-on="id">
+        <p:input port="source">
+            <p:pipe port="result" step="id"/>
+        </p:input>
+        <p:input port="stylesheet" select="doc(//wrapper-pipeline/package/resources/resource[prox-id='id-prox2xq']/url/normalize-space(text()))">
+            <p:pipe port="map" step="main"/>
+        </p:input>
+        <p:input port="parameters">
+            <p:pipe port="xsltparams" step="main"/>
+        </p:input>
+    </p:xslt>
     
     
     
@@ -143,7 +172,7 @@
             <p:pipe port="map" step="main"/>
         </p:input>-->
         <p:input port="source">
-            <p:pipe port="result" step="id"/>
+            <!--<p:pipe port="result" step="id"/>-->
         </p:input>
     </p:identity>
 </p:declare-step>

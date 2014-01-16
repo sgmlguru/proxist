@@ -1,450 +1,411 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <resource-map>
-   
-   <!-- Source Modules Listed here -->
-   <docs>
-      
-      <!-- NOTE: The doc lists can contain duplicate modules, with the same URN/URL
+
+    <!-- Source Modules Listed here -->
+    <docs>
+
+        <!-- NOTE: The doc lists can contain duplicate modules, with the same URN/URL
            pairs. The ProX wrapper XProc and XSLT will handle them. -->
-      
-      <!-- Document #1 -->
-      <!-- One doc, with root and modules incl images -->
-      <doc id="">
-         
-         <!-- Root document from Process Manager confguration -->
-         <!-- ProX instance needs this value -->
-         <!-- //*/@type=''external' and //*/@input-type='doc-root' -->
-         <root>
-            <resource>
-               <urn>urn:testroot</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/test-root.xml</url>
-               <type>doc-root</type>
-               <prox-id>value-2013-4-9-16-53-8-39562387-</prox-id>
+
+        <!-- Document #1 -->
+        <!-- One doc, with root and modules, incl images -->
+        <doc id="">
+
+            <!-- Root document from Process Manager confguration -->
+            <!-- ProX instance needs this value -->
+            <!-- //*/@type=''external' and //*/@input-type='doc-root' -->
+            <root>
+                <resource>
+                    <urn>urn:testroot</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/test-root.xml</url>
+                    <type>doc-root</type>
+                    <prox-id>value-2013-4-9-16-53-8-39562387-</prox-id>
+                </resource>
+            </root>
+
+            <!-- All modules linked from root or its descendants -->
+            <!-- XML, images, etc -->
+            <modules>
+                <resource>
+                    <urn>urn:image1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/image3.jpg</url>
+                    <type>jpg</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset1.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset2.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset3</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset3.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset4</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset4.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:block-inset1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/block-inset1.xml</url>
+                    <type>xml</type>
+                </resource>
+            </modules>
+        </doc>
+    </docs>
+
+
+    <!-- Runtime targets -->
+    <targets>
+        <resource>
+            <urn>URN-FOR-OUTPUT</urn>
+            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-pdf-internal-file.pdf</url>
+            <type>primary</type>
+            <prox-id>value-2013-4-9-16-53-8-39562387-6</prox-id>
+        </resource>
+        <resource>
+            <urn>URN2-FOR-OUTPUT</urn>
+            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-pdf-formal-file.pdf</url>
+            <type>primary</type>
+            <prox-id>value-2013-4-9-16-53-8-39562387-10</prox-id>
+        </resource>
+        <resource>
+            <urn>URN-FOR-XREF-XHTML-LOG</urn>
+            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-xref-check.htm</url>
+            <type>primary</type>
+            <prox-id>id-value-xref-htm</prox-id>
+        </resource>
+        <resource>
+            <urn>URN-FOR-FILES-LIST-XML</urn>
+            <url>http://localhost:8080/exist/rest/db/work/docs/test/files.xml</url>
+            <type>secondary</type>
+            <prox-id>id-file-url</prox-id>
+        </resource>
+        <resource>
+            <urn>URN-FOR-HTM-OUT</urn>
+            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-xhtml-out.htm</url>
+            <type>primary</type>
+            <prox-id>id-htm-out</prox-id>
+        </resource>
+    </targets>
+
+    <!-- ProX blueprint and saved instance(s) -->
+    <prox>
+        <!-- Blueprint used to get instance is here -->
+        <blueprints>
+            <resource id="id-prox-blueprint">
+                <urn>URN-OF-PROX-BLUEPRINT</urn>
+                <url>http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml</url>
+                <!--<url>file://prox-blueprint.xml</url>-->
+                <type/>
+                <prox-id/>
             </resource>
-         </root>
-         
-         <!-- All modules linked from root or its descendants -->
-         <!-- XML, images, etc -->
-         <modules>
-            <resource>
-               <urn>urn:image1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/image3.jpg</url>
-               <type>jpg</type>
+        </blueprints>
+
+        <!-- Saved ProX instances -->
+        <!-- Input to wrapper pipeline -->
+        <instances>
+            <resource id="id-prox-xform-target-instance">
+                <urn>URN-OF-TARGET-PROX-INSTANCE</urn>
+                <url>http://localhost:8080/exist/webdav/db/work/docs/test/prox-instance.xml</url>
+                <!-- Insert file URI here for local testing -->
+                <type/>
+                <prox-id/>
             </resource>
-            <resource>
-               <urn>urn:inset1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset1.xml</url>
-               <type>xml</type>
+            <resource id="id-prox-xform-xmldb-instance">
+                <urn>URN-OF-TARGET-PROX-INSTANCE</urn>
+                <url>xmldb:exist:///db/work/docs/test/prox-instance.xml</url>
+                <type/>
+                <prox-id/>
             </resource>
-            <resource>
-               <urn>urn:inset2</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset2.xml</url>
-               <type>xml</type>
+            <resource id="id-prox-saved-instance">
+                <urn>URN-OF-SAVED-PROX-INSTANCE</urn>
+                <url>http://localhost:8080/exist/rest/db/work/docs/test/prox-instance.xml</url>
+                <!-- Insert file URI here for local testing -->
+                <type/>
+                <prox-id/>
             </resource>
-            <resource>
-               <urn>urn:inset3</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset3.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:inset4</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset4.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:block-inset1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/block-inset1.xml</url>
-               <type>xml</type>
-            </resource>
-         </modules>    
-      </doc>
-      
-      
-      <!-- Document #2 -->
-      <doc id="">
-         
-         <!-- Root document from Process Manager confguration -->
-         <!-- ProX instance needs this value -->
-         <!-- //*/@type=''external' and //*/@input-type='doc-root' -->
-         <root>
-            <resource>
-               <urn>urn:testroot</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/test-root.xml</url>
-               <type>doc-root</type>
-               <prox-id>id-html-docroot</prox-id>
-            </resource>
-         </root>
-         
-         <!-- All modules linked from root or its descendants -->
-         <!-- XML, images, etc -->
-         <modules>
-            <resource>
-               <urn>urn:image1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/image3.jpg</url>
-               <type>jpg</type>
-               <transl>1</transl>
-            </resource>
-            <resource>
-               <urn>urn:inset1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset1.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:inset2</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset2.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:inset3</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset3.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:inset4</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/inset4.xml</url>
-               <type>xml</type>
-            </resource>
-            <resource>
-               <urn>urn:block-inset1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/block-inset1.xml</url>
-               <type>xml</type>
-            </resource>
-         </modules>    
-      </doc>
-      
-   </docs>
-   
-   
-   <!-- Runtime targets -->
-   <targets>
-      <resource>
-         <urn>URN-FOR-OUTPUT</urn>
-         <url>file:///c:/xampp/htdocs/prox/refactor/my-pdf-internal-file.pdf</url>
-         <type>primary</type>
-         <prox-id>value-2013-4-9-16-53-8-39562387-6</prox-id>
-      </resource>
-      <resource>
-         <urn>URN2-FOR-OUTPUT</urn>
-         <url>file:///c:/xampp/htdocs/prox/refactor/my-pdf-formal-file.pdf</url>
-         <type>primary</type>
-         <prox-id>value-2013-4-9-16-53-8-39562387-10</prox-id>
-      </resource>
-      <resource>
-         <urn>URN-FOR-XREF-XHTML-LOG</urn>
-         <url>file:///c:/xampp/htdocs/prox/refactor/my-xref-check.htm</url>
-         <type>primary</type>
-         <prox-id>id-value-xref-htm</prox-id>
-      </resource>
-      <resource>
-         <urn>URN-FOR-FILES-LIST-XML</urn>
-         <url>file:///c:/xampp/htdocs/prox/refactor/files.xml</url>
-         <type>secondary</type>
-         <prox-id>id-file-url</prox-id>
-      </resource>
-      <resource>
-         <urn>URN-FOR-HTM-OUT</urn>
-         <url>file:///c:/xampp/htdocs/prox/refactor/my-xhtml-out.htm</url>
-         <type>primary</type>
-         <prox-id>id-htm-out</prox-id>
-      </resource>
-   </targets>
-   
-   <!-- ProX blueprint and saved instance(s) -->
-   <prox>
-      <!-- Blueprint used to get instance is here -->
-      <blueprints>
-         <resource id="id-prox-blueprint">
-            <urn>URN-OF-PROX-BLUEPRINT</urn>
-            <url>prox-blueprint.xml</url>
-            <!--<url>file://prox-blueprint.xml</url>-->
-            <type></type>
-            <prox-id></prox-id>
-         </resource>    
-      </blueprints>
-      
-      <!-- Saved instance to run with wrapper is here -->
-      <!-- All these are associated with .config files -->
-      <!-- Input to wrapper pipeline -->
-      <instances>
-         <resource id="id-prox-saved-instance">
-            <urn>URN-OF-SAVED-PROX-INSTANCE</urn>
-            <!--<url>file:///c:/xampp/htdocs/prox/refactor/prox-instance.xml</url>-->
-            <url>prox-instance.xml</url>
-            <type></type>
-            <prox-id></prox-id>
-         </resource>
-      </instances>
-   </prox>
-   
-   <!-- Resources used by ProX Processes -->
-   <prox-resources>
-      
-      <!-- PDF Publishing XProc -->
-      <package>
-         <name>XProc Pipeline for Normalize, Validate
-                  and PDF</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002715:sv-SE:0.1</urn>
-               <url>file:///e:/SGML/DTD/Cassis/XProc/publish-cosml-pdf.xpl</url>
-               <prox-id>locator-2013-4-10-10-32-24-12830403-</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- PDF Publishing XSL-FO, Internal -->
-      <package>
-         <name>XSL-FO Package for COSML PDF</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000232:sv-SE:0.6</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/cos-fo-internal.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-1</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000074:sv-SE:0.11</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/param.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-2</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000059:sv-SE:0.2</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/attribute-set.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-3</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000070:sv-SE:0.15</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/layout.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-4</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000876:sv-SE:0.2</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/bookmarks.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-5</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000075:sv-SE:0.17</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/static-content.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-6</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000072:sv-SE:0.10</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/meta-data.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-7</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000078:sv-SE:0.9</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/toc.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-8</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000062:sv-SE:0.9</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/body.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-9</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000233:sv-SE:0.8</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/sections.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-10</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000061:sv-SE:0.29</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/block.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-11</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000065:sv-SE:0.6</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/inline.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-12</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000071:sv-SE:0.6</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/list.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-13</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000077:sv-SE:0.6</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/table.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-14</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000079:sv-SE:0.7</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/xref.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-15</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000060:sv-SE:0.7</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/back.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-16</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000064:sv-SE:0.8</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/index.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-17</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000066:sv-SE:0.2</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/inset.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-18</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000069:sv-SE:0.3</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/l10n.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-19</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000063:sv-SE:0.3</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/extension.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-20</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000785:sv-SE:0.6</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/demo.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-21</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000076:sv-SE:0.10</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/strings.xml</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-22</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000230:sv-SE:0.1</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/logotyp.jpg</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-23</prox-id>
-            </resource>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000426:sv-SE:0.1</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/tux.jpg</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-24</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- XHTML Publishing XProc -->
-      <package>
-         <name>XProc COSML2XHTML</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002756:sv-SE:0.2</urn>
-               <url>file:///e:/SGML/DTD/Cassis/XProc/publish-cosml-html.xpl</url>
-               <prox-id>id-xhtml-xproc</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- XHTML Publishing XSLT -->
-      <package>
-         <name>COSML XHTML XSLT</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002755:sv-SE:0.1</urn>
-               <url>file:///e:/SGML/DTD/Cassis/Conversions/cosml2html-ti.xsl</url>
-               <prox-id>id-xhtml-xslt</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- Xref Check XProc -->
-      <package>
-         <name>XProc Xref Check</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002757:sv-SE:0.2</urn>
-               <url>file:///e:/SGML/DTD/Cassis/XProc/xref-check-cosml.xpl</url>
-               <prox-id>id-xproc-xref</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- Xref Check XSLT -->
-      <package>
-         <name>XSLT Xref Check</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002754:sv-SE:0.1</urn>
-               <url>file:///e:/SGML/DTD/Cassis/Conversions/link-target-check-multifile.xsl</url>
-               <prox-id>id-xslt-xref</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- Standard Normalize XSLT for Publishing -->
-      <package>
-         <name>Normalize XSLT</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00000073:sv-SE:0.4</urn>
-               <url>file:///e:/SGML/DTD/Cassis/FO/normalize.xsl</url>
-               <prox-id>locator-2013-4-9-16-53-8-39562387-26</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- Calabash Engine Configuration -->
-      <package>
-         <name>Calabash Configuration</name>
-         <resources>
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002745:sv-SE:0.1</urn>
-               <url>file:///c:/xmlcalabash-1.0.9-94/conf-calabash.xml</url>
-               <prox-id>id-loc-calabash-config</prox-id>
-            </resource>
-         </resources>
-      </package>
-   </prox-resources>
-   
-   
-   <!-- Wrapper stuff -->
-   <wrapper-pipeline>
-      
-      <!-- Warapper Pipeline Resources -->
-      <package>
-         <name>Wrapper Pipeline Processing</name>
-         <resources>
-            <!-- Wrapper Pipeline -->
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002735:sv-SE:0.1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/prox-wrapper.xpl</url>
-               <prox-id>id-wrapper-xpl</prox-id>
-            </resource>
-            <!-- ProX Instance Update -->
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002732:sv-SE:0.1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/prox-fix.xsl</url>
-               <prox-id>id-prox-fix</prox-id>
-            </resource>
-            <!-- URN2URL for XML Input -->
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002733:sv-SE:0.1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/urn2url.xsl</url>
-               <prox-id>id-urn2url</prox-id>
-            </resource>
-            <!-- ProX Instance Conversion to Shell Script -->
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002731:sv-SE:0.1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/prox2shell.xsl</url>
-               <prox-id>id-prox2bat</prox-id>
-            </resource>
-            <!-- Engine parameters required by ProX to Shell Script conversion -->
-            <resource>
-               <urn>urn:x-cassis:r1:cos:00002734:sv-SE:0.1</urn>
-               <url>file:///c:/xampp/htdocs/prox/refactor/prox2shell-config.xml</url>
-               <prox-id>id-prox2shell-config</prox-id>
-            </resource>
-         </resources>
-      </package>
-      
-      <!-- XForm for ProX Process Configuration -->
-      <package>
-         <name>ProX XForm</name>
-         <resources>
-            <!-- XForm for proX Blueprint Handling -->
-            <resource>
-               <urn>urn:prox:xform:0.1</urn>
-<!--               <url>file:///c:/xampp/htdocs/prox/refactor/prox-xform.xml</url>-->
-               <url>http://localhost/prox/refactor/prox-xform.xml</url>
-               <prox-id>id-loc-xform</prox-id>
-            </resource>
-         </resources>
-      </package>
-   </wrapper-pipeline>
+        </instances>
+    </prox>
+
+    <!-- Resources used by ProX Processes -->
+    <prox-resources>
+
+        <!-- PDF Publishing XProc -->
+        <package>
+            <name>XProc Pipeline for Normalize, Validate and PDF</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002715:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/publish-cosml-pdf.xpl</url>
+                    <prox-id>locator-2013-4-10-10-32-24-12830403-</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- PDF Publishing XSL-FO, Internal -->
+        <package>
+            <name>XSL-FO Package for COSML PDF</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000232:sv-SE:0.6</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/cos-fo-internal.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-1</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000074:sv-SE:0.11</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/param.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-2</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000059:sv-SE:0.2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/attribute-set.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-3</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000070:sv-SE:0.15</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/layout.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-4</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000876:sv-SE:0.2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/bookmarks.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-5</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000075:sv-SE:0.17</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/static-content.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-6</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000072:sv-SE:0.10</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/meta-data.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-7</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000078:sv-SE:0.9</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/toc.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-8</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000062:sv-SE:0.9</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/body.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-9</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000233:sv-SE:0.8</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/sections.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-10</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000061:sv-SE:0.29</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/block.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-11</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000065:sv-SE:0.6</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/inline.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-12</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000071:sv-SE:0.6</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/list.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-13</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000077:sv-SE:0.6</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/table.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-14</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000079:sv-SE:0.7</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/xref.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-15</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000060:sv-SE:0.7</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/back.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-16</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000064:sv-SE:0.8</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/index.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-17</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000066:sv-SE:0.2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/inset.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-18</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000069:sv-SE:0.3</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/l10n.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-19</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000063:sv-SE:0.3</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/extension.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-20</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000785:sv-SE:0.6</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/demo.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-21</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000076:sv-SE:0.10</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/strings.xml</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-22</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000230:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/standard-images/logotyp.jpg</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-23</prox-id>
+                </resource>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000426:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/standard-images/tux.jpg</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-24</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- XHTML Publishing XProc -->
+        <package>
+            <name>XProc COSML2XHTML</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002756:sv-SE:0.2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/publish-cosml-html.xpl</url>
+                    <prox-id>id-xhtml-xproc</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- XHTML Publishing XSLT -->
+        <package>
+            <name>COSML XHTML XSLT</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002755:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/cosml2html-ti.xsl</url>
+                    <prox-id>id-xhtml-xslt</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- Xref Check XProc -->
+        <package>
+            <name>XProc Xref Check</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002757:sv-SE:0.2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/xref-check-cosml.xpl</url>
+                    <prox-id>id-xproc-xref</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- Xref Check XSLT -->
+        <package>
+            <name>XSLT Xref Check</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002754:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/link-target-check-multifile.xsl</url>
+                    <prox-id>id-xslt-xref</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- Standard Normalize XSLT for Publishing -->
+        <package>
+            <name>Normalize XSLT</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00000073:sv-SE:0.4</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/normalize-2.xsl</url>
+                    <prox-id>locator-2013-4-9-16-53-8-39562387-26</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- Calabash Engine Configuration -->
+        <package>
+            <name>Calabash Configuration</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002745:sv-SE:0.1</urn>
+                    <url>file:///home/ari/xmlcalabash-1.0.9-94/conf-calabash.xml</url>
+                    <prox-id>id-loc-calabash-config</prox-id>
+                </resource>
+            </resources>
+        </package>
+    </prox-resources>
+
+
+    <!-- Wrapper stuff -->
+    <wrapper-pipeline>
+
+        <!-- Wrapper Pipeline Resources -->
+        <package>
+            <name>Wrapper Pipeline Processing</name>
+            <resources>
+                <!-- Wrapper Pipeline -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002735:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/prox-wrapper.xpl</url>
+                    <prox-id>id-wrapper-xpl</prox-id>
+                </resource>
+                <!-- ProX Instance Update -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002732:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox-fix.xsl</url>
+                    <prox-id>id-prox-fix</prox-id>
+                </resource>
+                <!-- URN2URL for XML Input -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002733:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/urn2url.xsl</url>
+                    <prox-id>id-urn2url</prox-id>
+                </resource>
+                <!-- ProX Instance Conversion to Shell Script -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002731:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox2shell.xsl</url>
+                    <prox-id>id-prox2shell</prox-id>
+                </resource>
+                <!-- ProX Instance Conversion to XQ -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00012731:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox2xq.xsl</url>
+                    <prox-id>id-prox2xq</prox-id>
+                </resource>
+                <!-- Engine parameters required by ProX to Shell Script conversion -->
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00002734:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/xml/prox2shell-config.xml</url>
+                    <prox-id>id-prox2shell-config</prox-id>
+                </resource>
+            </resources>
+        </package>
+
+        <!-- XForm for ProX Process Configuration -->
+        <package>
+            <name>ProX XForm</name>
+            <resources>
+                <!-- XForm for proX Blueprint Handling -->
+                <resource>
+                    <urn>urn:prox:xform:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/apps/prox-xform.xml</url>
+                    <prox-id>id-loc-xform</prox-id>
+                </resource>
+            </resources>
+        </package>
+    </wrapper-pipeline>
 </resource-map>
