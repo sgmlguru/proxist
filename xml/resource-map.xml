@@ -57,40 +57,97 @@
                 </resource>
             </modules>
         </doc>
+        <doc id="">
+            
+            <!-- Root document from Process Manager confguration -->
+            <!-- ProX instance needs this value -->
+            <!-- //*/@type=''external' and //*/@input-type='doc-root' -->
+            <root>
+                <resource>
+                    <urn>urn:testroot</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/test-root.xml</url>
+                    <type>doc-root</type>
+                    <prox-id>id-html-docroot</prox-id>
+                </resource>
+            </root>
+            
+            <!-- All modules linked from root or its descendants -->
+            <!-- XML, images, etc -->
+            <modules>
+                <resource>
+                    <urn>urn:image1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/image3.jpg</url>
+                    <type>jpg</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset1.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset2</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset2.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset3</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset3.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:inset4</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/inset4.xml</url>
+                    <type>xml</type>
+                </resource>
+                <resource>
+                    <urn>urn:block-inset1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/docs/pdftest/block-inset1.xml</url>
+                    <type>xml</type>
+                </resource>
+            </modules>
+        </doc>
     </docs>
 
 
     <!-- Runtime targets -->
+    <!-- Should use xmldb:exist for most -->
+    <!-- Do they need http or webdav variants? -->
     <targets>
         <resource>
             <urn>URN-FOR-OUTPUT</urn>
-            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-pdf-internal-file.pdf</url>
+            <url>xmldb:exist:///db/work/docs/test/my-pdf-internal-file.pdf</url>
             <type>primary</type>
             <prox-id>value-2013-4-9-16-53-8-39562387-6</prox-id>
         </resource>
         <resource>
             <urn>URN2-FOR-OUTPUT</urn>
-            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-pdf-formal-file.pdf</url>
+            <url>xmldb:exist:///db/work/docs/test/my-pdf-formal-file.pdf</url>
             <type>primary</type>
             <prox-id>value-2013-4-9-16-53-8-39562387-10</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-XREF-XHTML-LOG</urn>
-            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-xref-check.htm</url>
+            <url>xmldb:exist:///db/work/docs/test/my-xref-check.htm</url>
             <type>primary</type>
             <prox-id>id-value-xref-htm</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-FILES-LIST-XML</urn>
-            <url>http://localhost:8080/exist/rest/db/work/docs/test/files.xml</url>
+            <url>xmldb:exist:///db/work/docs/test/files.xml</url>
             <type>secondary</type>
             <prox-id>id-file-url</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-HTM-OUT</urn>
-            <url>http://localhost:8080/exist/rest/db/work/docs/test/my-xhtml-out.htm</url>
+            <url>xmldb:exist:///db/work/docs/test/my-xhtml-out.htm</url>
             <type>primary</type>
             <prox-id>id-htm-out</prox-id>
+        </resource>
+        <resource>
+            <urn>URN-FOR-NORMALIZED-HTML</urn>
+            <url>xmldb:exist///db/work/docs/test/normalized-for-debug.xml</url>
+            <type>primary</type>
+            <prox-id>id-normalized-html</prox-id>
         </resource>
     </targets>
 
@@ -142,7 +199,7 @@
             <resources>
                 <resource>
                     <urn>urn:x-cassis:r1:cos:00002715:sv-SE:0.1</urn>
-                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/publish-cosml-pdf.xpl</url>
+                    <url>xmldb:exist:///db/work/system/cosml/xproc/publish-cosml-pdf.xpl</url>
                     <prox-id>locator-2013-4-10-10-32-24-12830403-</prox-id>
                 </resource>
             </resources>
@@ -281,7 +338,7 @@
             <resources>
                 <resource>
                     <urn>urn:x-cassis:r1:cos:00002756:sv-SE:0.2</urn>
-                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/publish-cosml-html.xpl</url>
+                    <url>xmldb:exist:///db/work/system/cosml/xproc/publish-cosml-html.xpl</url>
                     <prox-id>id-xhtml-xproc</prox-id>
                 </resource>
             </resources>
@@ -305,7 +362,7 @@
             <resources>
                 <resource>
                     <urn>urn:x-cassis:r1:cos:00002757:sv-SE:0.2</urn>
-                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xproc/xref-check-cosml.xpl</url>
+                    <url>xmldb:exist:///db/work/system/cosml/xproc/xref-check-cosml.xpl</url>
                     <prox-id>id-xproc-xref</prox-id>
                 </resource>
             </resources>
