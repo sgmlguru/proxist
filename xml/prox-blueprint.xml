@@ -36,7 +36,7 @@
                         <inputs id="inputs-2013-4-9-16-53-8-39562387-">
                             <input choice="no" id="input-2013-4-9-16-53-8-39562387-">
                                 <port id="port-2013-4-9-16-53-8-39562387-">document</port>
-                                <value type="external" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-" mimetype="application/xml">DOCUMENT-PLACEHOLDER</value>
+                                <value type="external" input-type="doc-root" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-" mimetype="application/xml">DOCUMENT-PLACEHOLDER</value>
                             </input>
                             <input choice="no" id="input-2013-4-9-16-53-8-39562387-1">
                                 <port id="port-2013-4-9-16-53-8-39562387-1">stylesheet</port>
@@ -103,7 +103,7 @@
                         <inputs id="inputs-2013-4-9-16-53-8-39562387-1">
                             <input choice="no" id="input-2013-4-9-16-53-8-39562387-3">
                                 <port id="port-2013-4-9-16-53-8-39562387-6">document</port>
-                                <value type="external" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-7">DOCUMENT-PLACEHOLDER</value>
+                                <value type="external" input-type="doc-root" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-7">DOCUMENT-PLACEHOLDER</value>
                             </input>
                             <input choice="no" id="input-2013-4-9-16-53-8-39562387-4">
                                 <port id="port-2013-4-9-16-53-8-39562387-7">stylesheet</port>
