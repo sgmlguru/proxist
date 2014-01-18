@@ -1,16 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns=""
-    exclude-result-prefixes="xs"
-    version="2.0">
-    
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
     <xsl:output method="xml" indent="yes"/>
     
     <!-- Mapping Document -->
-    <xsl:param name="map-url"/>
+    <xsl:param name="map-url"/><!--  select="'http://localhost:8080/exist/rest/db/work/system/common/xml/resource-map.xml'" -->
     <xsl:param name="map" select="doc($map-url)"/>
     
     
@@ -23,7 +15,6 @@
             <xsl:apply-templates select="*|text()"/>
         </xsl:element>
     </xsl:template>
-    
     <xsl:template match="*">
         <xsl:element name="{local-name(.)}">
             <xsl:copy-of select="namespace::*"/>
@@ -63,18 +54,13 @@
             <xsl:attribute name="xlink:href">
                 <xsl:call-template name="add-ext-url">
                     <xsl:with-param name="id" select="./@id"/>
-                </xsl:call-template>    
+                </xsl:call-template>
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
-    
     <xsl:template match="@*" mode="attr">
         <xsl:attribute name="{name(.)}">
             <xsl:value-of select="."/>
         </xsl:attribute>
     </xsl:template>
-    
-    
-    
-    
 </xsl:stylesheet>
