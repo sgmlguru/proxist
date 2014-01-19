@@ -255,7 +255,7 @@
                             </option>
                             <option>
                                 <name>normalized</name>
-                                <value id="id-normalized-html" type="external" mimetype="application/xml" output-type="primary"/>
+                                <value id="id-normalized-html" type="external" mimetype="application/xml" output-type="secondary"/>
                             </option>
                         </options>
                     </cmdline>
@@ -341,7 +341,7 @@
                             </option>
                             <option>
                                 <name>file-url</name>
-                                <value id="id-file-url" type="external" output-type="primary" mimetype="application/xml"/>
+                                <value id="files" type="external" output-type="fixed" mimetype="application/xml"/>
                             </option>
                         </options>
                     </cmdline>

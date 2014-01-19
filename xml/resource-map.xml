@@ -135,7 +135,7 @@
             <urn>URN-FOR-FILES-LIST-XML</urn>
             <url>xmldb:exist:///db/work/docs/test/files.xml</url>
             <type>secondary</type>
-            <prox-id>id-file-url</prox-id>
+            <prox-id>files</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-HTM-OUT</urn>

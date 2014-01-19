@@ -36,8 +36,8 @@
         <resource>
             <urn>URN-FOR-FILES-LIST-XML</urn>
             <url>xmldb:exist:///db/work/docs/test/files.xml</url>
-            <type>secondary</type>
-            <prox-id>id-file-url</prox-id>
+            <type>fixed</type>
+            <prox-id>files</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-HTM-OUT</urn>
@@ -48,7 +48,7 @@
         <resource>
             <urn>URN-FOR-NORMALIZED-HTML</urn>
             <url>xmldb:exist///db/work/docs/test/normalized-for-debug.xml</url>
-            <type>primary</type>
+            <type>secondary</type>
             <prox-id>id-normalized-html</prox-id>
         </resource>
     </targets>
