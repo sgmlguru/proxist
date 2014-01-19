@@ -1,0 +1,148 @@
+<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
+<?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xf="http://www.w3.org/2002/xforms" 
+    xmlns:my="test" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <head>
+        <title>Select Resource</title>
+        <!--<link type="text/css" rel="stylesheet" href="http://localhost:8080/exist/rest/db/apps/style-sel.css"/>-->
+        <xf:model id="facts">
+            <!-- Filter instance -->
+            <xf:instance id="filtered">
+                <data xmlns="">
+                    <filter/>
+                    <texttype/>
+                    <value/>
+                </data>
+            </xf:instance>
+            <!-- Add eXist instance(s) -->
+            <xf:instance 
+                id="exist-data" 
+                src="http://localhost:8080/exist/rest/db/work/system/cosml/xq/list-root-xml.xq">
+                <data xmlns="">
+                    <item>
+                        <string/>
+                        <value/>
+                    </item>
+                </data>
+            </xf:instance>
+            
+            <xf:instance id="publish-files">
+                <data xmlns="">
+                    <value/>
+                </data>
+            </xf:instance>
+            
+            <xf:action ev:event="xforms-ready">
+                <xf:setvalue 
+                    ref="instance('publish-files')/data/value" 
+                    value="'dummy-value'"/>
+            </xf:action>
+            
+            <!-- Use bind with calculate to populate local item list using filter condition -->
+            <xf:bind 
+                id="test" 
+                nodeset="instance('filtered')/item" 
+                calculate="instance('exist-data')/item[contains(string,instance('filtered')/filter)]"/>
+            
+            <xf:bind id="delete" nodeset="instance('publish-files')/value"/>
+            
+            <!-- POSTs list of files to be moved to publishing chain -->
+            <xf:submission 
+                id="move-on-server" 
+                method="post" 
+                action="../work/system/cosml/xq/selection.xq"
+                ref="instance('publish-files')"/>
+            
+        </xf:model>
+    </head>
+    
+    <body>
+        <h2>Resources in /db/work</h2>
+        <fieldset>
+            <legend>Select root XML to process</legend>
+            <xf:trigger>
+                <xf:label>Process selected resource</xf:label>
+                <xf:hint>Processes selected resource using the process selected in the next step.</xf:hint>
+                <xf:action ev:event="DOMActivate">
+                    <xf:send submission="move-on-server"/>
+                </xf:action>
+            </xf:trigger>
+            <xf:group appearance="full">
+                <!-- Filter condition, add to filter instance in model -->
+                <div class="block-form">
+                    <xf:input 
+                        incremental="true" 
+                        model="facts" 
+                        ref="instance('filtered')/filter" 
+                        appearance="compact">
+                        <xf:label>Filter</xf:label>
+                        <xf:hint>Filter the list using freetext search</xf:hint>
+                    </xf:input>
+                </div>
+                
+                <!-- Type of resource -->
+                <div class="block-form">
+                    <xf:select1 ref="instance('filtered')/texttype">
+                        <xf:label>Select resource type</xf:label>
+                        <xf:hint>Filters resources according to type</xf:hint>
+                        <xf:item>
+                            <xf:label>All</xf:label>
+                            <xf:value></xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Root XML</xf:label>
+                            <xf:value>root</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>XML modules</xf:label>
+                            <xf:value>xmlmodules</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Other</xf:label>
+                            <xf:value>other</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                </div>
+                
+                <!-- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -->
+                <div class="block-form">
+                    <xf:select1
+                        model="facts" 
+                        appearance="minimal" 
+                        incremental="true" 
+                        ref="instance('publish-files')/value" 
+                        id="fact-list">
+                        <xf:label/>
+                        <xf:hint>Select resources</xf:hint>
+                        
+                        <xf:itemset 
+                            model="facts" 
+                            nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and
+                            contains(type,instance('filtered')/texttype)]">
+                            <xf:label ref="string"/>
+                            <xf:value ref="value"/>
+                        </xf:itemset>
+                    </xf:select1>
+                </div>
+                
+            </xf:group>
+            
+        </fieldset>
+        
+        <div/>
+        
+        <!--<p>
+            <!-\- Output deleted facts -\->
+            <xf:output value="serialize(instance('delete-files'),'yes')"/>
+        </p>
+        <p>
+            <xf:output value="serialize(instance('filtered'),'yes')"/>
+        </p>-->
+        
+    </body>
+</html>
