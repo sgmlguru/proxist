@@ -22,7 +22,7 @@
             <!-- Add eXist instance(s) -->
             <xf:instance 
                 id="exist-data" 
-                src="http://localhost:8080/exist/rest/db/work/system/cosml/xq/list-root-xml.xq">
+                src="http://localhost:8080/exist/rest/db/work/system/cosml/xq/list-resources.xq">
                 <data xmlns="">
                     <item>
                         <string/>
@@ -55,7 +55,7 @@
             <xf:submission 
                 id="move-on-server" 
                 method="post" 
-                action="../work/system/cosml/xq/selection.xq"
+                action="http://localhost:8080/work/system/cosml/xq/generate-resmap.xq"
                 ref="instance('publish-files')"/>
             
         </xf:model>

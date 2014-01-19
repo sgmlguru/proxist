@@ -1,0 +1,82 @@
+<css>
+@namespace xf url("http://www.w3.org/2002/xforms");
+			.code{
+			    font-family:monospace;
+			    white-space:pre;
+			    font-size: 8pt;
+			}
+			body {
+				margin-left: 30px;
+				margin-right: 30px;
+				font-family: Helvetica, sans-serif;
+			}
+			/*fieldset {
+				width: 800px;
+			}
+			fieldset.config {
+				width: 280px;
+				height: 140px;
+			}*/
+			.debug {
+				font-size: 8pt;
+			}
+			
+			xf|help, xf|hint {
+				padding-left: 5px;
+				font-size: 9pt;
+			}
+			
+			xf|group:disabled {display: none}
+			xf|repeat:disabled {display: none}
+			
+			
+            /* formatting rule for all XForms controls elements within a block form.  Each input control is on a separate line */
+            .block-form xf|input,
+            .block-form xf|item,
+            .block-form xf|select,
+            .block-form xf|select1,
+            .block-form xf|textarea {
+                 display: block;
+                 margin: 8px;
+                 font-size: 10pt;
+                 width: 90%;
+            }
+            
+            xf|select {
+                margin-top: 60px;
+            }
+            
+            .block-form xf|select1 {
+                height: 25px;
+            }
+             
+            /* formatting rule for all labels in a block form */
+            .block-form xf|label {
+                display: block;
+                width: 300px; /* fix the width of all the labels in the block form */
+                float: left;
+                text-align: right;
+                margin-right: 1ex; /* margin to the right of the label */
+            }
+            
+            xf|trigger {
+                display: block;
+                margin-bottom: 50px;
+            }
+            
+            a {
+            text-decoration:none;
+            color: #0088CC;
+            }
+            a:hover {
+            -moz-text-blink: none;
+            -moz-text-decoration-color: -moz-use-text-color;
+            -moz-text-decoration-line: underline;
+            -moz-text-decoration-style: solid;
+            color: #005580;
+            }
+            ul li {
+            list-style-type: none;
+}
+			
+</css>

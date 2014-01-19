@@ -1,0 +1,29 @@
+
+
+
+Select input root XML
+
+* select.xhtml (XForm for input XML selection)
+  - list-resources.xq (lists resources in /db/work)
+  - generate-resmap.xq (submission in XForm; generates resource-map.xml)
+
+
+Configure ProX
+
+* prox-xform.xhtml (XForm for ProX process config)
+  - prox-blueprint.xml (input to XForm)
+  - prox-instance.xml (saved instance)
+
+
+Run ProX wrapper
+
+* wrapper-TEST.xq (XQ for running wrapper XProc)
+  - resource-map.xml as input (from 1st step)
+  - normalized.xml for debug
+
+* WRAP-2.xsl (wrapper XProc)
+  - resource-map.xml as input
+  - prox-fix.xsl (updates ProX instance)
+  - prox2xq.xsl (converts ProX instance to XQ) => out.xq
+  - ch-mode.xq (changes permissions, ownership, group of XQ)   UPDATE NEEDED!
+  - runs out.xq
