@@ -84,7 +84,7 @@
                         <options id="options-2013-4-9-16-53-8-39562387-">
                             <option choice="no" id="option-2013-4-9-16-53-8-39562387-">
                                 <name id="name-2013-4-9-16-53-8-39562387-3">pdf</name>
-                                <value type="external" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf</value>
+                                <value type="external" output-type="primary" mimetype="application/pdf" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf</value>
                             </option>
                         </options>
                     </cmdline>
@@ -117,7 +117,7 @@
                         <options id="options-2013-4-9-16-53-8-39562387-1">
                             <option choice="no" id="option-2013-4-9-16-53-8-39562387-1">
                                 <name id="name-2013-4-9-16-53-8-39562387-4">pdf</name>
-                                <value type="external" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-10" mimetype="application/pdf">PDF-PLACEHOLDER.pdf</value>
+                                <value type="external" output-type="primary" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-10" mimetype="application/pdf">PDF-PLACEHOLDER.pdf</value>
                             </option>
                         </options>
                     </cmdline>
@@ -251,11 +251,11 @@
                         <options>
                             <option>
                                 <name>htm</name>
-                                <value id="id-htm-out" type="external" output-type="primary"/>
+                                <value id="id-htm-out" type="external" mimetype="text/html" output-type="primary"/>
                             </option>
                             <option>
                                 <name>normalized</name>
-                                <value id="id-normalized-html" type="external" output-type="primary"/>
+                                <value id="id-normalized-html" type="external" mimetype="application/xml" output-type="primary"/>
                             </option>
                         </options>
                     </cmdline>
@@ -327,7 +327,7 @@
                         <inputs>
                             <input>
                                 <port>map</port>
-                                <value type="external" input-type="map"/>
+                                <value type="external" mimetype="application/xml" input-type="map"/>
                             </input>
                             <input id="input-2013-5-19-11-12-49-71312191-2">
                                 <port>stylesheet</port>
@@ -337,11 +337,11 @@
                         <options>
                             <option>
                                 <name>htm</name>
-                                <value id="id-value-xref-htm" type="external" mimetype="text/xhtml"/>
+                                <value id="id-value-xref-htm" type="external" output-type="primary" mimetype="text/html"/>
                             </option>
                             <option>
                                 <name>file-url</name>
-                                <value id="id-file-url" type="external" mimetype="text/xml"/>
+                                <value id="id-file-url" type="external" output-type="primary" mimetype="application/xml"/>
                             </option>
                         </options>
                     </cmdline>
