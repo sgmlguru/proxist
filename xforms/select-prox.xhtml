@@ -131,8 +131,8 @@
     <body>
         
         <!-- Selections First... -->
-        <h2>Resources in /db/work</h2>
-        <fieldset>
+        <!--<h2>Resources in /db/work</h2>-->
+        <!--<fieldset>
             <legend>Select root XML to process</legend>
             <xf:trigger>
                 <xf:label>Process selected resource</xf:label>
@@ -143,7 +143,7 @@
             </xf:trigger>
             
             <xf:group appearance="full">
-                <!-- Filter condition, add to filter instance in model -->
+                <!-\- Filter condition, add to filter instance in model -\->
                 <div class="block-form">
                     <xf:input 
                         incremental="true" 
@@ -155,7 +155,7 @@
                     </xf:input>
                 </div>
                 
-                <!-- Type of resource -->
+                <!-\- Type of resource -\->
                 <div class="block-form">
                     <xf:select1 ref="instance('filtered')/texttype">
                         <xf:label>Select resource type</xf:label>
@@ -179,7 +179,7 @@
                     </xf:select1>
                 </div>
                 
-                <!-- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -->
+                <!-\- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -\->
                 <div class="block-form">
                     <xf:select1 
                         model="facts" 
@@ -187,8 +187,8 @@
                         incremental="true" 
                         ref="instance('publish-files')/value" 
                         id="fact-list">
-                        <xf:label/>
-                        <xf:hint>Select resources</xf:hint>
+                        <xf:label>Select resource</xf:label>
+                        <xf:hint>Select resource</xf:hint>
                         <xf:itemset 
                             model="facts" 
                             nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and                             contains(type,instance('filtered')/texttype)]">
@@ -198,16 +198,106 @@
                     </xf:select1>
                 </div>
             </xf:group>
-        </fieldset>
-        <div/>
+        </fieldset>-->
+        <!--<div/>
         <p>
             <xf:output value="serialize(instance('publish-files'),'yes')"/>
         </p>
-        <div/>
+        <div/>-->
         
         <!-- ProX Forms Follow... -->
-        <h2>Process Configuration</h2>
+        <h2>Input Selection and Process Configuration</h2>
         <table>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend>Select input XML</legend>
+                        <xf:group appearance="full">
+                            <!-- Filter condition, add to filter instance in model -->
+                            <div class="block-form">
+                                <xf:input 
+                                    incremental="true" 
+                                    model="facts" 
+                                    ref="instance('filtered')/filter" 
+                                    appearance="compact">
+                                    <xf:label>Filter</xf:label>
+                                    <xf:hint>Filter the list using freetext search</xf:hint>
+                                </xf:input>
+                            </div>
+                        </xf:group>
+                    </fieldset>
+                </td>
+                <td>
+                    <fieldset>
+                        <legend>Select input XML</legend>
+                        <xf:group appearance="full">
+                            <!-- Type of resource -->
+                            <div class="block-form">
+                                <xf:select1 ref="instance('filtered')/texttype">
+                                    <xf:label>Select resource type</xf:label>
+                                    <xf:hint>Filters resources according to type</xf:hint>
+                                    <xf:item>
+                                        <xf:label>All</xf:label>
+                                        <xf:value/>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Root XML</xf:label>
+                                        <xf:value>root</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>XML modules</xf:label>
+                                        <xf:value>xmlmodules</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Other</xf:label>
+                                        <xf:value>other</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                            </div>
+                        </xf:group>
+                    </fieldset>
+                </td>
+                <td>
+                    <fieldset>
+                        <legend>Select input XML</legend>
+                        <xf:group appearance="full">
+                            <!-- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -->
+                            <div class="block-form">
+                                <xf:select1 
+                                    model="facts" 
+                                    appearance="minimal" 
+                                    incremental="true" 
+                                    ref="instance('publish-files')/value" 
+                                    id="fact-list">
+                                    <xf:label>Select resource</xf:label>
+                                    <xf:hint>Select resource</xf:hint>
+                                    <xf:itemset 
+                                        model="facts" 
+                                        nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and                             contains(type,instance('filtered')/texttype)]">
+                                        <xf:label ref="string"/>
+                                        <xf:value ref="value"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </div>
+                        </xf:group>
+                    </fieldset>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <xf:trigger>
+                        <xf:label>Process selected resource</xf:label>
+                        <xf:hint>Processes selected resource using the process selected in the next step.</xf:hint>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:send submission="select"/>
+                        </xf:action>
+                    </xf:trigger>
+                </td>
+                <td/>
+                <td/>
+            </tr>
+            
             <tr>
                 <td>
                     <!-- Process -->
@@ -218,7 +308,7 @@
                                 appearance="compact" 
                                 incremental="false" 
                                 ref="theprocess">
-                                <xf:label><!--Process Select--></xf:label>
+                                <xf:label/>
                                 <xf:item id="item-proc-dummy">
                                     <xf:label>Select a process</xf:label>
                                     <xf:value>Nothing</xf:value>
@@ -389,6 +479,9 @@
             </xf:action>
         </xf:trigger>
         <hr/>
+        <p class="code">
+            <xf:output value="serialize(instance('publish-files'),'yes')"/>
+        </p>
         <p class="code">
             <xf:output value="serialize(instance('mytarget'),'yes')"/>
         </p>
