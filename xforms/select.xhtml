@@ -1,4 +1,5 @@
-<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
+<?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:my="test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Select Resource</title>
@@ -35,11 +36,8 @@
                 id="test" 
                 nodeset="instance('filtered')/item" 
                 calculate="instance('exist-data')/item[contains(string,instance('filtered')/filter)]"/>
-            <!--<xf:bind 
-                id="delete" 
-                nodeset="instance('publish-files')/value"/>-->
             
-            <!-- POSTs list of files to be moved to publishing chain -->
+            <!-- POSTs resource map selected root, modules and standard ProX resources -->
             <xf:submission 
                 id="select" 
                 method="post" 
