@@ -55,7 +55,7 @@
             <!-- Target for built process -->
             <xf:instance id="mytarget">
                 <data xmlns="">
-                    <processes> </processes>
+                    <processes form-id="prox-instance"> </processes>
                 </data>
             </xf:instance>
             
@@ -83,7 +83,8 @@
             <xf:submission 
                 id="select" 
                 method="post" 
-                action="http://localhost:8080/exist/rest/db/apps/proxist/modules/generate-resmap.xq" ref="instance('publish-files')"/>
+                action="http://localhost:8080/exist/rest/db/apps/proxist/modules/generate-resmap.xq" 
+                ref="instance('publish-files')"/>
             
             
             <!-- ProX stuff... -->
@@ -116,14 +117,22 @@
             <!-- Save the configured ProX instance -->
             <!-- Instance name listed in @action, set by wrapper XProc,
 				 based on the URL in the resource map XML. -->
-            <xf:submission 
+            <!--<xf:submission 
                 ref="instance('mytarget')/processes" 
                 replace="instance" 
                 method="put" 
                 encoding="UTF-8" 
                 action="/prox/refactor/prox-instance.xml" 
                 indent="true" 
-                id="save"/>
+                id="save"/>-->
+            <xf:submission ref="instance('mytarget')/processes" validate="false" replace="instance" method="post" encoding="UTF-8" resource="http://localhost:8080/exist/rest/db/apps/test/modules/save.xq" indent="true" id="save" instance="mytarget">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message>Save Done</xf:message>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                    <xf:message>Save Failed</xf:message>
+                </xf:action>
+            </xf:submission>
         </xf:model>
     </head>
     
@@ -454,7 +463,8 @@
             </tr>
         </table>
         <xf:trigger>
-            <xf:label>Save</xf:label>
+            <xf:label>Save Process</xf:label>
+            <xf:hint>Saves the configured process and applies it to the selected input document</xf:hint>
             <xf:action ev:event="DOMActivate">
                 <xf:delete 
                     nodeset="instance('mytarget')/processes/process"/>
@@ -478,8 +488,18 @@
                     submission="save"/>
             </xf:action>
         </xf:trigger>
+        <xf:group ref="instance('mytarget')/.[@code='200']">
+            <div class="success">
+                <xf:output ref="instance('mytarget')//message"/>
+            </div>
+        </xf:group>
+        <xf:group ref="instance('mytarget')/.[@code='400']">
+            <div class="failure">
+                <xf:output ref="instance('mytarget')//message"/>
+            </div>
+        </xf:group>
         <hr/>
-        <p class="code">
+        <!--<p class="code">
             <xf:output value="serialize(instance('publish-files'),'yes')"/>
         </p>
         <p class="code">
@@ -490,6 +510,6 @@
             <xf:output value="serialize(instance('scratchpad'),'yes')">
                 <xf:label>Scratchpad Contents </xf:label>
             </xf:output>
-        </p>
+        </p>-->
     </body>
 </html>

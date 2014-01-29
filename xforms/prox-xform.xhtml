@@ -68,10 +68,12 @@
 				 based on the URL in the resource map XML. -->
 			<xf:submission 
 			    ref="instance('mytarget')/processes" 
-			    replace="instance" method="put" 
+			    replace="instance" 
+			    method="put" 
 			    encoding="UTF-8" 
 			    action="/prox/refactor/prox-instance.xml" 
-			    indent="true" id="save"/>
+			    indent="true" 
+			    id="save"/>
 			<!-- file:///e:/SGML/DTD/Process-XML/XSLT/ -->
 		</xf:model>
 	</head>
@@ -241,6 +243,7 @@
 				<xf:send submission="save"/>
 			</xf:action>
 		</xf:trigger>
+	    
 		<hr/>
 		<p class="code">
 			<xf:output value="serialize(instance('mytarget'),'yes')"/>
