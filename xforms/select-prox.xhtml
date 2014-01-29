@@ -20,7 +20,7 @@
                 </data>
             </xf:instance>
             
-            <!-- Filter instance -->
+            <!-- Filter input selection -->
             <xf:instance id="filtered">
                 <data xmlns="">
                     <filter/>
@@ -32,7 +32,7 @@
             <!-- Add eXist instance(s) -->
             <xf:instance 
                 id="exist-data" 
-                src="http://localhost:8080/exist/rest/db/apps/proxist/modules/list-resources.xq">
+                src="modules/list-resources.xq">
                 <data xmlns="">
                     <item>
                         <string/>
@@ -40,6 +40,8 @@
                     </item>
                 </data>
             </xf:instance>
+            
+            
             
             <!-- Selected XML goes here -->
             <xf:instance id="publish-files">
@@ -66,12 +68,15 @@
                 src="http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml" 
                 id="mysource"/>
             
+            
+            
             <!-- Selection stuff... -->
             <xf:action ev:event="xforms-ready">
                 <xf:setvalue 
                     ref="instance('publish-files')/data/value" 
                     value="'dummy-value'"/>
             </xf:action>
+            
             
             <!-- Use bind with calculate to populate local item list using filter condition -->
             <xf:bind 
@@ -83,8 +88,17 @@
             <xf:submission 
                 id="select" 
                 method="post" 
-                action="http://localhost:8080/exist/rest/db/apps/proxist/modules/generate-resmap.xq" 
-                ref="instance('publish-files')"/>
+                replace="none" 
+                action="modules/generate-resmap.xq" 
+                ref="instance('publish-files')">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message>Input selected</xf:message>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                    <xf:message>Input selection failed</xf:message>
+                </xf:action>
+                <xf:recalculate/>
+            </xf:submission>
             
             
             <!-- ProX stuff... -->
@@ -117,15 +131,7 @@
             <!-- Save the configured ProX instance -->
             <!-- Instance name listed in @action, set by wrapper XProc,
 				 based on the URL in the resource map XML. -->
-            <!--<xf:submission 
-                ref="instance('mytarget')/processes" 
-                replace="instance" 
-                method="put" 
-                encoding="UTF-8" 
-                action="/prox/refactor/prox-instance.xml" 
-                indent="true" 
-                id="save"/>-->
-            <xf:submission ref="instance('mytarget')/processes" validate="false" replace="instance" method="post" encoding="UTF-8" resource="http://localhost:8080/exist/rest/db/apps/test/modules/save.xq" indent="true" id="save" instance="mytarget">
+            <xf:submission ref="instance('mytarget')/processes" validate="false" replace="instance" method="post" encoding="UTF-8" resource="modules/save.xq" indent="true" id="save" instance="mytarget">
                 <xf:action ev:event="xforms-submit-done">
                     <xf:message>Save Done</xf:message>
                 </xf:action>
@@ -138,81 +144,6 @@
     
     
     <body>
-        
-        <!-- Selections First... -->
-        <!--<h2>Resources in /db/work</h2>-->
-        <!--<fieldset>
-            <legend>Select root XML to process</legend>
-            <xf:trigger>
-                <xf:label>Process selected resource</xf:label>
-                <xf:hint>Processes selected resource using the process selected in the next step.</xf:hint>
-                <xf:action ev:event="DOMActivate">
-                    <xf:send submission="select"/>
-                </xf:action>
-            </xf:trigger>
-            
-            <xf:group appearance="full">
-                <!-\- Filter condition, add to filter instance in model -\->
-                <div class="block-form">
-                    <xf:input 
-                        incremental="true" 
-                        model="facts" 
-                        ref="instance('filtered')/filter" 
-                        appearance="compact">
-                        <xf:label>Filter</xf:label>
-                        <xf:hint>Filter the list using freetext search</xf:hint>
-                    </xf:input>
-                </div>
-                
-                <!-\- Type of resource -\->
-                <div class="block-form">
-                    <xf:select1 ref="instance('filtered')/texttype">
-                        <xf:label>Select resource type</xf:label>
-                        <xf:hint>Filters resources according to type</xf:hint>
-                        <xf:item>
-                            <xf:label>All</xf:label>
-                            <xf:value/>
-                        </xf:item>
-                        <xf:item>
-                            <xf:label>Root XML</xf:label>
-                            <xf:value>root</xf:value>
-                        </xf:item>
-                        <xf:item>
-                            <xf:label>XML modules</xf:label>
-                            <xf:value>xmlmodules</xf:value>
-                        </xf:item>
-                        <xf:item>
-                            <xf:label>Other</xf:label>
-                            <xf:value>other</xf:value>
-                        </xf:item>
-                    </xf:select1>
-                </div>
-                
-                <!-\- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -\->
-                <div class="block-form">
-                    <xf:select1 
-                        model="facts" 
-                        appearance="minimal" 
-                        incremental="true" 
-                        ref="instance('publish-files')/value" 
-                        id="fact-list">
-                        <xf:label>Select resource</xf:label>
-                        <xf:hint>Select resource</xf:hint>
-                        <xf:itemset 
-                            model="facts" 
-                            nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and                             contains(type,instance('filtered')/texttype)]">
-                            <xf:label ref="string"/>
-                            <xf:value ref="value"/>
-                        </xf:itemset>
-                    </xf:select1>
-                </div>
-            </xf:group>
-        </fieldset>-->
-        <!--<div/>
-        <p>
-            <xf:output value="serialize(instance('publish-files'),'yes')"/>
-        </p>
-        <div/>-->
         
         <!-- ProX Forms Follow... -->
         <h2>Input Selection and Process Configuration</h2>
@@ -296,8 +227,8 @@
             <tr>
                 <td>
                     <xf:trigger>
-                        <xf:label>Process selected resource</xf:label>
-                        <xf:hint>Processes selected resource using the process selected in the next step.</xf:hint>
+                        <xf:label>Generate resource map</xf:label>
+                        <xf:hint>Processes selected input XML and generates a resource map XML file</xf:hint>
                         <xf:action ev:event="DOMActivate">
                             <xf:send submission="select"/>
                         </xf:action>
