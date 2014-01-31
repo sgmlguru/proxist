@@ -1,4 +1,4 @@
-<?xml-model href="http://www.sgmlguru.org/exist/rest/db/work/system/prox/relaxng/processes.rnc" type="application/relax-ng-compact-syntax"?><!--<!DOCTYPE processes SYSTEM "processes.dtd">-->
+<?xml-model href="http://localhost:8080/exist/rest/db/work/system/prox/relaxng/processes.rnc" type="application/relax-ng-compact-syntax"?>
 <processes xmlns:xlink="http://www.w3.org/1999/xlink" id="processes-2013-4-9-16-53-8-39562387-">
    
    <!-- Print Publishing Process -->
@@ -86,6 +86,10 @@
                                 <name id="name-2013-4-9-16-53-8-39562387-3">pdf</name>
                                 <value type="external" output-type="primary" mimetype="application/pdf" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf</value>
                             </option>
+                            <option>
+                                <name>normalized</name>
+                                <value id="id-normalized-pdf-int" type="external" mimetype="application/xml" output-type="secondary"/>
+                            </option>
                         </options>
                     </cmdline>
                
@@ -118,6 +122,10 @@
                             <option choice="no" id="option-2013-4-9-16-53-8-39562387-1">
                                 <name id="name-2013-4-9-16-53-8-39562387-4">pdf</name>
                                 <value type="external" output-type="primary" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-10" mimetype="application/pdf">PDF-PLACEHOLDER.pdf</value>
+                            </option>
+                            <option>
+                                <name>normalized</name>
+                                <value id="id-normalized-pdf-formal" type="external" mimetype="application/xml" output-type="secondary"/>
                             </option>
                         </options>
                     </cmdline>

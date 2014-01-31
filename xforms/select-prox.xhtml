@@ -1,9 +1,8 @@
 <?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:my="test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:my="test" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Select Resource</title>
         <!--<link type="text/css" rel="stylesheet" href="http://localhost:8080/exist/rest/db/apps/style-sel.css"/>-->
-        
         <xf:model id="facts">
             <!-- Temp data for ProX selections -->
             <xf:instance id="scratchpad">
@@ -30,9 +29,7 @@
             </xf:instance>
             
             <!-- Add eXist instance(s) -->
-            <xf:instance 
-                id="exist-data" 
-                src="modules/list-resources.xq">
+            <xf:instance id="exist-data" src="modules/list-resources.xq">
                 <data xmlns="">
                     <item>
                         <string/>
@@ -57,40 +54,28 @@
             <!-- Target for built process -->
             <xf:instance id="mytarget">
                 <data xmlns="">
-                    <processes form-id="prox-instance"> </processes>
+                    <processes form-id="prox-instance"/>
                 </data>
             </xf:instance>
             
             <!-- Source ProX Blueprint -->
             <!-- @src points out proX blueprint. It is set by wrapper XProc script, 
 				 based on the URL given in the resource map XML. -->
-            <xf:instance 
-                src="http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml" 
-                id="mysource"/>
+            <xf:instance src="http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml" id="mysource"/>
             
             
             
             <!-- Selection stuff... -->
             <xf:action ev:event="xforms-ready">
-                <xf:setvalue 
-                    ref="instance('publish-files')/data/value" 
-                    value="'dummy-value'"/>
+                <xf:setvalue ref="instance('publish-files')/data/value" value="'dummy-value'"/>
             </xf:action>
             
             
             <!-- Use bind with calculate to populate local item list using filter condition -->
-            <xf:bind 
-                id="test" 
-                nodeset="instance('filtered')/item" 
-                calculate="instance('exist-data')/item[contains(string,instance('filtered')/filter)]"/>
+            <xf:bind id="test" nodeset="instance('filtered')/item" calculate="instance('exist-data')/item[contains(string,instance('filtered')/filter)]"/>
             
             <!-- Generates resource map for selected root, modules and standard ProX resources -->
-            <xf:submission 
-                id="select" 
-                method="post" 
-                replace="none" 
-                action="modules/generate-resmap.xq" 
-                ref="instance('publish-files')">
+            <xf:submission id="select" method="post" replace="none" action="modules/generate-resmap.xq" ref="instance('publish-files')">
                 <xf:action ev:event="xforms-submit-done">
                     <xf:message>Input selected</xf:message>
                 </xf:action>
@@ -106,24 +91,13 @@
 			     If saved without a well-defined instance, the generated child
 			     process will fail. -->
             <xf:action ev:event="xforms-ready">
-                <xf:setvalue 
-                    ref="theprocess" 
-                    value="instance('mysource')/process[1]/@id"/>
-                <xf:setvalue 
-                    ref="thepipeline" 
-                    value="instance('mysource')/process[1]/pipelines/pipeline[1]/@id"/>
-                <xf:setvalue 
-                    ref="thecmds" 
-                    value="instance('mysource')/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[1]/@id"/>
-                <xf:setvalue 
-                    ref="booleanparams" 
-                    value="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/@id" if="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value='1'"/>
+                <xf:setvalue ref="theprocess" value="instance('mysource')/process[1]/@id"/>
+                <xf:setvalue ref="thepipeline" value="instance('mysource')/process[1]/pipelines/pipeline[1]/@id"/>
+                <xf:setvalue ref="thecmds" value="instance('mysource')/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[1]/@id"/>
+                <!--<xf:setvalue ref="booleanparams" value="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/@id" if="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value='1'"/>-->
                 <!--				<xf:setvalue ref="list1params/param" value="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='list1']/value[1]/@id" if="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='list1']/value[1]"/>-->
-                <xf:setvalue 
-                    ref="thepackages"/>
-                <xf:setvalue 
-                    ref="commonpackages" 
-                    value="instance('mysource')/processes/packages"/>
+                <xf:setvalue ref="thepackages"/>
+                <xf:setvalue ref="commonpackages" value="instance('mysource')/processes/packages"/>
             </xf:action>
             
             
@@ -141,8 +115,6 @@
             </xf:submission>
         </xf:model>
     </head>
-    
-    
     <body>
         
         <!-- ProX Forms Follow... -->
@@ -155,11 +127,7 @@
                         <xf:group appearance="full">
                             <!-- Filter condition, add to filter instance in model -->
                             <div class="block-form">
-                                <xf:input 
-                                    incremental="true" 
-                                    model="facts" 
-                                    ref="instance('filtered')/filter" 
-                                    appearance="compact">
+                                <xf:input incremental="true" model="facts" ref="instance('filtered')/filter" appearance="compact">
                                     <xf:label>Filter</xf:label>
                                     <xf:hint>Filter the list using freetext search</xf:hint>
                                 </xf:input>
@@ -169,7 +137,7 @@
                 </td>
                 <td>
                     <fieldset>
-                        <legend>Select input XML</legend>
+                        <legend>&#xa0;</legend>
                         <xf:group appearance="full">
                             <!-- Type of resource -->
                             <div class="block-form">
@@ -199,21 +167,14 @@
                 </td>
                 <td>
                     <fieldset>
-                        <legend>Select input XML</legend>
+                        <legend>&#xa0;</legend>
                         <xf:group appearance="full">
                             <!-- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -->
                             <div class="block-form">
-                                <xf:select1 
-                                    model="facts" 
-                                    appearance="minimal" 
-                                    incremental="true" 
-                                    ref="instance('publish-files')/value" 
-                                    id="fact-list">
+                                <xf:select1 model="facts" appearance="minimal" incremental="true" ref="instance('publish-files')/value" id="fact-list">
                                     <xf:label>Select resource</xf:label>
                                     <xf:hint>Select resource</xf:hint>
-                                    <xf:itemset 
-                                        model="facts" 
-                                        nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and                             contains(type,instance('filtered')/texttype)]">
+                                    <xf:itemset model="facts" nodeset="instance('exist-data')/item[contains(lower-case(string),lower-case(instance('filtered')/filter)) and                             contains(type,instance('filtered')/texttype)]">
                                         <xf:label ref="string"/>
                                         <xf:value ref="value"/>
                                     </xf:itemset>
@@ -223,7 +184,6 @@
                     </fieldset>
                 </td>
             </tr>
-            
             <tr>
                 <td>
                     <xf:trigger>
@@ -237,36 +197,26 @@
                 <td/>
                 <td/>
             </tr>
-            
             <tr>
                 <td>
                     <!-- Process -->
                     <fieldset>
-                        <legend>Process</legend>
+                        <legend>Configure Process</legend>
                         <div class="block-form">
-                            <xf:select1 
-                                appearance="compact" 
-                                incremental="false" 
-                                ref="theprocess">
-                                <xf:label/>
+                            <xf:select1 appearance="compact" incremental="false" ref="theprocess">
+                                <xf:label>Process</xf:label>
                                 <xf:item id="item-proc-dummy">
                                     <xf:label>Select a process</xf:label>
                                     <xf:value>Nothing</xf:value>
                                 </xf:item>
-                                <xf:itemset 
-                                    id="item-proc" 
-                                    nodeset="instance('mysource')/process">
+                                <xf:itemset id="item-proc" nodeset="instance('mysource')/process">
                                     <xf:label ref="./metadata/title"/>
                                     <xf:value ref="./@id"/>
                                 </xf:itemset>
                                 <xf:help id="help-proc">
-                                    <xf:output 
-                                        value="instance('mysource')/process[@id=instance('scratchpad')/theprocess]/metadata/description/p"/>
+                                    <xf:output value="instance('mysource')/process[@id=instance('scratchpad')/theprocess]/metadata/description/p"/>
                                 </xf:help>
-                                <xf:setvalue 
-                                    ref="../thepipeline" 
-                                    ev:event="DOMFocusIn" 
-                                    value="'Nothing'"/>
+                                <xf:setvalue ref="../thepipeline" ev:event="DOMFocusIn" value="'Nothing'"/>
                             </xf:select1>
                         </div>
                     </fieldset>
@@ -274,32 +224,22 @@
                 <td>
                     <!-- Pipeline -->
                     <fieldset>
-                        <legend>Pipeline</legend>
+                        <legend>&#xa0;</legend>
                         <div class=" block-form">
-                            <xf:select1 
-                                appearance="compact" 
-                                incremental="false" 
-                                ref="thepipeline" 
-                                id="id-pipe">
-                                <xf:label/>
+                            <xf:select1 appearance="compact" incremental="false" ref="thepipeline" id="id-pipe">
+                                <xf:label>Pipeline</xf:label>
                                 <xf:item id="item-pipe-dummy">
                                     <xf:label>Select a pipeline</xf:label>
                                     <xf:value>Nothing</xf:value>
                                 </xf:item>
-                                <xf:itemset 
-                                    id="item-pipe" 
-                                    nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline">
+                                <xf:itemset id="item-pipe" nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline">
                                     <xf:label ref="./metadata/title"/>
                                     <xf:value ref="@id"/>
                                 </xf:itemset>
                                 <xf:help id="help-pipe">
-                                    <xf:output 
-                                        value="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id=instance('scratchpad')/thepipeline]/metadata/description/p"/>
+                                    <xf:output value="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id=instance('scratchpad')/thepipeline]/metadata/description/p"/>
                                 </xf:help>
-                                <xf:setvalue 
-                                    ref="../thecmds" 
-                                    ev:event="DOMFocusIn" 
-                                    value="'Nothing'"/>
+                                <xf:setvalue ref="../thecmds" ev:event="DOMFocusIn" value="'Nothing'"/>
                             </xf:select1>
                         </div>
                     </fieldset>
@@ -307,40 +247,30 @@
                 <td>
                     <!-- Commands -->
                     <fieldset>
-                        <legend>Output</legend>
+                        <legend>&#xa0;</legend>
                         <div class="block-form">
-                            <xf:select1 
-                                appearance="compact" 
-                                incremental="false" 
-                                ref="thecmds" 
-                                id="id-cmd">
-                                <xf:label/>
+                            <xf:select1 appearance="compact" incremental="false" ref="thecmds" id="id-cmd">
+                                <xf:label>Output</xf:label>
                                 <xf:item id="item-cmd-dummy">
                                     <xf:label>Select output options</xf:label>
                                     <!--<xf:label>Select a command line</xf:label>-->
                                     <xf:value>Nothing</xf:value>
                                 </xf:item>
-                                <xf:itemset 
-                                    id="item-cmd" 
-                                    nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id = instance('scratchpad')/thepipeline]/cmdlines/cmdline">
+                                <xf:itemset id="item-cmd" nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id = instance('scratchpad')/thepipeline]/cmdlines/cmdline">
                                     <xf:label ref="metadata/title"/>
                                     <xf:value ref="@id"/>
                                 </xf:itemset>
                                 <xf:help id="help-cmd">
-                                    <xf:output 
-                                        value="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id=instance('scratchpad')/thepipeline]/cmdlines/cmdline[@id=instance('scratchpad')/thecmds]/metadata/description/p"/>
+                                    <xf:output value="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id=instance('scratchpad')/thepipeline]/cmdlines/cmdline[@id=instance('scratchpad')/thecmds]/metadata/description/p"/>
                                 </xf:help>
-                                <xf:setvalue 
-                                    ref="../booleanparams" 
-                                    ev:event="DOMFocusIn" 
-                                    value="''"/>
+                                <!--<xf:setvalue ref="../booleanparams" ev:event="DOMFocusIn" value="''"/>-->
                                 <!--								<xf:setvalue ref="../list1params/param" ev:event="DOMFocusIn" value="'Nothing'"/>-->
                             </xf:select1>
                         </div>
                     </fieldset>
                 </td>
             </tr>
-            <tr>
+            <!--<tr>
                 <td>
                     
                 </td>
@@ -350,19 +280,15 @@
                 <td>
                     <fieldset>
                         <legend>Params</legend>
-                        <!-- Check box params -->
+                        <!-\- Check box params -\->
                         <div class="block-form">
-                            <xf:select 
-                                appearance="full" 
-                                incremental="true" 
-                                ref="booleanparams">
+                            <xf:select appearance="full" incremental="true" ref="booleanparams">
                                 <xf:label/>
-                                <!--<xf:item>
+                                <!-\-<xf:item>
 									<xf:label>No params selected</xf:label>
 									<xf:value>Nothing</xf:value>
-								</xf:item>-->
-                                <xf:itemset 
-                                    nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]//pipeline[@id = instance('scratchpad')/thepipeline]//cmdline[@id=instance('scratchpad')/thecmds]//param[@choice='yes' and @ctype='boolean']">
+								</xf:item>-\->
+                                <xf:itemset nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]//pipeline[@id = instance('scratchpad')/thepipeline]//cmdline[@id=instance('scratchpad')/thecmds]//param[@choice='yes' and @ctype='boolean']">
                                     <xf:label ref="name"/>
                                     <xf:value ref="@id"/>
                                 </xf:itemset>
@@ -370,24 +296,21 @@
                         </div>
                     </fieldset>
                 </td>
-            </tr>
+            </tr>-->
             <tr>
                 <td class="debug">
                     <!-- @id -->
-                    <xf:output 
-                        ref="instance('mysource')//process[@id=instance('scratchpad')/theprocess]/metadata/title">
+                    <xf:output ref="instance('mysource')//process[@id=instance('scratchpad')/theprocess]/metadata/title">
                         <xf:label>Selected: </xf:label>
                     </xf:output>
                 </td>
                 <td class="debug">
-                    <xf:output 
-                        ref="instance('mysource')//pipeline[@id=instance('scratchpad')/thepipeline]/metadata/title">
+                    <xf:output ref="instance('mysource')//pipeline[@id=instance('scratchpad')/thepipeline]/metadata/title">
                         <xf:label>Selected: </xf:label>
                     </xf:output>
                 </td>
                 <td class="debug">
-                    <xf:output 
-                        ref="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]/metadata/title">
+                    <xf:output ref="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]/metadata/title">
                         <xf:label>Selected: </xf:label>
                     </xf:output>
                 </td>
@@ -397,26 +320,15 @@
             <xf:label>Save Process</xf:label>
             <xf:hint>Saves the configured process and applies it to the selected input document</xf:hint>
             <xf:action ev:event="DOMActivate">
-                <xf:delete 
-                    nodeset="instance('mytarget')/processes/process"/>
-                <xf:delete 
-                    nodeset="instance('mytarget')/processes/packages"/>
-                <xf:insert 
-                    context="instance('mytarget')/processes" 
-                    origin="instance('mysource')/process[@id = instance('scratchpad')/theprocess]"/>
-                <xf:insert 
-                    context="instance('mytarget')/processes" 
-                    origin="instance('mysource')/packages" if="instance('mysource')/packages"/>
-                <xf:delete 
-                    nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[@id != instance('scratchpad')/thepipeline]"/>
-                <xf:delete 
-                    nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[@id != instance('scratchpad')/thecmds]"/>
-                <xf:delete 
-                    nodeset="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean'][not(contains(instance('scratchpad')/booleanparams,@id))]"/>
-                <xf:setvalue 
-                    ref="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value">1</xf:setvalue>
-                <xf:send 
-                    submission="save"/>
+                <xf:delete nodeset="instance('mytarget')/processes/process"/>
+                <xf:delete nodeset="instance('mytarget')/processes/packages"/>
+                <xf:insert context="instance('mytarget')/processes" origin="instance('mysource')/process[@id = instance('scratchpad')/theprocess]"/>
+                <xf:insert context="instance('mytarget')/processes" origin="instance('mysource')/packages" if="instance('mysource')/packages"/>
+                <xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[@id != instance('scratchpad')/thepipeline]"/>
+                <xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[@id != instance('scratchpad')/thecmds]"/>
+                <!--<xf:delete nodeset="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean'][not(contains(instance('scratchpad')/booleanparams,@id))]"/>
+                <xf:setvalue ref="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value">1</xf:setvalue>-->
+                <xf:send submission="save"/>
             </xf:action>
         </xf:trigger>
         <xf:group ref="instance('mytarget')/.[@code='200']">

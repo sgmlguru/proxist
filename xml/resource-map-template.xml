@@ -7,41 +7,40 @@
            pairs. The ProX wrapper XProc and XSLT will handle them. -->
         
         <!-- Insert <doc> structures here -->
-        
     </docs>
 
 
     <!-- Runtime targets -->
     <!-- Should use xmldb:exist for most -->
     <!-- Do they need http or webdav variants? -->
-    <targets>
+    <!--<targets>
         <resource>
             <urn>URN-FOR-OUTPUT</urn>
-            <url>xmldb:exist:///db/work/docs/test/my-pdf-internal-file.pdf</url>
+            <url>xmldb:exist:///db/work/tmp/my-pdf-internal-file.pdf</url>
             <type>primary</type>
             <prox-id>value-2013-4-9-16-53-8-39562387-6</prox-id>
         </resource>
         <resource>
             <urn>URN2-FOR-OUTPUT</urn>
-            <url>xmldb:exist:///db/work/docs/test/my-pdf-formal-file.pdf</url>
+            <url>xmldb:exist:///db/work/tmp/my-pdf-formal-file.pdf</url>
             <type>primary</type>
             <prox-id>value-2013-4-9-16-53-8-39562387-10</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-XREF-XHTML-LOG</urn>
-            <url>xmldb:exist:///db/work/docs/test/my-xref-check.htm</url>
+            <url>xmldb:exist:///db/work/tmp/my-xref-check.htm</url>
             <type>primary</type>
             <prox-id>id-value-xref-htm</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-FILES-LIST-XML</urn>
-            <url>xmldb:exist:///db/work/docs/test/files.xml</url>
+            <url>xmldb:exist:///db/work/tmp/files.xml</url>
             <type>fixed</type>
             <prox-id>files</prox-id>
         </resource>
         <resource>
             <urn>URN-FOR-HTM-OUT</urn>
-            <url>xmldb:exist:///db/work/docs/test/my-xhtml-out.htm</url>
+            <url>xmldb:exist:///db/work/tmp/my-xhtml-out.htm</url>
             <type>primary</type>
             <prox-id>id-htm-out</prox-id>
         </resource>
@@ -51,7 +50,7 @@
             <type>secondary</type>
             <prox-id>id-normalized-html</prox-id>
         </resource>
-    </targets>
+    </targets>-->
 
     <!-- ProX blueprint and saved instance(s) -->
     <prox>
@@ -71,20 +70,20 @@
         <instances>
             <resource id="id-prox-xform-target-instance">
                 <urn>URN-OF-TARGET-PROX-INSTANCE</urn>
-                <url>http://localhost:8080/exist/webdav/db/work/docs/test/prox-instance.xml</url>
+                <url>http://localhost:8080/exist/webdav/db/work/tmp/prox-instance.xml</url>
                 <!-- Insert file URI here for local testing -->
                 <type/>
                 <prox-id/>
             </resource>
             <resource id="id-prox-xform-xmldb-instance">
                 <urn>URN-OF-TARGET-PROX-INSTANCE</urn>
-                <url>xmldb:exist:///db/work/docs/test/prox-instance.xml</url>
+                <url>xmldb:exist:///db/work/tmp/prox-instance.xml</url>
                 <type/>
                 <prox-id/>
             </resource>
             <resource id="id-prox-saved-instance">
                 <urn>URN-OF-SAVED-PROX-INSTANCE</urn>
-                <url>http://localhost:8080/exist/rest/db/work/docs/test/prox-instance.xml</url>
+                <url>http://localhost:8080/exist/rest/db/work/tmp/prox-instance.xml</url>
                 <!-- Insert file URI here for local testing -->
                 <type/>
                 <prox-id/>
@@ -318,7 +317,7 @@
                 <!-- Wrapper Pipeline -->
                 <resource>
                     <urn>urn:x-cassis:r1:cos:00002735:sv-SE:0.1</urn>
-                    <url>http://localhost:8080/exist/rest/db/work/system/prox/prox-wrapper.xpl</url>
+                    <url>http://localhost:8080/exist/rest/db/work/system/prox/proxist-wrapper.xpl</url>
                     <prox-id>id-wrapper-xpl</prox-id>
                 </resource>
                 <!-- ProX Instance Update -->
@@ -361,7 +360,7 @@
                 <!-- XForm for proX Blueprint Handling -->
                 <resource>
                     <urn>urn:prox:xform:0.1</urn>
-                    <url>http://localhost:8080/exist/rest/db/apps/prox-xform.xml</url>
+                    <url>http://localhost:8080/exist/rest/db/apps/proxist/select-prox.xhtml</url>
                     <prox-id>id-loc-xform</prox-id>
                 </resource>
             </resources>
