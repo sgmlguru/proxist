@@ -2,9 +2,15 @@ xquery version "1.0";
 
 declare namespace xs="http://www.w3.org/2001/XMLSchema";
 declare namespace xf="http://www.w3.org/2002/xforms";
+declare namespace fo="http://www.w3.org/1999/XSL/Format";
+declare namespace xslfo="http://exist-db.org/xquery/xslfo";
+declare namespace xhtml="http://www.w3.org/1999/xhtml";
+declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 
 let $login := xmldb:login('xmldb:exist:///db/work/tmp','admin','Favorit70')
- 
+
+let $config := util:expand(doc("/db/xep.xml")/*)
+
 let $log := util:log-system-out('running save.xq')
 (: get-data() returns the document node.  We want the root node :)
 let $formdata := request:get-data()/*
@@ -37,17 +43,30 @@ let $store := xmldb:store($save-data-collection, $file-name, $formdata)
 
 (: Runs wrapper XProc that generates XQ for child process, runs child process XProc :)
 let $result := xmlcalabash:process("xmldb:exist:///db/work/system/prox/xproc/proxist-wrapper.xpl",
-("-imap=http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml",
-"-oresult=-"),
-("normalized=xmldb:exist:///db/work/tmp/debug-normalized.xml"))
+    ("-imap=http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml",
+    "-oresult=-"),
+    ("normalized=xmldb:exist:///db/work/tmp/debug-normalized.xml"))
 
 (: Handles child process output :)
 (: Should convert to PDF and save result, if $result is FO :)
-let $output := if (local-name($result/*)='root')
-   then <p>FO</p>
-   else if (local-name($result/*)='html')
-       then <p>HTML</p>
-       else <p>XML</p>
+let $output := if (name($result/*)='fo:root')
+   then "FO"
+   else if (name($result/*)='xhtml:html')
+       then "HTML"
+       else if (name($result/*)='html')
+            then "HTML"
+            else "XML"
+
+let $out := if ($output='FO')
+    then xslfo:render($result, "application/pdf", (), $config)
+    else $result
+    
+let $save :=  if ($output='FO') 
+    then xmldb:store('/db/work/tmp','out.pdf',$out)
+    else if ($output='HTML')
+        then xmldb:store('/db/work/tmp','out.htm',$out)
+        else xmldb:store('/db/work/tmp','out.xml',$out)
+    
 
 (: Returns result info :)
 return
