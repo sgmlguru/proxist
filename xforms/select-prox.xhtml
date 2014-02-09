@@ -1,4 +1,5 @@
-<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
+<?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:my="test" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Select Resource</title>
@@ -137,7 +138,7 @@
                 </td>
                 <td>
                     <fieldset>
-                        <legend>&#xa0;</legend>
+                        <legend>&#160;</legend>
                         <xf:group appearance="full">
                             <!-- Type of resource -->
                             <div class="block-form">
@@ -167,7 +168,7 @@
                 </td>
                 <td>
                     <fieldset>
-                        <legend>&#xa0;</legend>
+                        <legend>&#160;</legend>
                         <xf:group appearance="full">
                             <!-- Filtered item list, add to item instance in model (too expensive to fetch from eXist?) -->
                             <div class="block-form">
@@ -224,7 +225,7 @@
                 <td>
                     <!-- Pipeline -->
                     <fieldset>
-                        <legend>&#xa0;</legend>
+                        <legend>&#160;</legend>
                         <div class=" block-form">
                             <xf:select1 appearance="compact" incremental="false" ref="thepipeline" id="id-pipe">
                                 <xf:label>Pipeline</xf:label>
@@ -247,7 +248,7 @@
                 <td>
                     <!-- Commands -->
                     <fieldset>
-                        <legend>&#xa0;</legend>
+                        <legend>&#160;</legend>
                         <div class="block-form">
                             <xf:select1 appearance="compact" incremental="false" ref="thecmds" id="id-cmd">
                                 <xf:label>Output</xf:label>

@@ -66,7 +66,6 @@ let $save :=  if ($output='FO')
     else if ($output='HTML')
         then xmldb:store('/db/work/tmp','out.htm',$out)
         else xmldb:store('/db/work/tmp','out.xml',$out)
-    
 
 (: Returns result info :)
 return
