@@ -7,7 +7,7 @@ declare namespace xslfo="http://exist-db.org/xquery/xslfo";
 declare namespace xhtml="http://www.w3.org/1999/xhtml";
 declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 
-let $login := xmldb:login('xmldb:exist:///db/work/tmp','admin','Favorit70')
+(:let $login := xmldb:login('xmldb:exist:///db/work/tmp','admin','Favorit70'):)
 
 let $config := util:expand(doc("/db/xep.xml")/*)
 
@@ -66,7 +66,7 @@ let $save :=  if ($output='FO')
     else if ($output='HTML')
         then xmldb:store('/db/work/tmp','out.htm',$out)
         else xmldb:store('/db/work/tmp','out.xml',$out)
-
+    
 (: Returns result info :)
 return
     if (doc-available('http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml')) 
@@ -77,8 +77,10 @@ return
                         then <message>ProX instance updated at {$path-name}. Output is {$output}.</message>
                         else <message>New ProX instance saved to {$path-name}. Output is {$output}.</message>
                 }
-            </save-results>)
+            </save-results>
+            )
         else (<save-results code="400">
             {<message>No current resource map. ProX child process did not finish.</message>}
         </save-results>
         )
+        

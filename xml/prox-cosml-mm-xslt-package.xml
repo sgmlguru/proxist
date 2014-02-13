@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/mnt/win7-work/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
+<package id="package-xslt-cosml2mm">
+    <metadata>
+        <title>XSLT COSML to MM</title>
+        <description>
+            <p>Converts COSML XML to MM XML.</p>
+        </description>
+    </metadata>
+    <locator id="id-xslt-mm" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="urn:x-cassis:cos:00009098:sv-SE:0.1"/>
+</package>

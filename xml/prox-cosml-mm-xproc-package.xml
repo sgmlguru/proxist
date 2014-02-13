@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/mnt/win7-work/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
+<package id="package-cosml2mm-xproc">
+    <metadata>
+        <title>XProc COSML to Mindmap</title>
+        <description>
+            <p>Converts a modularised COSML document into a mindmap representation, with each link represented as a mindmap node.</p>
+        </description>
+    </metadata>
+    <locator id="id-xproc-mm" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="urn:x-cassis:cos:00009099:sv-SE:0.1"/>
+</package>

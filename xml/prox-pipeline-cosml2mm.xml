@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/mnt/win7-work/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
+<pipeline>
+    <metadata>
+        <title>Visualise as Mindmap</title>
+        <description>
+            <p>Visualises the modularised XML as a mindmap, representing links as mindmap nodes.</p>
+        </description>
+    </metadata>
+    <script 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        xlink:href="URN-XPROC-PACKAGE#package-cosml2mm-xproc" 
+        type="pkg"/>
+    <cmdlines>
+        <cmdline id="cmdline-2013-5-19-11-12-49-71312191-">
+            <metadata>
+                <title>COSML to Mindmap Config</title>
+                <description>
+                    <p>Configures the COSML to mindmap conversion.</p>
+                </description>
+            </metadata>
+            <engine-config>
+                <config 
+                    type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                    xlink:href="#id-conf-calabash"/>
+            </engine-config>
+            <inputs>
+                <input>
+                    <port>document</port>
+                    <value 
+                        type="external" 
+                        input-type="doc-root"
+                        mimetype="application/xml"></value>
+                </input>
+                <input id="input-2013-5-19-11-12-49-71312191-2">
+                    <port>stylesheet</port>
+                    <value 
+                        xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        xlink:href="URN-PROX-PACKAGE-XSLT-COSML2MM#package-xslt-cosml2mm" 
+                        xlink:title="XSLT COSML to MM" 
+                        type="pkg"/>
+                </input>
+                <input id="input-2013-5-19-11-12-49-71312191-">
+                    <port>stylesheet-norm</port>
+                    <value
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#id-normalize" 
+                        xlink:title=" Normalize XSLT Stylesheet for applics filtering and module normalization for COSML documents " 
+                        type="pkg"/>
+                </input>
+            </inputs>
+            <options>
+                <option>
+                    <name>mm</name>
+                    <value 
+                        id="id-mm-out" 
+                        type="external" 
+                        mimetype="application/xml" 
+                        output-type="primary"/>
+                </option>
+                <option>
+                    <name>normalized</name>
+                    <value 
+                        id="id-normalized-mm" 
+                        type="external" 
+                        mimetype="application/xml" 
+                        output-type="secondary"/>
+                </option>
+            </options>
+        </cmdline>
+    </cmdlines>
+</pipeline>
