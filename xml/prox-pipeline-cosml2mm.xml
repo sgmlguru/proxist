@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="file:/mnt/win7-work/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
-<pipeline>
+<pipeline id="id-pipeline-cosml2mindmap">
     <metadata>
         <title>Visualise as Mindmap</title>
         <description>
@@ -9,10 +9,10 @@
     </metadata>
     <script 
         xmlns:xlink="http://www.w3.org/1999/xlink" 
-        xlink:href="URN-XPROC-PACKAGE#package-cosml2mm-xproc" 
+        xlink:href="urn:x-cassis:r1:cos:00005000:sv-SE:0.2#package-cosml2mm-xproc" 
         type="pkg"/>
     <cmdlines>
-        <cmdline id="cmdline-2013-5-19-11-12-49-71312191-">
+        <cmdline id="cmdline-cosml2mindmap">
             <metadata>
                 <title>COSML to Mindmap Config</title>
                 <description>
@@ -28,19 +28,20 @@
                 <input>
                     <port>document</port>
                     <value 
+                        id="id-docroot-mm"
                         type="external" 
                         input-type="doc-root"
                         mimetype="application/xml"></value>
                 </input>
-                <input id="input-2013-5-19-11-12-49-71312191-2">
+                <input id="input-2013-5-19-11-12-49-71312191-33">
                     <port>stylesheet</port>
                     <value 
                         xmlns:xlink="http://www.w3.org/1999/xlink" 
-                        xlink:href="URN-PROX-PACKAGE-XSLT-COSML2MM#package-xslt-cosml2mm" 
+                        xlink:href="URN-PROX-PACKAGE-XSLT-COSML2MM#package-cosml2mm-xslt" 
                         xlink:title="XSLT COSML to MM" 
                         type="pkg"/>
                 </input>
-                <input id="input-2013-5-19-11-12-49-71312191-">
+                <input id="input-2013-5-19-11-12-49-713121922-">
                     <port>stylesheet-norm</port>
                     <value
                         xmlns:xlink="http://www.w3.org/1999/xlink"

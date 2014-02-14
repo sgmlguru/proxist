@@ -1,7 +1,7 @@
 <?xml-model href="http://localhost:8080/exist/rest/db/work/system/prox/relaxng/processes.rnc" type="application/relax-ng-compact-syntax"?>
 <processes xmlns:xlink="http://www.w3.org/1999/xlink" id="processes-2013-4-9-16-53-8-39562387-">
    
-   <!-- Print Publishing Process -->
+    <!-- Print Publishing Process -->
     <process id="id-pdf-process">
         <metadata id="metadata-2013-4-9-16-53-8-39562387-">
             <title id="title-2013-4-9-16-53-8-39562387-">Print Publishing</title>
@@ -11,7 +11,7 @@
         </metadata>
         <pipelines id="pipelines-2013-4-9-16-53-8-39562387-">
          
-         <!-- PDF Pipeline -->
+            <!-- PDF Pipeline -->
             <pipeline id="id-pipeline-pdf-1">
                 <metadata id="metadata-2013-4-9-16-53-8-39562387-1">
                     <title id="title-2013-4-9-16-53-8-39562387-1">Publish PDF</title>
@@ -82,6 +82,7 @@
                             </input>
                         </inputs>
                         <options id="options-2013-4-9-16-53-8-39562387-">
+                            <!-- Should be application/xml for FO rather than PDF -->
                             <option choice="no" id="option-2013-4-9-16-53-8-39562387-">
                                 <name id="name-2013-4-9-16-53-8-39562387-3">pdf</name>
                                 <value type="external" output-type="primary" mimetype="application/pdf" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf</value>
@@ -119,6 +120,7 @@
                             </input>
                         </inputs>
                         <options id="options-2013-4-9-16-53-8-39562387-1">
+                            <!-- Should be application/xml for FO rather than PDF -->
                             <option choice="no" id="option-2013-4-9-16-53-8-39562387-1">
                                 <name id="name-2013-4-9-16-53-8-39562387-4">pdf</name>
                                 <value type="external" output-type="primary" xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-10" mimetype="application/pdf">PDF-PLACEHOLDER.pdf</value>
@@ -133,10 +135,10 @@
             </pipeline>
         </pipelines>
       
-      <!-- Packages for Print -->
+        <!-- Packages for Print -->
         <packages xml:base="file:///e:/SGML/DTD/Cassis/Process-XML/" id="packages-2013-4-9-16-53-8-39562387-">
          
-         <!-- XProc Normalize, Validate, XSLFO Pipeline Package -->
+            <!-- XProc Normalize, Validate, XSLFO Pipeline Package -->
             <package id="id-xproc-pdf">
                 <metadata id="metadata-2013-4-9-16-53-8-39562387-4">
                     <title id="title-2013-4-9-16-53-8-39562387-4">XProc Pipeline for Normalize, Validate and PDF</title>
@@ -149,7 +151,7 @@
             </package>
          
          
-         <!-- COSML Internal XSL-FO Package -->
+            <!-- COSML Internal XSL-FO Package -->
             <package id="id-xslfo-cosml">
                 <metadata id="metadata-2013-4-9-16-53-8-39562387-5">
                     <title id="title-2013-4-9-16-53-8-39562387-5">XSL-FO Package for COSML PDF</title>
@@ -159,21 +161,21 @@
                     </description>
                 </metadata>
             
-            <!-- Stylesheet parameters -->
+                <!-- Stylesheet parameters -->
                 <params id="params-2013-4-9-16-53-8-39562387-1">
-               <!-- Index generation -->
+                    <!-- Index generation -->
                     <param id="param-2013-4-9-16-53-8-39562387-3">
                         <port id="port-2013-4-9-16-53-8-39562387-9">xslt-params</port>
                         <name id="name-2013-4-9-16-53-8-39562387-5">generate.index</name>
                         <value type="string" id="value-2013-4-9-16-53-8-39562387-11">0</value>
                     </param>
-               <!-- XEP Extensions -->
+                    <!-- XEP Extensions -->
                     <param id="param-2013-4-9-16-53-8-39562387-4">
                         <port id="port-2013-4-9-16-53-8-39562387-10">xslt-params</port>
                         <name id="name-2013-4-9-16-53-8-39562387-6">xep.extensions</name>
                         <value type="string" id="value-2013-4-9-16-53-8-39562387-12">0</value>
                     </param>
-               <!-- XSL-FO Bookmark Generation -->
+                    <!-- XSL-FO Bookmark Generation -->
                     <param id="param-2013-4-9-16-53-8-39562387-5">
                         <port id="port-2013-4-9-16-53-8-39562387-11">xslt-params</port>
                         <name id="name-2013-4-9-16-53-8-39562387-7">xslfo.bookmarks</name>
@@ -181,7 +183,7 @@
                     </param>
                 </params>
             
-            <!-- XSLT -->
+                <!-- XSLT -->
                 <locator xlink:href="urn:x-cassis:r1:cos:00000232:sv-SE:0.6" xlink:title="COS Internal XSLT" type="main" id="locator-2013-4-9-16-53-8-39562387-1"/>
                 <locator xlink:href="urn:x-cassis:r1:cos:00000074:sv-SE:0.11" id="locator-2013-4-9-16-53-8-39562387-2"/>
                 <locator xlink:href="urn:x-cassis:r1:cos:00000059:sv-SE:0.2" id="locator-2013-4-9-16-53-8-39562387-3"/>
@@ -210,7 +212,7 @@
         </packages>
     </process>
    
-   <!-- Wep PublishingProcess -->
+    <!-- Wep PublishingProcess -->
     <process id="id-web-process">
         <metadata id="metadata-2013-4-9-16-53-8-39562387-6">
             <title id="title-2013-4-9-16-53-8-39562387-6">Web Publishing</title>
@@ -220,7 +222,7 @@
         </metadata>
         <pipelines id="pipelines-2013-4-9-16-53-8-39562387-1">
          
-         <!-- Pipeline for HTML -->
+            <!-- Pipeline for HTML -->
             <pipeline id="id-pipeline-web-1">
                 <metadata id="metadata-2013-4-9-16-53-8-39562387-7">
                     <title id="title-2013-4-9-16-53-8-39562387-7">Publish HTML</title>
@@ -231,7 +233,7 @@
                 <script id="script-2013-4-9-16-53-8-39562387-1" xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-1" xlink:title="XProc COSML2XHTMLNormalises, validates and converts COSML to XHTML." type="pkg"/>
                 <cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-1">
                
-               <!-- Single-file HTML Config -->
+                    <!-- Single-file HTML Config -->
                     <cmdline id="id-cmdline-single-file-HTML-1">
                         <metadata id="metadata-2013-4-9-16-53-8-39562387-8">
                             <title id="title-2013-4-9-16-53-8-39562387-8">COS HTML</title>
@@ -269,9 +271,12 @@
                     </cmdline>
                 </cmdlines>
             </pipeline>
+            
+            <!-- Additional pipeline definitions go here -->
+            
         </pipelines>
       
-      <!-- Web Publishing Packages -->
+        <!-- Web Publishing Packages -->
         <packages>
          
          <!-- XProc for COSML to XHTML -->
@@ -285,7 +290,7 @@
                 <locator id="id-xhtml-xproc" type="main" xlink:href="urn:x-cassis:r1:cos:00002756:sv-SE:0.2" xlink:title="publish-cosml-html.xpl"/>
             </package>
          
-         <!-- XSLT for COSML to XHTML -->
+            <!-- XSLT for COSML to XHTML -->
             <package id="package-2013-5-19-11-12-49-71312191-">
                 <metadata>
                     <title>COSML XHTML XSLT</title>
@@ -298,7 +303,7 @@
         </packages>
     </process>
    
-   <!-- Content Validation Process -->
+    <!-- Content Validation Process -->
     <process id="process-2013-5-19-11-12-49-71312191-">
         <metadata>
             <title>Content Validation</title>
@@ -307,7 +312,7 @@
             </description>
         </metadata>
       
-      <!-- Content Validation Pipelines -->
+         <!-- Content Validation Pipelines -->
         <pipelines>
          
          <!-- Xref Check Pipeline -->
@@ -355,10 +360,18 @@
                     </cmdline>
                 </cmdlines>
             </pipeline>
+            
+            <!-- Additional pipeline definitions here -->
+            
+            
+            
+            <!-- End -->
         </pipelines>
+        
+        
         <packages>
          
-         <!-- XProc for Xref Check -->
+            <!-- XProc for Xref Check -->
             <package id="package-2013-5-19-11-12-49-71312191-3">
                 <metadata>
                     <title>XProc Xref Check</title>
@@ -369,7 +382,7 @@
                 <locator id="id-xproc-xref" xlink:href="urn:x-cassis:r1:cos:00002757:sv-SE:0.2" xlink:title="xref-check-cosml.xpl" type="main"/>
             </package>
          
-         <!-- XSLT for Xref Check -->
+            <!-- XSLT for Xref Check -->
             <package id="package-2013-5-19-11-12-49-71312191-2">
                 <metadata>
                     <title>XSLT Xref Check</title>
@@ -379,11 +392,21 @@
                 </metadata>
                 <locator id="id-xslt-xref" xlink:href="urn:x-cassis:r1:cos:00002754:sv-SE:0.1" xlink:title="link-target-check-multifile.xsl" type="main"/>
             </package>
+            
+            <!-- Additional packages go here -->
+            
+            
+            
+            <!-- End -->
+        
         </packages>
+        
     </process>
+    
+    <!-- Common packages -->
     <packages id="packages-2013-4-9-16-53-8-39562387-1">
       
-      <!-- XSLT for Normalizing COSML -->
+        <!-- XSLT for Normalizing COSML -->
         <package id="id-normalize" type="xslt">
             <metadata id="metadata-2013-4-9-16-53-8-39562387-9">
                 <title id="title-2013-4-9-16-53-8-39562387-9">Normalize XSLT</title>
@@ -396,7 +419,7 @@
             <locator xlink:href="urn:x-cassis:r1:cos:00000073:sv-SE:0.4" id="locator-2013-4-9-16-53-8-39562387-26" type="main" xlink:title="Normalize XSLT"/>
         </package>
       
-      <!-- Calabash Engine Configuration File -->
+        <!-- Calabash Engine Configuration File -->
         <package id="id-conf-calabash">
             <metadata id="metadata-2013-5-2-21-40-30-37001288-">
                 <title id="title-2013-5-2-21-40-30-37001288-">Calabash Configuration</title>
@@ -409,7 +432,7 @@
       
       
       
-      <!-- Wrapper ProX Resources -->
+        <!-- Wrapper ProX Resources -->
         <package id="id-wrapper-resources">
             <metadata id="metadata-2013-5-2-21-40-30-37001288-1">
                 <title id="title-2013-5-2-21-40-30-37001288-1">Wrapper Pipeline Processing</title>
@@ -424,7 +447,7 @@
             <locator xlink:href="urn:x-cassis:r1:cos:00002734:sv-SE:0.1" id="id-prox2shell-config"/>
         </package>
       
-      <!-- XForms -->
+        <!-- XForms -->
         <package id="id-xform">
             <metadata>
                 <title>ProX XForms Package</title>

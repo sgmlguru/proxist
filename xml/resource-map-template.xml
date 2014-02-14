@@ -59,7 +59,6 @@
             <resource id="id-prox-blueprint">
                 <urn>URN-OF-PROX-BLUEPRINT</urn>
                 <url>http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml</url>
-                <!--<url>file://prox-blueprint.xml</url>-->
                 <type/>
                 <prox-id/>
             </resource>
@@ -280,6 +279,31 @@
                 </resource>
             </resources>
         </package>
+        
+        <!-- COSML to MM XProc -->
+        <package>
+            <name>XProc COSML to Mindmap</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00009099:sv-SE:0.1</urn>
+                    <url>xmldb:exist:///db/work/system/cosml/xproc/mindmap-cosml-modules.xpl</url>
+                    <prox-id>id-xproc-mm</prox-id>
+                </resource>
+            </resources>
+        </package>
+        
+        <!-- COSML to MM XSLT -->
+        <package>
+            <name>XSLT COSML to MM</name>
+            <resources>
+                <resource>
+                    <urn>urn:x-cassis:r1:cos:00009098:sv-SE:0.1</urn>
+                    <url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/links2mindmap.xsl</url>
+                    <prox-id>id-xslt-mm</prox-id>
+                </resource>
+            </resources>
+        </package>
+        
 
         <!-- Standard Normalize XSLT for Publishing -->
         <package>
