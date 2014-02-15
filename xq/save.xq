@@ -7,8 +7,6 @@ declare namespace xslfo="http://exist-db.org/xquery/xslfo";
 declare namespace xhtml="http://www.w3.org/1999/xhtml";
 declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 
-(:let $login := xmldb:login('xmldb:exist:///db/work/tmp','admin','Favorit70'):)
-
 let $config := util:expand(doc("/db/xep.xml")/*)
 
 let $log := util:log-system-out('running save.xq')
@@ -47,35 +45,44 @@ let $result := xmlcalabash:process("xmldb:exist:///db/work/system/prox/xproc/pro
     "-oresult=-"),
     ("normalized=xmldb:exist:///db/work/tmp/debug-normalized.xml"))
 
-(: Handles child process output :)
-(: Should convert to PDF and save result, if $result is FO :)
-let $output := if (name($result/*)='fo:root')
-   then "FO"
-   else if (name($result/*)='xhtml:html')
-       then "HTML"
-       else if (name($result/*)='html')
-            then "HTML"
-            else "XML"
 
-let $out := if ($output='FO')
+(: Analyse result from child process :)
+let $output := if (name($result/*)='fo:root')
+   then "out.pdf"
+   else if (name($result/*)='xhtml:html')
+       then "out.xhtml"
+       else if (name($result/*)='html')
+            then "out.htm"
+            else if (name($result/*)='map')
+                then "out.mm"
+                else "out.xml"
+
+let $out := if ($output='out.pdf')
     then xslfo:render($result, "application/pdf", (), $config)
     else $result
     
-let $save :=  if ($output='FO') 
+(:let $save :=  if ($output='FO') 
     then xmldb:store('/db/work/tmp','out.pdf',$out)
-    else if ($output='HTML')
-        then xmldb:store('/db/work/tmp','out.htm',$out)
-        else xmldb:store('/db/work/tmp','out.xml',$out)
-    
+    else if ($output='XHTML')
+        then xmldb:store('/db/work/tmp','out.xhtml',$out)
+            else if ($output='HTML')
+                then xmldb:store('/db/work/tmp','out.htm',$out)
+                    else if ($output='MM')
+                        then xmldb:store('/db/work/tmp','out.mm',$out)
+                        else xmldb:store('/db/work/tmp','out.xml',$out):)
+
+let $save := xmldb:store('/db/work/tmp',$output,$out)
+
 (: Returns result info :)
 return
     if (doc-available('http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml')) 
         then (
             <save-results code="200">
                 {
-                    if ($overwrite)
+                    (:if ($overwrite)
                         then <message>ProX instance updated at {$path-name}. Output is {$output}.</message>
-                        else <message>New ProX instance saved to {$path-name}. Output is {$output}.</message>
+                        else <message>New ProX instance saved to {$path-name}. Output is {$output}.</message>:)
+                        <message>{concat('http://localhost:8080/exist/rest/db/work/tmp','/',$output)}</message>
                 }
             </save-results>
             )

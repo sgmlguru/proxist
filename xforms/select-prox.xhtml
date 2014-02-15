@@ -1,5 +1,4 @@
-<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?>
-<?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<?xml-model href="http://localhost:8080/exist/rest/db/work/system/nvdl/xhtml-xforms.nvdl" type="application/xml" schematypens="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0"?><?xml-stylesheet href="http://localhost:8080/exist/rest/db/apps/xsltforms/xsltforms.xsl" type="text/xsl"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:my="test" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Select Resource</title>
@@ -66,6 +65,13 @@
             
             
             
+            <!-- URLs for returned xf:loads -->
+            <xf:instance xmlns="" id="URL-container">
+                <URL/>
+            </xf:instance>
+            
+            
+            
             <!-- Selection stuff... -->
             <xf:action ev:event="xforms-ready">
                 <xf:setvalue ref="instance('publish-files')/data/value" value="'dummy-value'"/>
@@ -78,7 +84,7 @@
             <!-- Generates resource map for selected root, modules and standard ProX resources -->
             <xf:submission id="select" method="post" replace="none" action="modules/generate-resmap.xq" ref="instance('publish-files')">
                 <xf:action ev:event="xforms-submit-done">
-                    <xf:message>Input selected</xf:message>
+                    <xf:message>Input selected and resource map generated</xf:message>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
                     <xf:message>Input selection failed</xf:message>
@@ -95,8 +101,6 @@
                 <xf:setvalue ref="theprocess" value="instance('mysource')/process[1]/@id"/>
                 <xf:setvalue ref="thepipeline" value="instance('mysource')/process[1]/pipelines/pipeline[1]/@id"/>
                 <xf:setvalue ref="thecmds" value="instance('mysource')/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[1]/@id"/>
-                <!--<xf:setvalue ref="booleanparams" value="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/@id" if="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value='1'"/>-->
-                <!--				<xf:setvalue ref="list1params/param" value="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='list1']/value[1]/@id" if="instance('mysource')/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='list1']/value[1]"/>-->
                 <xf:setvalue ref="thepackages"/>
                 <xf:setvalue ref="commonpackages" value="instance('mysource')/processes/packages"/>
             </xf:action>
@@ -106,12 +110,12 @@
             <!-- Save the configured ProX instance -->
             <!-- Instance name listed in @action, set by wrapper XProc,
 				 based on the URL in the resource map XML. -->
-            <xf:submission ref="instance('mytarget')/processes" validate="false" replace="instance" method="post" encoding="UTF-8" resource="modules/save.xq" indent="true" id="save" instance="mytarget">
+            <xf:submission ref="instance('mytarget')/processes" replace="instance" encoding="utf-8" method="post" validate="false" resource="modules/save.xq" id="save" instance="mytarget"><!--  serialization="application/octet-stream" -->
                 <xf:action ev:event="xforms-submit-done">
-                    <xf:message>Save Done</xf:message>
+                    <xf:message>Child process ran normally </xf:message>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
-                    <xf:message>Save Failed</xf:message>
+                    <xf:message>Child process failed</xf:message>
                 </xf:action>
             </xf:submission>
         </xf:model>
@@ -254,7 +258,6 @@
                                 <xf:label>Output</xf:label>
                                 <xf:item id="item-cmd-dummy">
                                     <xf:label>Select output options</xf:label>
-                                    <!--<xf:label>Select a command line</xf:label>-->
                                     <xf:value>Nothing</xf:value>
                                 </xf:item>
                                 <xf:itemset id="item-cmd" nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id = instance('scratchpad')/thepipeline]/cmdlines/cmdline">
@@ -264,8 +267,6 @@
                                 <xf:help id="help-cmd">
                                     <xf:output value="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id=instance('scratchpad')/thepipeline]/cmdlines/cmdline[@id=instance('scratchpad')/thecmds]/metadata/description/p"/>
                                 </xf:help>
-                                <!--<xf:setvalue ref="../booleanparams" ev:event="DOMFocusIn" value="''"/>-->
-                                <!--								<xf:setvalue ref="../list1params/param" ev:event="DOMFocusIn" value="'Nothing'"/>-->
                             </xf:select1>
                         </div>
                     </fieldset>
@@ -318,8 +319,8 @@
             </tr>
         </table>
         <xf:trigger>
-            <xf:label>Save Process</xf:label>
-            <xf:hint>Saves the configured process and applies it to the selected input document</xf:hint>
+            <xf:label>Save and run process</xf:label>
+            <xf:hint>Saves the configured process and runs it on the selected input document</xf:hint>
             <xf:action ev:event="DOMActivate">
                 <xf:delete nodeset="instance('mytarget')/processes/process"/>
                 <xf:delete nodeset="instance('mytarget')/processes/packages"/>
@@ -327,14 +328,35 @@
                 <xf:insert context="instance('mytarget')/processes" origin="instance('mysource')/packages" if="instance('mysource')/packages"/>
                 <xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[@id != instance('scratchpad')/thepipeline]"/>
                 <xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[@id != instance('scratchpad')/thecmds]"/>
-                <!--<xf:delete nodeset="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean'][not(contains(instance('scratchpad')/booleanparams,@id))]"/>
-                <xf:setvalue ref="instance('mytarget')/processes/process[1]//pipeline[1]//cmdline[1]//param[@choice='yes' and @ctype='boolean']/value">1</xf:setvalue>-->
                 <xf:send submission="save"/>
             </xf:action>
+            <!--<xf:action ev:event="DOMActivate">
+                <xf:setvalue ref="instance('URL-container')" value="'http://www.sgmlguru.org'"/>
+                <xf:load ref="instance('URL-container')"/>
+            </xf:action>-->
         </xf:trigger>
+        
+        <!--<!-\- Test of xf:load -\->
+        <xf:trigger appearance="minimal">
+            <xf:label>Download here</xf:label>
+            <xf:action ev:event="xforms-submit-done">
+                <!-\-<xf:setvalue ref="instance('URL-container')" value="instance('mytarget')//message"/>-\->
+                <xf:load ref="instance('mytarget')//message"/>
+            </xf:action>
+        </xf:trigger> -->
+        
+        <!-- Output messages -->
         <xf:group ref="instance('mytarget')/.[@code='200']">
             <div class="success">
-                <xf:output ref="instance('mytarget')//message"/>
+                <!--<xf:output ref="instance('mytarget')//message"/>-->
+                <!-- Test of xf:load -->
+                <xf:trigger appearance="minimal">
+                    <xf:label><xf:output ref="instance('mytarget')//message"/></xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <!--<xf:setvalue ref="instance('URL-container')" value="instance('mytarget')//message"/>-->
+                        <xf:load ref="instance('mytarget')//message"/>
+                    </xf:action>
+                </xf:trigger> 
             </div>
         </xf:group>
         <xf:group ref="instance('mytarget')/.[@code='400']">
@@ -343,6 +365,9 @@
             </div>
         </xf:group>
         <hr/>
+        
+        
+        <!-- Debug only -->
         <!--<p class="code">
             <xf:output value="serialize(instance('publish-files'),'yes')"/>
         </p>
