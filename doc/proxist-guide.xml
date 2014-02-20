@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<article xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <info>
+        <title>ProXist</title>
+        <author>
+            <orgname/>
+            <address>
+                <city>City</city>
+                <street>Street</street>
+                <postcode>000000</postcode>
+                <country>Country</country>
+            </address>
+            <email>ari.nordstrom@gmail.com</email>
+        </author>
+    </info>
+    <section>
+        <title>Intro and Overview</title>
+        <para>This document attempts to document the eXist implementation of ProX. In doing so, it
+            also documents ProX itself. The intention here is that the reasonably XML-savvy
+            implementer can, efter reading through the relevant parts, install and run his or her
+            own ProXist environement.</para>
+        <section xml:id="section_wgq_c33_2n">
+            <title>Prereqs</title>
+            <itemizedlist>
+                <para>Since most XML people I know of want to do it rather than read about it,
+                    here's a list of requirements...</para>
+                <listitem>
+                    <para>eXist in version 2.1 or later.</para>
+                </listitem>
+                <listitem>
+                    <para>For now, a modified Calabash JAR; this is available for download at the
+                        official ProXist Github site. I expect this to change soon so you can use
+                        the standard Calabash download instead.</para>
+                </listitem>
+                <listitem>
+                    <para>The ProXist web app for eXist. This will give you the XQueries, XForm and
+                        such, but <emphasis>not</emphasis> the ProX XProcs, XQ, etc. Blame me; I
+                        packaged them separately.</para>
+                </listitem>
+                <listitem>
+                    <para>The ProX package including wrapper XProcs, XSLT and XQ, not to mention the
+                        basic ProX blueprint, the resource map template XML, and so on. This is why
+                        you need this documentation.</para>
+                </listitem>
+                <listitem>
+                    <para>For running the ProXist demo I ran at XML Prague 2014, the COSML package
+                        containing a Relax NG schema, XProc pipelines and XSLT stylesheets. COSML is
+                        simply a schema, RelaX NG these days but originally a DTD that was and is my
+                        private general-purpose XML for documentation purposes<footnote>
+                            <para>Except, obviously, this document.</para>
+                        </footnote>. The XProc and XSLT are for doing various things with COSML
+                        documents.</para>
+                </listitem>
+            </itemizedlist>
+        </section>
+        <section xml:id="section_mlk_nj3_2n">
+            <title>Installation</title>
+            <procedure>
+                <para>To get the basic ProXist demo running, follow these steps:</para>
+                <step>
+                    <para>Install eXist 2.1 or later. TBA: Calabash module.</para>
+                </step>
+                <step>
+                    <para>Configure eXist with whatever packages you need, such as a PDF rendering
+                        engine if you require something else than FOP. Instructions at
+                            <uri>Wikibooks - Wolfgang - TBA</uri>.</para>
+                </step>
+                <step>
+                    <para>Get the modified Calabash JAR at <uri>XXX</uri> and replace the standard
+                        JAR in XXX.</para>
+                </step>
+                <step>
+                    <para>Install the ProXist web app.</para>
+                </step>
+                <step>
+                    <para>Unpack the ProX and COSML packages in XXX and XXX. If you want to place
+                        them elsewhere, you need to edit XXX with the new paths.</para>
+                </step>
+                <step>
+                    <para>Unpack the example COSML files in XXX. Again, if you change the path, you
+                        need to edit XXX.</para>
+                </step>
+                <step>
+                    <para>Create a temporary output collection path. This is where ProXist will
+                        place whatever files it creates. For now, give it generous permissions (I
+                        use <quote>rwxrwxrwx</quote> but that's because the NSA hates me).</para>
+                </step>
+                <step>
+                    <para>Edit <filename>resource-map-template.xml</filename><!--ADD PATH--> for any
+                        changes done in the previous steps.</para>
+                </step>
+            </procedure>
+            <para>You should now be done.</para>
+        </section>
+        <section xml:id="section_myj_sk3_2n">
+            <title>Testing the Installation</title>
+            <procedure>
+                <para>To make sure that your shiny new ProXist installation works, try these
+                    steps:</para>
+                <step>
+                    <para>From the eXist dashboard, hit the <guibutton>ProXist</guibutton> button.
+                        The Web app should open in a separate tab or window, depending on your
+                        browser setup.</para>
+                </step>
+                <step>
+                    <para>Select a COSML XML input file and hit <guibutton>Generate resource
+                            map</guibutton>. The XML should be a <quote>root  file</quote>,
+                        basically meaning that it uses the <tag>cos</tag> element as root. It's kind
+                        of nice if it's modularised in some way, because the demo becomes more fun,
+                        but not strictly necesary.</para>
+                </step>
+                <step>
+                    <para>Select a process, pipeline and output in the fancy GUI. Hit
+                            <guibutton>Save and run child process</guibutton>. There should be some
+                        kind of output placed in XXX and a link to that effect displayed right under
+                        the button.</para>
+                </step>
+            </procedure>
+            <note>
+                <para>While it is theoretically possible to select an input file just once and then
+                    run several processes in sequence, selecting a new one once the previous has
+                    completed, this is not always reliable. I fully intend to fix this.</para>
+            </note>
+        </section>
+    </section>
+    <section xml:id="section_c5v_yl3_2n">
+        <title>A ProX Overview</title>
+        <para>ProX, basically, is an XML-based abstraction layer that describes XProc pipelines in a
+            system context. Think of it as the Calabash command line expressed as XML, but expanding
+            on it to define whatever resource (XProc, XSLT, XQ, XML...) the pipeline uses in that
+            system as packages linked to by the XML. For example, there is a <tag>script</tag>
+            element that will link to a <tag>package</tag> element that contains some metadata plus
+            an element with the actual link to the XProc script. If the pipeline uses an XSLT
+            stylesheet divided into a dozen modules, the command line XML includes a link to that
+            package, again with some metadata and tha list of links to the XSLT modules. One or more
+            of these links also identifies any entry points to the XSLT package.</para>
+        <para>And so on. The ProX XML is a complete list of <emphasis>everything</emphasis> the
+            pipeline is allowed to do in the system.</para>
+        <para>But ProX takes things fiurther than that. The <tag>pipeline</tag>, in ProX speak, is
+            part of a <tag>process</tag> that may include other <tag>pipeline</tag>s. For example,
+            you might have a <quote>print publishing</quote>
+            <tag>process</tag> that includes pipelines for PDF output, Word output, WordPerfect
+            output (well, maybe not), and so on.</para>
+        <para>Looking at the <tag>pipeline</tag> element's command line, a single pipeline may be
+            configured in a number of ways, withy different stylesheets, different inputs and
+            options, engine config, and so on, so each <tag>pipeline</tag> accepts one or more
+            command lines or <tag>cmdline</tag> elements, each of these describing their own set of
+            bindings, configuration, and so on.</para>
+        <para>Here's an illustration of the basic ProX structure:</para>
+        <!--IMAGE MIND MAP-->
+        <para>A ProX XML document describing all possible processes, pipelines and their
+            configurations in a given system is what I call a ProX <emphasis>blueprint</emphasis>,
+            something that lists everything that this particular system can do. Not just one
+            pipeline using one set of configurations, but every possible pipeline
+            configuration.</para>
+        <para>To describe a specific process using a specific pipeline with a specific
+            configuration, selections must be made in the blurprint to narrow it down:</para>
+        <!--IMAGE SELECTING PROX-->
+        <para>Now, since the ProX blueprint is an XML file, it is easy to provide it as input to an
+            XForm allowing the end user to make the selections using a GUI rather than an XML
+            editor. Here's the ProXist GUI:</para>
+        <!--ProXist GUI-->
+        <para>Once every possible selection has been made in the GUI, the results can be saved into
+            what I call a ProX <emphasis>instance</emphasis>, something that describes a single
+            process, a single pipeline and a single configuration. No ambiguity; every choice has
+            been made. If this instance is given runtime values (such as the URI to the input
+            document, the name of the output, etc), it becomes an XML version of a ready-to-run
+            Calabash shell script that runs the actual publishing process.</para>
+        <para>A simple XSLT can do that. The first ProX implementation was basically a file folder
+            in htdocs on an Apache server and the XSLT target then was a shell script if Linux or
+            Mac, and a batch file if Windows. In ProXist, the target document is an XQuery rather
+            than a shell script, but the principle is unchanged.</para>
+        <para>The process selected by the user is what I call a <emphasis>child process</emphasis>.
+            The child process was intended to be self-contained, meaning that whatever it does is
+            black-boxed; we don't need to know what it does, we only need to know that it finished
+            as intended. Unfortunately, in ProXist, currently, this is not the case. For more on
+            this, see XXX.</para>
+        <para>For now, the child process returns XML markup containing whatever results that were
+            produced by the child process. This is saved by the <quote>parent</quote> process, and
+            sometimes also postprocessed, depending on what the markup is.</para>
+        <section xml:id="section_x33_5pj_2n">
+            <title>ProX Components</title>
+            <itemizedlist>
+                <para>ProX (and ProXist) uses various components that I thought better to list
+                    before attempting to explain anything else. Here goes:</para>
+                <listitem>
+                    <para><emphasis>The ProX blueprint</emphasis> is an XML file adhering to a Relax
+                        NG schema that describes every process, pipeline and configuration allowed
+                        in some arbitrary context, usually a system. It also lists any packages used
+                        by the pipelines (or rather, the configurations of these pipelines). These
+                        packages consist of one or more links to the actual files included by that
+                        package.</para>
+                    <para>The blueprint also includes packages that define any other resources used
+                        by ProX, such as any wrapper scripts or the XForm that presents the
+                        blueprint to an end user. Basically, if ProX uses something, it should be
+                        included in the blueprint. If a child process uses something, that something
+                        should be included. You get the idea.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>The resource map</emphasis> is an XML file that maps the actual
+                        locations of the resources defined in packages. It also lists the URIs of
+                        any input XML and the URIs of any and all outputs. The latter is, for now,
+                        generated by an XSLT but would in a proper system be decided by an external
+                        function.</para>
+                    <para>ProX was born in a system that linked things using URNs rather than URLs,
+                        which necessitated a lookup mechanism to map the fixed URNs to the temporary
+                        URLs the participating resources would get when processed, usuall in a temp
+                        folder on a server somewhere. The lookup, then, consisted of a URN to URL
+                        map in a simple XML format.</para>
+                    <para>Some things in the map didn't have URNs so they were identified for ProX
+                        purposes with <quote>ProX IDs</quote>. These values, made up when writing
+                        the ProX blueprint, fill pretty much the same purpose as the URNs: they
+                        provide an abstraction layer, in other words, avoiding addresses and
+                        preferring names.</para>
+                    <para>The ProX IDs may or may not survive in future versions, but for now, they
+                        do have a purpose, which is to help look up things needed by ProX.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>The reosurce map template</emphasis> is a resource map
+                        containing those resources that are considered to be <quote>static</quote>
+                        in a system, meaning that they are not determined at runtime. Therefore,
+                        every child process resource is listed in it, as is every ProX resource.
+                        What isn't is the input and the output, since these can only be determined
+                        at runtime.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>The ProX XForm</emphasis> is an XHTML file containing some
+                        exciting XForms markup. In ProX, it was merely the ProX
+                        process/pipeline/config selection mechanism; in ProXist, it also includes an
+                        input selection mechanism. The XForm references the ProX blueprint,
+                            <filename>prox-blueprint.xml</filename>, in an XForm model instance to
+                        provide its selections to the end user. While the blueprint is statically
+                        determined in ProXist (a nicer way to say that it's hard-coded in the
+                        XForm), the blueprint URI should be added to the XForm at runtime<footnote>
+                            <para>It was, in the original ProX demo, but time constraints made me
+                                drop this particular feature in the first ProXist version. The
+                                feature was in the XProc wrapper, but unfortunately that wrapper now
+                                runs <emphasis>after</emphasis> the XForm.</para>
+                        </footnote>, as it is listed in <filename>resource-map.xml</filename>. This
+                        is not hard to do.</para>
+                    <para>The input XML is listed using an XQuery,
+                            <filename>list-resources.xq</filename>, referenced by the XForm.</para>
+                    <para>The ProXist XForm uses an XQuery, <filename>gen-resmap.xq</filename>, to
+                        generate a resource map XML file based on the input XML that is selected,
+                        plus the resource map template. The XQ runs an XSLT,
+                            <filename>doc-resources.xsl</filename>, that as of this writing is
+                        somewhat specific to the COSML XML used in the demo, since it assumes
+                        XLink-based links that use the linking elements <tag>inset</tag>,
+                            <tag>block-inset</tag> and <tag>graphics</tag> to include modules. If
+                        another XML format was used for input, say, DocBook or DITA, a different
+                        XSLT would have to be written to handle XIncludes and such. This shouldn't
+                        be very hard to do, so I'm probably going to do it at some point.</para>
+                </listitem>
+                <listitem>
+                    <para>The second part of the XForm, the ProX selection mechanism, uses an
+                        XQuery, <filename>save.xq</filename>, to save the ProX instance as selected
+                        by the user, and then runs the <emphasis>XProc wrapper script</emphasis>.
+                        When the XProc is done, <filename>save.xq</filename> saves the results
+                        (hence the name, but you probably guessed that, right?) and, sometimes,
+                        post-processes them. This last bit happens if the output is XSL-FO; the
+                        XQuery then runs the PDF rendering engine.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>The XProc wrapper</emphasis> is, as the name suggests, a wrapper
+                        pipeline that first converts the ProX instance to something it can run, and
+                        then runs that something. This is where the actual child process runs, in
+                        other words. The child should return well-formed, and sometimes valid, XML
+                        that reflects the actual resulting contents, for now.</para>
+                    <note>
+                        <para>In an ideal world, the XML that is returned should merely be a URI to
+                            the result, but the current state of affairs in eXist, in particular the
+                            Calabash module or perhaps Calabash itself, stops the child from running
+                            things like the <tag>xsl-formatter</tag> XProc step, whoch means that if
+                            PDF is desired, it will have to be created <emphasis>after</emphasis>
+                            the child process, not during it.</para>
+                    </note>
+                </listitem>
+                <listitem>
+                    <para>The wrapper XProc uses an XQuery, <filename>ch-mode.xq</filename>, that
+                        changes the ownership, group and permisisons for the XQuery that has been
+                        generated from the ProX instance. This is done so the XQ can be executed in
+                        eXist. This, of course, is an ugly hack but reflects the author's skills
+                        perfectly. A better way to do it would be to have
+                            <filename>save.xq</filename> and whatever it runs with well-defined
+                        permissions for the purpose.</para>
+                </listitem>
+                <listitem>
+                    <para>In addition, ProX (obviously) uses whatever resources that are needed by
+                        the child processes it defines.</para>
+                </listitem>
+            </itemizedlist>
+        </section>
+        <section xml:id="section_axs_q4j_2n">
+            <title>ProX Attempt One</title>
+            <procedure>
+                <para>Mostly for historical reasons but also because things can be learned from it,
+                    here's the basic steps of the first ProX demo (Balisage 2013):</para>
+                <step>
+                    <para>Start the <quote>wrapper XProc pipeline</quote>.This runs the whole ProX
+                        chain, from start to finish, and the idea was for it to be a black box that
+                        ran another black box, that is, the child process. Hence the names
+                            <quote>wrapper</quote> and <quote>child</quote>, even though
+                            <quote>parent</quote> might have been a better term. Never mind.</para>
+                </step>
+                <step>
+                    <para/>
+                </step>
+            </procedure>
+        </section>
+        <section xml:id="section_m5t_twj_2n">
+            <title>ProXist</title>
+            <procedure>
+                <para/>
+                <step>
+                    <para/>
+                </step>
+            </procedure>
+        </section>
+    </section>
+    <section xml:id="section_cnq_vwj_2n">
+        <title>The ProX Relax NG Schema</title>
+        <para/>
+        <section xml:id="section_sc3_ywj_2n">
+            <title>Processes</title>
+            <para/>
+        </section>
+        <section xml:id="section_ll4_zwj_2n">
+            <title>Pipelines</title>
+            <para/>
+        </section>
+        <section xml:id="section_f5b_1xj_2n">
+            <title>Command Lines</title>
+            <para/>
+        </section>
+        <section xml:id="section_frd_cxj_2n">
+            <title>Packages</title>
+            <para/>
+        </section>
+    </section>
+    <section xml:id="section_wgz_cxj_2n">
+        <title>Authoring ProX Blueprints</title>
+        <para/>
+    </section>
+    <section xml:id="section_rhj_3xj_2n">
+        <title>The Resource Map XML Format</title>
+        <para/>
+    </section>
+</article>
