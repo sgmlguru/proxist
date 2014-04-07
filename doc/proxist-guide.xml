@@ -342,6 +342,9 @@
         <para/>
         <section xml:id="section_sc3_ywj_2n">
             <title>Processes</title>
+            <para>The root element of the schema is the <tag>processes</tag> element that may
+                contain (you guessed it) one or more <tag>process</tag> elements, each of which is
+                meant to describe a <quote>process</quote> within the system.</para>
             <para>Here's the <tag>process</tag> structure:<figure>
                     <title>The <tag>process</tag> Element</title>
                     <mediaobject>
@@ -353,6 +356,11 @@
         </section>
         <section xml:id="section_ll4_zwj_2n">
             <title>Pipelines</title>
+            <para>A process is an abstract grouping of related pipelines. They could be <quote>print
+                    publishing</quote>, <quote>web publishing</quote> or <quote>shopping
+                    lists</quote>, or basically anything the designer of the system considers to be
+                a meaningful group in the context of the current system. It's an abstraction, but
+                the pipelines it groups are actual pipelines.</para>
             <para>Here's the <tag>pipeline</tag> element:<figure>
                     <title>The <tag>pipeline</tag> Element</title>
                     <mediaobject>
@@ -364,6 +372,10 @@
         </section>
         <section xml:id="section_f5b_1xj_2n">
             <title>Command Lines</title>
+            <para>A pipeline may be configured in a number of ways, with different options and input
+                and whatnot, depending on what the pipeline is for, and so a command line as
+                represented by the <tag>cmdline</tag> element in the ProX schema is simply one such
+                configuration of that pipeline.</para>
             <para>Here's the <tag>cmdline</tag> element:<figure>
                     <title>The <tag>cmdline</tag> Element</title>
                     <mediaobject>
@@ -380,6 +392,10 @@
                         </imageobject>
                     </mediaobject>
                 </figure></para>
+            <para>TBA inputs are port/value pairs; params may be defined for an input that points out
+                a stylesheet; params are port/value pairs ...</para>
+            <para>TBA values: types of values (pkg, external, uri, string, other) and their
+                uses</para>
         </section>
         <section xml:id="section_frd_cxj_2n">
             <title>Packages</title>
@@ -442,7 +458,7 @@
         <para>Authoring a ProX blueprint is, while not for the faint of heart, not impossible,
             either. The first thing to remember is that it models a typical Calabash command line,
             but unlike one, it includes <emphasis>every</emphasis> binding allowed in the system the
-            blueprint descries.</para>
+            ProX blueprint is meant to describe.</para>
         <para>The second thing to remember, then, is simply that the blueprint is really just a a
             long list of configurations for a system: <quote>this process allows these two
                 pipelines, which in turn allow these command lines linking to these stylesheet
