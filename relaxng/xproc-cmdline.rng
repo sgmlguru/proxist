@@ -189,7 +189,10 @@
       </choice>
     </attribute>
   </define>
-  <!-- Configuration for Calabash -->
+  <!--
+    Configuration for Calabash
+    Should be user-selectable and include multiple configs?
+  -->
   <define name="config">
     <element name="config">
       <ref name="config.attlist"/>
@@ -341,6 +344,9 @@
   <define name="param">
     <element name="param">
       <ref name="param.attlist"/>
+      <optional>
+        <ref name="metadata"/>
+      </optional>
       <ref name="port"/>
       <ref name="name"/>
       <zeroOrMore>

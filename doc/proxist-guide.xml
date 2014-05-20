@@ -1113,4 +1113,232 @@
         <para>TBA description of components: docs, targets, prox, prox-resources,
             wrapper-pipeline...</para>
     </section>
+    <section xml:id="section_v5w_fy1_24">
+        <title>Processes Schema Reference</title>
+        <para>This section contains an element reference for the <filename>processes</filename>
+            Relax NG schema.</para>
+        <section xml:id="section_xls_gz1_24">
+            <title>cmdline</title>
+            <para><tag>cmdline</tag> describes a single set of allowed configurable options for a
+                pipeline.</para>
+        </section>
+        <section xml:id="section_s52_cz1_24">
+            <title>cmdlines</title>
+            <para><tag>cmdlines</tag> is a wrapper element grouping all allowed command lines
+                    (<tag>cmdline</tag> elements) for a specific pipeline.</para>
+        </section>
+        <section xml:id="section_dmc_25b_24">
+            <title>config</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_ucl_k5b_24">
+            <title>data-input</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_fw5_35b_24">
+            <title>data-inputs</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_igh_dvb_24">
+            <title>debug</title>
+            <!--Should be deprecated-->
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_wls_w1b_24">
+            <title>description</title>
+            <para><tag>description</tag> is a wrapper element for descriptive texts in ProX
+                component metadata, used for component help texts. Descriptions give a short
+                description of the component, suitable for </para>
+        </section>
+        <section xml:id="section_utz_l5b_24">
+            <title>engine-config</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_zrm_n5b_24">
+            <title>extensions</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_jgz_n5b_24">
+            <title>extension</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_mg1_ctb_24">
+            <title>input</title>
+            <para><tag>input</tag> defines a single input binding for an XProc pipeline. An
+                    <tag>input</tag> lists an input port (in a <tag>port</tag> element) and its
+                corresponding value.</para>
+            <note>
+                <para>While an input might be configurable with several different input values,
+                    currently, ProX only allows for a single value for each input binding. If you
+                    need to define a process that allows different values for the same input binding
+                    (for example, a pipeline might allow different stylesheet packages to be pointed
+                    out using the same input), you should use a separate command line group
+                        (<tag>cmdline</tag>) for each such variant.</para>
+            </note>
+        </section>
+        <section xml:id="section_gkr_ysb_24">
+            <title>inputs</title>
+            <para><tag>inputs</tag> is a wrapper element for every defined input binding for a
+                pipeline.</para>
+        </section>
+        <section xml:id="section_bnt_5mb_24">
+            <title>inset</title>
+            <para>An <tag>inset</tag> element is an inclusion link to another ProX module, enabling
+                the modularisation of ProX blueprints. For example, instead of including a
+                    <tag>package</tag> structure directly inside the <tag>packages</tag> wrapper, it
+                might be linked to.</para>
+        </section>
+        <section xml:id="section_ewb_x5b_24">
+            <title>libraries</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_rgp_x5b_24">
+            <title>library</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_ofj_p5b_24">
+            <title>locator</title>
+            <para><tag>locator</tag> links to an external package resource.</para>
+        </section>
+        <section xml:id="section_wmw_l1b_24">
+            <title>metadata</title>
+            <para><tag>metadata</tag> is a wrapper element for metadata describing a process,
+                pipeline, package or parameter. This metadata is used to generate label texts for
+                user interface components (for example, dropdown list items) and help texts (for
+                example, popup help texts).</para>
+        </section>
+        <section xml:id="section_yrs_3lb_24">
+            <title>name</title>
+            <para><tag>name</tag> identifies an XProc pipeline binding's name.</para>
+        </section>
+        <section xml:id="section_k2k_h5b_24">
+            <title>option</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_rq5_h5b_24">
+            <title>options</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_qlr_c5b_24">
+            <title>output</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_amb_d5b_24">
+            <title>outputs</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_qnd_mjb_24">
+            <title>p</title>
+            <para><tag>p</tag> is a paragraph in a <tag>description</tag> element.</para>
+        </section>
+        <section xml:id="section_e42_f1b_24">
+            <title>package</title>
+            <para><tag>package</tag> lists links to the resources that form a well-defined package,
+                such as a set of related XSLT stylesheets and any other files that might be required
+                by the XSLT package. It also lists metadata for the package.</para>
+        </section>
+        <section xml:id="section_bs5_kz1_24">
+            <title>packages</title>
+            <para><tag>packages</tag> is a wrapper element containing individual packages common to
+                either all processes, a single process or a single pipeline<footnote>
+                    <para>Since packages are referenced by <tag>value</tag> or <tag>script</tag>
+                        elements using a simple XLink pointer, there is currently nothing to stop
+                        you from referencing a scoped package from outside that scope; this is
+                        simply a convention I think is useful.</para>
+                </footnote>.</para>
+        </section>
+        <section xml:id="section_o1z_sjb_24">
+            <title>param</title>
+            <para><tag>param</tag> describes the allowed and configurable behaviour of a single XSLT
+                parameter. It does <emphasis>not</emphasis> describe every possible parameter value;
+                it only describes a parameter and its values, <emphasis>if</emphasis> they are of
+                interest when running the ProX process that uses the XSLT.</para>
+            <para>In addition to metadata, used to give the parameter a human-readable label and
+                help text, a <tag>param</tag> element lists the parameter port used by the pipeline
+                (in a <tag>port</tag> element), the parameter's name (in a <tag>name</tag> element)
+                and the parameter's allowed value or values (in<tag>value</tag> elements).</para>
+        </section>
+        <section xml:id="section_ush_qjb_24">
+            <title>params</title>
+            <para><tag>params</tag> is a wrapper element for XSLT parameters (<tag>param</tag>
+                elements).</para>
+        </section>
+        <section xml:id="section_lmx_jnb_24">
+            <title>pipe</title>
+            <para><tag>pipe</tag> identifies an XProc step inside a <tag>pipeline</tag><footnote>
+                    <para>Conceivably used to run a single XProc step rather than a whole
+                        script.</para>
+                </footnote></para>
+        </section>
+        <section xml:id="section_sbw_ty1_24">
+            <title>pipeline</title>
+            <para><tag>pipeline</tag> describes a single XProc pipeline and its allowed
+                configuration and runtime options.</para>
+        </section>
+        <section xml:id="section_ahg_xy1_24">
+            <title>pipelines</title>
+            <para><tag>pipelines</tag> is a wrapper element for all allowed pipelines defined to be
+                part of the same process (in a <tag>process</tag> element).</para>
+        </section>
+        <section xml:id="section_t11_skb_24">
+            <title>port</title>
+            <para><tag>port</tag> identifies an XProc pipeline binding's port.</para>
+        </section>
+        <section xml:id="section_r1g_qy1_24">
+            <title>process</title>
+            <para><tag>process</tag> is a wrapper for a specific <quote>process</quote>, a somewhat
+                arbitrary goruping of related pipelines.</para>
+        </section>
+        <section xml:id="section_ffj_my1_24">
+            <title>processes</title>
+            <para><tag>processes</tag> is a wrapper element for <tag>process</tag> elements and the
+                topmost element of the ProX schema.</para>
+        </section>
+        <section xml:id="section_cmk_bvb_24">
+            <title>processor</title>
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_uvs_1vb_24">
+            <title>saxon</title>
+            <!--Should be deprecated-->
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_mjg_2vb_24">
+            <title>schema-aware</title>
+            <!--Should be deprecated-->
+            <para>TBA</para>
+        </section>
+        <section xml:id="section_uxf_fnb_24">
+            <title>script</title>
+            <para><tag>script</tag> identifies the actual XProc script, either directly in the form
+                of a URI or as a link to a ProX <tag>package</tag>.</para>
+        </section>
+        <section xml:id="section_bqs_t1b_24">
+            <title>title</title>
+            <para><tag>title</tag> identifies a descripitive label for a ProX component, used for
+                user interface labels.</para>
+        </section>
+        <section xml:id="section_jzq_wkb_24">
+            <title>value</title>
+            <para><tag>value</tag> lists a pipeline binding's allowed value. A binding in ProX may
+                include several values (one for each allowed value), which means that unlike a
+                ready-to-run XProc pipeline script, ProX blueprints need to list every allowed value
+                for every configurable binding. The ready-to-run XProc pipeline, then, is equivalent
+                to a ProX instance.</para>
+            <para><tag>value</tag>s may be used for many different types of values, depending on
+                what is being described. For example, an XSLT parameter's available values may be an
+                ennumerated list, which means that there would be one <tag>value</tag> for each list
+                item. An <tag>input</tag>'s allowed values, on the other hand, might be references
+                to the XSLT stylesheet <tag>package</tag>s that may be used by the pipeline at hand,
+                in which case each <tag>value</tag> will instead be a link to a <tag>package</tag>
+                element listing the package resources.</para>
+            <para>Or, a <tag>value</tag> may not be known until runtime; it could be the name of the
+                input XML file, provided by the system, or a calculated output filename.</para>
+            <para>To know what kind of <tag>value</tag> is intended, ProX <tag>value</tag>s use an
+                ennumerated list of <tag>type</tag> attribute values. The attribute value
+                    <quote>external</quote>, for example, identifies a runtime value while
+                    <quote>pkg</quote> identifies a package reference.</para>
+            <para>TBA mimetype, input-type, output-type attributes</para>
+        </section>
+    </section>
 </article>

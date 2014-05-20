@@ -5,7 +5,8 @@ pipeline = element pipeline {
         pipeline.attlist,
         metadata,
         (script | pipe)?,
-        cmdlines?
+        cmdlines?,
+        packages?
     }
 pipeline.attlist &= 
     choice.att,

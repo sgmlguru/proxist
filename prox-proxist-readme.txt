@@ -24,6 +24,8 @@ TBA eXist installation
 
 * Added optional <metadata> to <param>.
 
+* Added optional <packages> to <pipeline>.
+
 
 
 3. Known Issues

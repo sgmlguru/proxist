@@ -13,6 +13,9 @@
       <optional>
         <ref name="cmdlines"/>
       </optional>
+      <optional>
+        <ref name="packages"/>
+      </optional>
     </element>
   </define>
   <define name="pipeline.attlist" combine="interleave">
