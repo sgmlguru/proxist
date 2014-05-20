@@ -3,8 +3,11 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 
 resource.type = attribute type { "root" | "main" | "aux" | "other" }?
 
-package =
-    element package { package.attlist, metadata, params?, locator+ }
+package = element package {
+    package.attlist,
+    metadata,
+    params?,
+    locator+ }
 package.attlist &=
     attribute type { "xslt" | "xslfo" | "dtd" | "xsd" | "rnc" | "rng" | "xpl" | "xml" | "binary" | "other" }?,
     choice.att,
@@ -13,11 +16,13 @@ package.attlist &=
     xmllang.att
 
 # URIs of participating resources in a package
-locator = element locator { locator.attlist, empty }
-locator.attlist &= 
-    xlink.simple.att?, 
-    xmlbase.att, 
-    resource.type, 
+locator = element locator {
+    locator.attlist,
+    empty }
+locator.attlist &=
+    xlink.simple.att?,
+    xmlbase.att,
+    resource.type,
     id.att
 
 #start |= package

@@ -4,16 +4,21 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 
 # Processes
 
-processes = element processes { processes.attlist, (process | inset)+, packages? }
-processes.attlist &= 
-    id.att, 
+processes = element processes {
+    processes.attlist,
+    (process | inset)+,
+    packages? }
+processes.attlist &=
+    id.att,
     xmlbase.att,
     xmllang.att
 
 
 # Linking Mechanism
 
-inset = element inset { inset.attlist, empty }
+inset = element inset {
+    inset.attlist,
+    empty }
 inset.attlist &=
     id.att,
     xmlbase.att,
@@ -33,36 +38,49 @@ choice.att =
 
 # Process
 
-process =
-    element process { process.attlist, metadata, pipelines?, packages? }
+process = element process {
+    process.attlist,
+    metadata,
+    pipelines?,
+    packages? }
 process.attlist &=
     choice.att,
-    id.att, 
+    id.att,
     xmlbase.att,
     xmllang.att
 
 
 # Metadata (common for all main structures)
 
-metadata = element metadata { metadata.attlist, title, description }
+metadata = element metadata {
+    metadata.attlist,
+    title,
+    description }
 metadata.attlist &= id.att
 
-title = element title { title.attlist, text }
+title = element title {
+    title.attlist,
+    text }
 title.attlist &= id.att
 
-description = element description { description.attlist, p+ }
+description = element description {
+    description.attlist,
+    p+ }
 description.attlist &= id.att
 
-p = element p { p.attlist, text }
+p = element p {
+    p.attlist,
+    text }
 p.attlist &= id.att
 
 
 # Pipelines associated with a process
 
-pipelines =
-    element pipelines { pipelines.attlist, (pipeline | inset)* }
-pipelines.attlist &= 
-    id.att, 
+pipelines = element pipelines {
+    pipelines.attlist,
+    (pipeline | inset)* }
+pipelines.attlist &=
+    id.att,
     xmlbase.att,
     xmllang.att
 
@@ -71,9 +89,11 @@ include "xproc-pipes.rnc"
 
 # Packages (XML, XSL, etc) associated with a process
 
-packages = element packages { packages.attlist, (package | inset)* }
-packages.attlist &= 
-    id.att, 
+packages = element packages {
+    packages.attlist,
+    (package | inset)* }
+packages.attlist &=
+    id.att,
     xmlbase.att,
     xmllang.att
 

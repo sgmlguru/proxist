@@ -1,6 +1,3 @@
-
-
-
 Select input root XML
 
 * select.xhtml (XForm for input XML selection)

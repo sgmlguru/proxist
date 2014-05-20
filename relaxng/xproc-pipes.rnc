@@ -1,11 +1,10 @@
 default namespace = ""
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-pipeline =
-    element pipeline {
-        pipeline.attlist, 
-        metadata, 
-        (script | pipe)?, 
+pipeline = element pipeline {
+        pipeline.attlist,
+        metadata,
+        (script | pipe)?,
         cmdlines?
     }
 pipeline.attlist &= 
@@ -16,23 +15,27 @@ pipeline.attlist &=
 
 # XProc script reference is either package ref as XLink or URI as text
 script = element script { 
-        script.attlist, 
-        text 
+        script.attlist,
+        text
         }
 script.attlist &= 
     attribute type { "pkg" }?,
-    xlink.simple.att, 
-    xmlbase.att, 
+    xlink.simple.att,
+    xmlbase.att,
     id.att
 
 # Atomic XProc step
-pipe = element pipe { pipe.attlist, text }
+pipe = element pipe { 
+    pipe.attlist,
+    text }
 pipe.attlist &= id.att
 
 # Valid Calabash command lines
-cmdlines = element cmdlines { cmdlines.attlist, (cmdline | inset)* }
+cmdlines = element cmdlines { 
+    cmdlines.attlist,
+    (cmdline | inset)* }
 cmdlines.attlist &= 
-    id.att, 
+    id.att,
     xmlbase.att
 
 # Calabash command line input

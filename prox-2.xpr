@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="15.2">
+<project version="15.1">
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="15.2" xml:space="preserve">
+            <serialized version="15.1" xml:space="preserve">
                 <map>
                     <entry>
                         <String>scenario.associations</String>
@@ -1317,6 +1317,12 @@
                                             <field name="value">
                                                 <null/>
                                             </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="isRequired">
+                                                <Boolean>false</Boolean>
+                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1327,6 +1333,12 @@
                                             </field>
                                             <field name="value">
                                                 <null/>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="isRequired">
+                                                <Boolean>false</Boolean>
                                             </field>
                                         </xprocOption>
                                     </xprocOption-array>
@@ -2111,7 +2123,7 @@
         <file name="../cosml/xslt/links2mindmap.xsl"/>
         <file name="../cosml/xq/list-resources.xq"/>
         <file name="../cosml/xproc/mindmap-cosml-modules.xpl"/>
-        <file name="../../../../../home/ari/Dropbox/XMLPrague/2014/Presentation/minmaptarget-example.xml"/>
+        <file name="file:/../home/ari/Dropbox/XMLPrague/2014/Presentation/minmaptarget-example.xml"/>
         <file name="oxygen:/eXist-db%20localhost$eXist-db%20localhost/db/work/docs/XMLPrague/prague-demo-root.xml"/>
         <file name="xslt/prox-fix.xsl"/>
         <file name="xproc/prox-wrapper-TEST.xpl"/>
@@ -2120,6 +2132,7 @@
         <file name="xslt/prox2shell-config.xml"/>
         <file name="xslt/prox2shell.xsl"/>
         <file name="xslt/prox2xq.xsl"/>
+        <file name="doc/proxist-guide.xml"/>
         <file name="xq/save.xq"/>
         <file name="oxygen:/eXist-db%20localhost$eXist-db%20localhost/db/work/docs/XMLPrague/section1.xml"/>
         <file name="xforms/select-prox.xhtml"/>

@@ -394,6 +394,10 @@
                 </figure></para>
             <para>TBA inputs are port/value pairs; params may be defined for an input that points out
                 a stylesheet; params are port/value pairs ...</para>
+            <para>TBA options are name/value pairs; can include params if option is used to
+                reference a package??? params in options might not be a good idea - probably better
+                to enforce a style to ProX (force any package reference to be made from an input or
+                a script element)</para>
             <para>TBA values: types of values (pkg, external, uri, string, other) and their
                 uses</para>
         </section>
