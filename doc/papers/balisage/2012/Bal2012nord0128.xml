@@ -1,0 +1,1350 @@
+﻿<?xml version="1.0"?>
+<!DOCTYPE cos PUBLIC "-//COS//DTD COSML 1.0//ISO10646" "cos.dtd">
+<cos xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="sv-SE"
+ id="cos-2012-2-22-12-44-1-184541-"> 
+<meta-data id="meta-data-2012-2-22-12-44-1-184541-"> 
+  <doc-info id="doc-info-2012-2-22-12-44-1-184541-"> 
+	 <title id="title-2012-2-22-12-44-1-184541-">Using XML to Implement
+		XML</title> 
+	 <subtitle id="subtitle-2012-3-20-11-30-13-57703936-">Or, Since XProc Is
+		XML, Shouldn't Everything Else Be, Too?</subtitle> 
+	 <doc-no id="doc-no-2012-2-22-12-44-1-184541-">
+		<number id="number-2012-2-22-12-44-1-184541-">Bal2012nord0128</number>
+		<rev id="rev-2012-2-22-12-44-1-184541-">2</rev> </doc-no> 
+  </doc-info> 
+  <author id="author-2012-2-22-12-44-1-184541-"> 
+	 <name id="name-2012-2-22-12-44-1-184541-"> 
+		<first id="first-2012-2-22-12-44-1-184541-">Ari</first> 
+		<last id="last-2012-2-22-12-44-1-184541-">Nordström</last> 
+	 </name> 
+	 <contact-info id="contact-info-2012-3-20-11-30-13-57703936-"> 
+		<tel id="tel-2012-3-20-11-30-13-57703936-"></tel> 
+		<email
+		id="email-2012-3-20-11-30-13-57703936-">ari.nordstrom@condesign.se</email> 
+	 </contact-info> 
+  </author> 
+  <company-info id="company-info-2012-3-20-11-30-13-57703936-"> 
+	 <company-name id="company-name-2012-3-20-11-30-13-57703936-">Condesign
+		AB</company-name> 
+  </company-info> 
+  <abstract id="abstract-2012-2-22-12-49-19-72016790-"> 
+	 <p id="p-2012-2-22-12-49-19-72016790-">This paper discusses implementing
+		XProc-based publishing and processing in a document management system that is
+		currently very difficult to expand because even though it handles and processes
+		XML, the system is currently implemented in a way that makes any changes to
+		publishing and processing difficult. The author currently depends on C#
+		developers without XML knowledge for any changes.</p> 
+	 <p id="p-2012-3-20-11-30-13-57703936-1">The paper suggests using XML to
+		<emph id="emph-2012-3-20-11-30-13-57703936-">implement</emph> the XProc
+		pipelines with, handling everything from the
+		<file-path id="file-path-2012-5-26-15-52-49-56637183-">.bat</file-path> files
+		for the XProc engine to the GUI that makes the pipelines available to the end
+		user. This XML can be used to generate both, but is also useful as an
+		abstraction layer that black-boxes not only the XProc but everything
+		surrounding it, providing a blueprint for the processes, simplifying
+		development and, for the author, eliminating an unwanted dependency to C#
+		developers.</p> 
+  </abstract> 
+  <pub-info id="pub-info-2012-2-22-12-49-19-72016790-"> 
+	 <rev-date id="rev-date-2012-6-3-9-38-55-98458456-"><y
+	 id="y-2012-6-3-9-38-55-98458456-">2012</y><m
+	 id="m-2012-6-3-9-38-55-98458456-">07</m><d
+	 id="d-2012-6-3-9-38-55-98458456-">03</d></rev-date> 
+	 <rev-date id="rev-date-2012-5-26-13-3-42-452828-"><y
+	 id="y-2012-5-26-13-3-42-452828-">2012</y><m
+	 id="m-2012-5-26-13-3-42-452828-">06</m><d
+	 id="d-2012-5-26-13-3-42-452828-">26</d></rev-date> 
+	 <rev-date id="rev-date-2012-3-19-13-29-37-70038244-"><y
+	 id="y-2012-3-19-13-29-37-70038244-">2012</y><m
+	 id="m-2012-3-19-13-29-37-70038244-">04</m><d
+	 id="d-2012-3-19-13-29-37-70038244-">20</d></rev-date> 
+	 <rev-date id="rev-date-2012-3-17-9-40-10-77171645-"><y
+	 id="y-2012-3-17-9-40-10-77171645-">2012</y><m
+	 id="m-2012-3-17-9-40-10-77171645-">04</m><d
+	 id="d-2012-3-17-9-40-10-77171645-">17</d></rev-date> 
+	 <rev-date id="rev-date-2012-3-13-10-19-12-34575458-"><y
+	 id="y-2012-3-13-10-19-12-34575458-">2012</y><m
+	 id="m-2012-3-13-10-19-12-34575458-">04</m><d
+	 id="d-2012-3-13-10-19-12-34575458-">13</d></rev-date> 
+	 <rev-date id="rev-date-2012-3-11-14-10-26-65410521-"><y
+	 id="y-2012-3-11-14-10-26-65410521-">2012</y><m
+	 id="m-2012-3-11-14-10-26-65410521-">04</m><d
+	 id="d-2012-3-11-14-10-26-65410521-">11</d></rev-date> 
+	 <first-date id="first-date-2012-2-22-12-49-19-72016790-"><y
+	 id="y-2012-2-22-12-49-19-72016790-1">2012</y><m
+	 id="m-2012-2-22-12-49-19-72016790-1">03</m><d
+	 id="d-2012-2-22-12-49-19-72016790-1">22</d></first-date> 
+  </pub-info>
+</meta-data> 
+<body id="body-2012-2-22-12-44-1-184541-"> 
+  <section id="section-2012-2-22-12-44-1-184541-"> 
+	 <title id="title-2012-2-22-12-44-1-184541-1">The Problem</title> 
+	 <p id="p-2012-2-22-12-44-1-184541-">My company develops and markets a
+		document management system. It does what these things do; there is an XML
+		editor, there is a database, and there is middleware for version handling,
+		workflows, modularisation, reuse, etc. Something we call the
+		<gui id="gui-2012-2-22-12-49-19-72016790-">Process Manager</gui> processes XML
+		documents, for example, outputs them in PDF. Unfortunately, it is currently
+		difficult to add new processes for new formats or media, something that such a
+		system should handle without difficulty.</p> 
+	 <section id="section-2012-2-22-14-18-20-72491660-1"> 
+		<title id="title-2012-2-22-14-18-20-72491660-">The Process
+		  Manager</title> 
+		<section id="section-2012-3-11-12-48-9-97934954-"> 
+		  <title id="title-2012-3-11-12-48-9-97934954-">Overview</title> 
+		  <p id="p-2012-5-26-13-3-42-452828-">Most documents in the system are
+			 modularised, with a root XML file linking to other XML and images. The linked
+			 XML, in turn, often link to further XML and images, effectively creating a
+			 <quote id="quote-2012-5-27-11-2-25-83325809-">link tree</quote>.</p> 
+		  <figure id="figure-2012-5-26-13-3-42-452828-"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00000909:sv-SE:0.1"
+			 xlink:href="Bal2012nord012801.png"
+			 width="649" height="656" id="graphics-2012-5-26-13-3-42-452828-"/> 
+			 <caption id="caption-2012-5-26-13-3-42-452828-">A Link Tree</caption>
+			 
+		  </figure> 
+		  <p id="p-2012-3-11-12-48-9-97934954-">The
+			 <gui id="gui-2012-3-11-12-48-9-97934954-">Process Manager</gui> points out the
+			 root XML<ftnote id="ftnote-2012-5-26-13-3-42-452828-">And lists some metadata
+			 about the process.</ftnote> and maps the linked resources in a link tree
+			 representation, with status information, target IDs, versions, etc<xref
+			 id="xref-2012-5-26-15-52-49-56637183-1"> (see
+			 <locator
+			 xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.34#figure-2012-3-13-10-19-12-34575458-"
+			 xlink:title="A Tree View of the Master-Language Document"
+			 id="locator-2012-5-26-15-52-49-56637183-1"/>)</xref>. This info is stored in a
+			 <emph id="emph-2012-5-26-15-52-49-56637183-">configuration</emph>.</p> 
+		  <figure id="figure-2012-3-13-10-19-12-34575458-"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00002189:sv-SE:0.1"
+			 xlink:href="Bal2012nord012802.jpg"
+			 width="789" height="520" id="graphics-2012-3-13-10-19-12-34575458-"/> 
+			 <caption id="caption-2012-3-13-10-19-12-34575458-">A Tree View of the
+				Master-Language Document</caption> 
+		  </figure> 
+		  <p id="p-2012-3-11-12-48-9-97934954-2">The link tree is the same,
+			 regardless of document language, and therefore useful when handling
+			 translations. It can show what translations exist, help create new translation
+			 packages, etc.</p> 
+		  <figure id="figure-2012-3-13-10-19-12-34575458-1"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00002188:sv-SE:0.1"
+			 xlink:href="Bal2012nord012803.jpg"
+			 width="828" height="519" id="graphics-2012-3-13-10-19-12-34575458-1"/> 
+			 <caption id="caption-2012-3-13-10-19-12-34575458-1">Managing
+				Translations</caption> 
+		  </figure> 
+		  <p id="p-2012-5-26-13-3-42-452828-2">More importantly, the
+			 <gui id="gui-2012-5-26-13-3-42-452828-">Process Manager</gui> uses the
+			 configuration to publish the link tree. It starts a process that fetches the
+			 necessary XML and images, and normalises them to one big XML file. It then
+			 applies a FO stylesheet to output PDF using Apache FOP. Here's the basic
+			 process handled by the <gui id="gui-2012-5-26-15-52-49-56637183-">Process
+			 Manager</gui> today to publish a modularised document.</p> 
+		  <figure id="figure-2012-5-26-15-52-49-56637183-"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00002311:sv-SE:0.1"
+			 xlink:href="Bal2012nord012804.jpg"
+			 id="graphics-2012-5-26-15-52-49-56637183-" width="988" height="478"/> 
+			 <caption id="caption-2012-5-26-15-52-49-56637183-">Publishing Using
+				the Current Process Manager</caption> 
+		  </figure> 
+		  <p id="p-2012-5-26-15-52-49-56637183-"> The four numbered steps at the
+			 top show what is actually exposed to the user. They hide a lot of background
+			 processing, including several XSLT conversions, DOM manipulation, etc.
+			 Everything is glued together using C#. The GUI itself is static and always more
+			 or less the same.</p> 
+		  <p id="p-2012-3-11-12-48-9-97934954-4">Other processes might output,
+			 say, HTML or ePUB, or simply a report, but currently, only copying the original
+			 process, translation handling and PDF publishing, all of which depend heavily
+			 on C# code, are supported.</p> 
+		</section> 
+		<section id="section-2012-3-12-11-16-5-31278444-"> 
+		  <title id="title-2012-3-12-11-16-5-31278444-">URNs Rather Than
+			 URLs</title> 
+		  <p id="p-2012-2-22-12-49-19-72016790-4">Everything is identified,
+			 handled and linked to using URNs. Whether a link points out XML or an image,
+			 the pointer is a URN. The URNs are unique and include language/country and
+			 version information, so there's full traceability; link trees can always be
+			 recreated later, regardless of what's been done to a module or image since.</p>
+		  
+		  <p id="p-2012-2-22-14-18-20-72491660-1">This works well. The URNs
+			 define basic semantic documents (with
+			 <quote id="quote-2012-2-22-14-18-20-72491660-1">base</quote> URNs), master
+			 language documents (base URN plus the master language/country) and their
+			 translations (the base URNs plus the target language/country)<ftnote
+			 id="ftnote-2012-6-3-12-10-36-35173372-">The system only uses URLs when
+			 publishing—the URNs are replaced with temp URLs in a temp location, thrown away
+			 afterwards.</ftnote>.</p> 
+		  <figure id="figure-2012-5-26-13-3-42-452828-1"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00000910:sv-SE:0.1"
+			 xlink:href="Bal2012nord012805.png"
+			 width="649" height="686" id="graphics-2012-5-26-13-3-42-452828-1"/> 
+			 <caption id="caption-2012-5-26-13-3-42-452828-1">Everything Is
+				Identified Using URNs</caption> 
+		  </figure> 
+		  <p id="p-2012-2-22-14-18-20-72491660-2">Stylesheet modules, while
+			 handled <emph id="emph-2012-5-27-11-2-25-83325809-">in</emph> the system in the
+			 same way as any other XML, using URNs, are developed
+			 <emph id="emph-2012-5-27-11-2-25-83325809-1">outside</emph> the system and use
+			 relative URLs to refence each other. Thus, the current
+			 <gui id="gui-2012-2-22-14-18-20-72491660-1">Process Manager</gui> can only use
+			 them in the temp location when publishing, because otherwise the relative URLs
+			 would break.</p> 
+		</section> 
+		<section id="section-2012-3-11-12-48-9-97934954-1"> 
+		  <title id="title-2012-3-11-12-48-9-97934954-1">Process Details</title> 
+		  <list id="list-2012-3-11-12-48-9-97934954-"> 
+			 <p id="p-2012-3-11-12-48-9-97934954-5">The
+				<gui id="gui-2012-3-11-12-48-9-97934954-2">Process Manager</gui> can currently
+				do the following:</p> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-5"> 
+				<p id="p-2012-3-11-12-48-9-97934954-6">Create and save new configs,
+				  with titles, descriptions and other metadata, and point out the exact version
+				  and language of a root XML document using its URN. </p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-"> 
+				<p id="p-2012-3-11-12-48-9-97934954-7">Open and edit an existing
+				  config.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-1"> 
+				<p id="p-2012-3-11-12-48-9-97934954-8">Copy an existing
+				  configuration and the root XML pointed out by it, that is, create a
+				  <quote id="quote-2012-3-11-12-48-9-97934954-1">fork</quote> of the XML<ftnote
+				  id="ftnote-2012-3-11-12-48-9-97934954-">This is done to change the profile used
+				  to publish the document.</ftnote>.</p> 
+			 </list-item> 
+		  </list> 
+		  <figure id="figure-2012-3-13-10-19-12-34575458-2"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00002190:sv-SE:0.1"
+			 xlink:href="Bal2012nord012806.jpg"
+			 width="789" height="520" id="graphics-2012-3-13-10-19-12-34575458-2"/> 
+			 <caption id="caption-2012-3-13-10-19-12-34575458-2">A Saved
+				Configuration</caption> 
+		  </figure> 
+		  <list id="list-2012-3-11-12-48-9-97934954-1"> 
+			 <p id="p-2012-3-11-12-48-9-97934954-9">A configuration is used by the
+				<gui id="gui-2012-3-11-12-48-9-97934954-3">Process Manager</gui> to process the
+				document it identifies:</p> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-6"> 
+				<p id="p-2012-3-11-12-48-9-97934954-10">View the document as a link
+				  tree, including any linked resources.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-2"> 
+				<p id="p-2012-3-11-12-48-9-97934954-11">Create a translation
+				  package of the document, selecting the target language and the modules to be
+				  included.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-3"> 
+				<p id="p-2012-3-11-12-48-9-97934954-12">Publish the document.
+				  Currently, only PDF.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-4"> 
+				<p id="p-2012-3-11-12-48-9-97934954-13">Profile<ftnote
+				  id="ftnote-2012-5-27-11-2-25-83325809-">That is, identify product variants and
+				  such.</ftnote> a copy (<quote
+				  id="quote-2012-3-11-12-48-9-97934954-2">fork</quote>) of the document, setting
+				  conditions that include or exclude content from the output<ftnote
+				  id="ftnote-2012-3-11-12-48-9-97934954-1">Modules include pre-defined profiles
+				  in attribute values inside them; a string comparison is made between these and
+				  a profile context defined in the root element.</ftnote>.</p> 
+			 </list-item> 
+		  </list> 
+		</section> 
+		<section id="section-2012-3-11-12-48-9-97934954-2"> 
+		  <title id="title-2012-3-11-12-48-9-97934954-2">Copying Configurations
+			 and XML</title> 
+		  <list id="list-2012-3-11-12-48-9-97934954-2"> 
+			 <p id="p-2012-3-11-12-48-9-97934954-14">In terms of pipeline
+				processing, this is what happens when copying and profiling a
+				configuration:</p> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-12"> 
+				<p
+				 id="p-2012-3-11-12-48-9-97934954-15">Copy the root XML<ftnote
+				  id="ftnote-2012-3-11-12-48-9-97934954-2">Any descendants linked to from the
+				  root XML remain unchanged.</ftnote>.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-7"> 
+				<p id="p-2012-3-11-12-48-9-97934954-16">Copy the configuration
+				  (copied config points to copied XML).</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-8"> 
+				<p id="p-2012-3-11-12-48-9-97934954-17">Change the filenames of the
+				  copied XML and config.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-9"> 
+				<p id="p-2012-3-11-12-48-9-97934954-19">Generate new URNs for the
+				  copied config and XML<ftnote id="ftnote-2012-3-11-12-48-9-97934954-3">The
+				  database tracks the relations between the old and the new URNs.</ftnote>.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-11"> 
+				<p id="p-2012-3-11-12-48-9-97934954-18">Profile the root XML copy
+				  using a GUI in the <gui id="gui-2012-3-11-12-48-9-97934954-4">Process
+				  Manager</gui>, adding and removing values controlled by the CMS.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-5-27-11-2-25-83325809-"> 
+				<p id="p-2012-5-27-11-2-25-83325809-"> Insert the selected profiles
+				  as attribute values in the copied XML's root element.</p> 
+			 </list-item> 
+			 <list-item id="list-item-2012-3-11-12-48-9-97934954-10"> 
+				<p id="p-2012-3-11-12-48-9-97934954-20">Store both copies in the
+				  CMS.</p> 
+			 </list-item> 
+		  </list> 
+		  <figure id="figure-2012-3-13-10-19-12-34575458-3"><graphics
+			 xlink:role="urn:x-cassis:r1:cos:00002193:sv-SE:0.1"
+			 xlink:href="Bal2012nord012807.jpg"
+			 width="790" height="520" id="graphics-2012-3-13-10-19-12-34575458-3"/> 
+			 <caption id="caption-2012-3-13-10-19-12-34575458-3">A Forked
+				Configuration</caption> 
+		  </figure> 
+		  <p id="p-2012-3-11-12-48-9-97934954-21">The copied XML is then
+			 processed.</p> 
+		</section> 
+		<section id="section-2012-3-11-12-48-9-97934954-3"> 
+		  <title id="title-2012-3-11-12-48-9-97934954-3">Publishing
+			 Processes</title> 
+		  <p id="p-2012-5-26-15-52-49-56637183-1">Even with the limited
+			 processing available today, there are quite a few steps involved, as shown<xref
+			 id="xref-2012-5-26-15-52-49-56637183-"> in
+			 <locator
+			 xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.34#figure-2012-5-26-15-52-49-56637183-"
+			 xlink:title="Publishing Using the Current Process Manager"
+			 id="locator-2012-5-26-15-52-49-56637183-"/>,</xref> above.</p> 
+		  <step-list id="step-list-2012-3-11-14-10-26-65410521-"> 
+			 <p id="p-2012-3-11-14-10-26-65410521-">Here's how to start the actual
+				process after pointing out a root XML and possibly profiling a copy of it:</p> 
+			 <step id="step-2012-3-11-14-10-26-65410521-5"> 
+				<p id="p-2012-3-11-14-10-26-65410521-1">Select the workflow status
+				  of the publication (temp, preview, delivery).</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-"> 
+				<p id="p-2012-3-11-14-10-26-65410521-2">Add any mandatory metadata
+				  to the configuration<ftnote id="ftnote-2012-3-19-14-12-25-86182196-">This
+				  metadata is used to identify the configuration rather than the XML, so that the
+				  process can be found and repeated later.</ftnote>.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-1"> 
+				<p id="p-2012-3-11-14-10-26-65410521-3">Start the publishing
+				  itself.</p> 
+			 </step> 
+		  </step-list> 
+		  <step-list id="step-list-2012-3-11-14-10-26-65410521-1"> 
+			 <p id="p-2012-3-11-14-10-26-65410521-4">The publishing process does
+				this:</p> 
+			 <step id="step-2012-3-11-14-10-26-65410521-6"> 
+				<p id="p-2012-3-11-14-10-26-65410521-5">Use the root XML URN to
+				  fetch the file to a temp folder. Map the URN to a temporary URL for later
+				  use.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-2"> 
+				<p id="p-2012-3-11-14-10-26-65410521-6">Parse the root XML for
+				  links (URNs, possibly followed by fragment IDs). <!--Map URNs to temp URLs.--></p>
+				
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-3"> 
+				<p id="p-2012-3-11-14-10-26-65410521-7">Fetch the URNs and place
+				  the files in the temp folder. Map the URNs to temp URLs.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-4"> 
+				<p id="p-2012-3-11-14-10-26-65410521-8">Parse every URN that is an
+				  XML file for further links and repeat until there are no more links to
+				  parse.</p> 
+				<note id="note-2012-3-11-15-20-19-60515720-"> 
+				  <p id="p-2012-3-11-15-20-19-60515720-1">Currently, this is all
+					 written in C#, with whatever methods C# provides to manipulate XML.</p> 
+				</note> 
+			 </step> 
+			 <step id="step-2012-5-27-11-2-25-83325809-"> 
+				<p id="p-2012-5-27-11-2-25-83325809-1">Replace every URN link with
+				  corresponding URLs in every resource.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-7"> 
+				<p id="p-2012-3-11-14-10-26-65410521-9">Use XSLT to normalise and
+				  profile the root XML, producing a single large XML file. Name it for use in the
+				  <file-path id="file-path-2012-5-27-11-2-25-83325809-">.bat</file-path> file for
+				  FOP, below.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-9"> 
+				<p id="p-2012-3-11-14-10-26-65410521-11">Copy the XSL-FO
+				  stylesheets from the CMS to the temp folder.</p> 
+				<p id="p-2012-3-11-14-10-26-65410521-12">Currently, the CMS can
+				  only identify and use one <quote
+				  id="quote-2012-3-11-14-10-26-65410521-">main</quote> FO stylesheet file at a
+				  time<ftnote id="ftnote-2012-3-11-14-10-26-65410521-">Admin-based system
+				  configuration is required to point out another main FO file.</ftnote>. The FO
+				  stylesheets use <code id="code-2012-3-11-14-10-26-65410521-">xsl:import</code> and <code id="code-2012-3-11-14-10-26-65410521-1">xsl:include</code> with relative URLs, but the system is not aware of any of this. It
+				  simply copies <emph id="emph-2012-3-11-14-10-26-65410521-">all</emph> FO files
+				  in the same physical folder ID'd by the CMS to the temp location.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-11"> 
+				<p id="p-2012-3-11-14-10-26-65410521-10">Generate a
+				  <file-path id="file-path-2012-3-11-14-10-26-65410521-">.bat</file-path> file to
+				  run the print engine (Apache FOP).</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-8"> 
+				<p id="p-2012-3-11-14-10-26-65410521-13">Transform the large XML
+				  file to XSL-FO.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-14-10-26-65410521-10"> 
+				<p id="p-2012-3-11-14-10-26-65410521-14">Convert the FO file to
+				  PDF.</p> 
+			 </step> 
+			 <step id="step-2012-3-11-15-20-19-60515720-1"> 
+				<p id="p-2012-3-11-15-20-19-60515720-">Depending on the workflow
+				  status for the publishing job<xref id="xref-2012-3-11-15-20-19-60515720-"> (see
+				  <locator
+				  xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.11#step-2012-3-11-14-10-26-65410521-5"
+				  xlink:title="Select the workflow status of the publication (temp, preview, delivery)."
+				  id="locator-2012-3-11-15-20-19-60515720-"/>)</xref>, name the PDF file and
+				  generate a new URN for it, storing the file in the database according to
+				  relevant workflow instructions.</p> 
+			 </step> 
+		  </step-list> 
+		  <p id="p-2012-3-11-15-20-19-60515720-2">Clearly, most if not all of the
+			 above steps would be far more effective to express as XProc pipelines.</p> 
+		</section> 
+	 </section> 
+	 <section id="section-2012-2-22-15-1-36-41520962-"> 
+		<title id="title-2012-2-22-15-1-36-41520962-">Problems</title> 
+		<p id="p-2012-2-22-15-1-36-41520962-">The
+		  <gui id="gui-2012-2-22-15-1-36-41520962-">Process Manager</gui> is written in a
+		  non-XML way in C#, by developers who understand C# but not all that much XML.
+		  It uses XSLT for the transforms, but if I want to use more than one set of
+		  stylesheets, say for HTML or just a different-looking PDF, I need developers to
+		  write more C# to put it all together because I don't speak C#. I speak XML.</p>
+		
+		<p id="p-2012-2-22-15-1-36-41520962-1">The GUI is static, too. While it
+		  is sufficient when presenting PDF publishing options, any other processing, be
+		  it validation, HTML output or something else, requires changing it, meaning
+		  more C# code and (for me) a dependency to developers.</p> 
+		<p id="p-2012-3-11-15-20-19-60515720-6">Any additional steps, for
+		  example, cross-reference validation of the normalised XML document before
+		  publication, also require coding.</p> 
+		<p id="p-2012-3-11-15-20-19-60515720-7">All sorts of things (XSLT, DOM
+		  APIs, etc) are used to manipulate XML, of course, but all is glued together
+		  using C# code, called using C# code, and changed using C# code, with whatever
+		  methods there are in that language for manipulating XML.</p> 
+		<p id="p-2012-2-22-15-1-36-41520962-2">Suffice to say, most changes
+		  require C#.</p> 
+		<list id="list-2012-3-11-15-20-19-60515720-1"> 
+		  <p id="p-2012-3-11-15-20-19-60515720-9">Some less obvious problems
+			 become apparent when handling XSLT:</p> 
+		  <list-item id="list-item-2012-3-11-15-20-19-60515720-7"> 
+			 <p id="p-2012-3-11-15-20-19-60515720-10">The XSLT files are
+				modularised and developed offline, outside the system. They use <code id="code-2012-6-3-12-10-36-35173372-">import</code> and <code id="code-2012-6-3-12-10-36-35173372-1">include</code> instructions with relative URLs to reference each other. Obviously,
+				they are handled together, as packages.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-13-10-19-12-34575458-"> 
+			 <p id="p-2012-3-11-15-20-19-60515720-11">The CMS can currently not
+				identify them as packages, however. XSLT files belong together in the system
+				only by proxy, by being stored in the same place.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-11-15-20-19-60515720-8"> 
+			 <p id="p-2012-3-11-15-20-19-60515720-14">A working set of stylesheets
+				in (and outside) the CMS always consists of specific versions of the included
+				modules. One module might require uploading a dozen versions before release
+				while another only two (see below; note the versions to the left).</p>
+			 <graphics xlink:role="urn:x-cassis:r1:cos:00002194:sv-SE:0.1"
+			 	xlink:href="Bal2012nord012808.jpg"
+			  width="791" height="304" id="graphics-2012-3-13-10-19-12-34575458-4"/> 
+			 <p id="p-2012-3-13-10-19-12-34575458-">Unfortunately the CMS can
+				currently only use the latest versions of the stylesheets, partly because of
+				the above problems with identifying packages, but also because the relative
+				URLs in the <code id="code-2012-3-11-15-20-19-60515720-">import</code> and <code id="code-2012-3-11-15-20-19-60515720-1">include</code> instructions do not include version information, URN or otherwise.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-11-15-20-19-60515720-6"> 
+			 <p id="p-2012-3-11-15-20-19-60515720-12">The relative URLs, of
+				course, are only usable in the temp publishing folder.</p> 
+		  </list-item> 
+		</list> 
+		<p id="p-2012-3-11-15-20-19-60515720-15">This applies to any set of XML
+		  files that needs to be handled as a package by a process in the CMS.</p> 
+	 </section> 
+	 <section id="section-2012-2-22-14-18-20-72491660-"> 
+		<title id="title-2012-2-22-14-18-20-72491660-1">A First Attempt at
+		  XProc</title> 
+		<p id="p-2012-2-22-12-49-19-72016790-2">The
+		  <gui id="gui-2012-2-22-12-49-19-72016790-2">Process Manager</gui>, of course,
+		  should be a showcase for XProc. Replace the current functionality with an XProc
+		  engine that runs pipelines for publishing and an admin interface to add and
+		  manipulate pipelines and stylesheets with, without having to resort to more C#
+		  code. And, of course, a GUI for the end users to select pipelines from. </p> 
+		<p id="p-2012-3-19-14-12-25-86182196-1">The developers agreed. Their
+		  lives would be easier, too. If XProc pipelines can take care of any XML
+		  processing while leaving the non-XML stuff to the middleware, everybody
+		  wins.</p> 
+		<p id="p-2012-2-22-12-49-19-72016790-5">Manipulating pipelines
+		  efficiently was far more complex than we first thought, however. We needed a
+		  GUI for the XProc engine, ways to add parameters and input to it, including
+		  pointing out modularised stylesheets and other XML, etc. This required
+		  <emph id="emph-2012-2-22-15-1-36-41520962-">more</emph> C#, not less. </p> 
+		<p id="p-2012-2-22-12-49-19-72016790-6">Also, XML pipelines are only as
+		  flexible as the user interfaces to run them with. I could think of using and
+		  reusing pipelines in more ways than would be practical to present in any GUI.
+		  The time estimate for the admin functionality alone was far bigger than our
+		  initial guesses, but the end user interface added enough hours to the point
+		  where the project was turned down.</p> 
+		<p id="p-2012-2-22-12-49-19-72016790-7">So I started thinking about ways
+		  to generalise all this, to accomplish it all without admin GUIs and a million
+		  lines of new C# code. This paper presents what I came up with.</p> 
+	 </section> 
+  </section> 
+  <section id="section-2012-2-22-16-35-35-33447766-"> 
+	 <title id="title-2012-2-22-16-35-35-33447766-">Requirements</title> 
+	 <list id="list-2012-2-22-16-35-35-33447766-"> 
+		<p id="p-2012-2-22-16-35-35-33447766-">Let's take a brief look at my wish
+		  list:</p> 
+		<list-item id="list-item-2012-2-22-16-35-35-33447766-2"> 
+		  <p id="p-2012-2-22-16-35-35-33447766-1">Less need for C# development
+			 when manipulating XML.</p> 
+		  <p id="p-2012-2-22-16-35-35-33447766-2">For me, more C# means a more
+			 complex and less flexible solution. It makes little sense to solve what is
+			 essentially an XML domain problem with something else than XML, using C#
+			 developers without XML expertise.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-2-22-16-35-35-33447766-3"> 
+		  <p id="p-2012-2-22-16-35-35-33447766-7">Easier-to-implement XML-based
+			 processing.</p> 
+		  <p id="p-2012-2-22-16-35-35-33447766-8">To implement new XML-based
+			 processes without C#, I need to handle them in some other way.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-2-22-16-35-35-33447766-"> 
+		  <p id="p-2012-2-22-16-35-35-33447766-3">A more dynamic GUI for end
+			 users.</p> 
+		  <p id="p-2012-2-22-16-35-35-33447766-4">The publishing process is by
+			 nature flexible and changes with the task. Therefore the GUI should change,
+			 too.</p> 
+		</list-item> 
+	 </list> 
+  </section> 
+  <section id="section-2012-2-26-11-28-16-53652616-"> 
+	 <title id="title-2012-2-26-11-28-16-53652616-">Describing Processes with
+		XML</title> 
+	 <list id="list-2012-2-22-16-35-35-33447766-1"> 
+		<p id="p-2012-2-22-16-35-35-33447766-9">XProc is XML, of course, so I
+		  think the processes surrounding it should be XML, too:</p> 
+		<list-item id="list-item-2012-3-12-9-22-32-26847798-"> 
+		  <p id="p-2012-3-12-9-22-32-26847798-">The XProc engine command line,
+			 from input to output, parameters, options, etc, would be useful to handle in
+			 XML.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-12-9-22-32-26847798-1"> 
+		  <p id="p-2012-3-12-9-22-32-26847798-1">The command line needs to
+			 reference <emph id="emph-2012-3-12-9-22-32-26847798-">packages</emph> in the
+			 CMS (sets of XSLT or XML modules) rather than individual files, so the packages
+			 would be useful to express in XML.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-12-9-22-32-26847798-3"> 
+		  <p id="p-2012-3-12-9-22-32-26847798-2">A pipeline can reference
+			 different packages and use different options, parameters, etc, which means that
+			 a single pipeline can be used with different sets of command line options by
+			 the engine. On the other hand, one such set of options might be useful to
+			 several different pipelines. A pipeline and its assciated command lines should
+			 therefore be separated in the XML.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-12-9-22-32-26847798-2"> 
+		  <p id="p-2012-3-12-9-22-32-26847798-5">The pipeline is part of a
+			 process in the <gui id="gui-2012-3-12-9-22-32-26847798-1">Process
+			 Manager</gui>. It would make sense to express that whole process in XML,
+			 because it would then be far easier for me to define such a process.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-2-23-9-40-55-77203605-"> 
+		  <p id="p-2012-2-23-9-40-55-77203605-1">A GUI presenting the processes
+			 to an end user should be as dynamic as the processes themselves. With the
+			 processes expressed in XML,why not generate the GUI from the XML?</p> 
+		</list-item> 
+	 </list> 
+	 <section id="section-2012-2-26-11-28-16-53652616-1"> 
+		<title id="title-2012-2-26-11-28-16-53652616-1">XProc and Calabash
+		  Command Lines</title> 
+		<p id="p-2012-3-12-9-22-32-26847798-4">Here's an example Calabash command
+		  line to handle a simple publishing process in the CMS's temp location:</p> 
+		<code-block id="code-block-2012-3-12-12-49-37-24773547-1">java com.xmlcalabash.drivers.Main 
+-isource=[runtime URN/URL] 
+-istylesheet-fo=[URN/URL for FO main stylesheet] 
+normalize-stylesheet=[URN/URL string for normalize]
+pdf=[runtime PDF URN/URL]
+[URN/URL for FO XPL]</code-block> 
+		<p id="p-2012-3-12-12-49-37-24773547-">Most inputs are URNs mapped to
+		  temp URLs as part of the publishing process, but others are generated at
+		  runtime. Generating a <file-path
+		  id="file-path-2012-5-27-13-8-14-24212431-">.bat</file-path> file directly from
+		  today's system is doable, but since XProc allows writing pipelines in many
+		  ways, it is hard to do consistently. For example, input to the pipeline can be
+		  handled in several ways. Note how the normalize stylesheet is defined using an
+		  XProc <code id="code-2012-3-12-12-49-37-24773547-">option</code> rather than the usual <code id="code-2012-3-12-12-49-37-24773547-1">input</code> port:</p> 
+		<code-block id="code-block-2012-3-12-12-49-37-24773547-2">...
+&lt;p:input port="stylesheet-fo"/&gt;
+&lt;p:option name="normalize-stylesheet" required="true"/&gt;
+...</code-block> 
+		<p id="p-2012-5-27-13-8-14-24212431-">Taking this kind of variation into
+		  account when creating an admin interface for handling pipelines would cause
+		  problems, as would, for example, <emph
+		  id="emph-2012-3-12-12-49-37-24773547-1">optional</emph> parameters.
+		  User-selectable options (such as stylesheets) would further complicate things.
+		  Etc.</p> 
+		<p id="p-2012-3-12-12-49-37-24773547-3">If we expressed the command line
+		  options in XML, generating the
+		  <file-path id="file-path-2012-5-27-13-8-14-24212431-1">.bat</file-path> file
+		  would be far more straight-forward:</p> 
+		<code-block id="code-block-2012-3-12-12-49-37-24773547-3">&lt;pipeline&gt;
+    
+  &lt;!-- XProc script for PDF --&gt;
+  &lt;script href="[URN/URL for FO XPL]"/&gt;
+  
+  &lt;!-- Calabash command line --&gt;
+  &lt;cmdlines&gt;
+    &lt;cmdline&gt;
+      &lt;inputs&gt;
+        &lt;input&gt;
+          &lt;port&gt;source&lt;/port&gt;
+          &lt;value type="ti"&gt;[runtime URN/URL]&lt;/value&gt;
+        &lt;/input&gt;
+        &lt;input&gt;
+          &lt;port&gt;stylesheet-fo&lt;/port&gt;
+          &lt;value type="uri"&gt;[URN/URL for FO main stylesheet]&lt;/value&gt;
+        &lt;/input&gt;
+      &lt;/inputs&gt;
+      &lt;options&gt;
+        &lt;option&gt;
+          &lt;name&gt;normalize&lt;/name&gt;
+          &lt;value type="uri"&gt;[URN/URL for normalize main stylesheet]&lt;/value&gt;
+        &lt;/option&gt;
+        &lt;option&gt;
+          &lt;name&gt;pdf&lt;/name&gt;
+          &lt;value type="ti"&gt;[runtime PDF URN/URL]&lt;/value&gt;
+        &lt;/option&gt;
+      &lt;/options&gt;
+    &lt;/cmdline&gt;
+  &lt;/cmdlines&gt;
+&lt;/pipeline&gt;</code-block> 
+		<p id="p-2012-3-12-12-49-37-24773547-4">This describes a single command
+		  line for one specific script. Other command lines for that same script might
+		  use other stylesheets, optional input, XProc engine options, etc. My basic DTD
+		  can easily include such variations:</p> 
+		<figure id="figure-2012-3-17-14-29-0-29249958-"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002197:sv-SE:0.1"
+		  xlink:href="Bal2012nord012809.jpg"
+		  width="453" height="238" id="graphics-2012-3-17-14-29-0-29249958-"/> 
+		  <caption id="caption-2012-3-17-14-29-0-29249958-">The Pipeline
+			 Structure</caption> 
+		</figure> 
+		<p id="p-2012-3-17-14-29-0-29249958-">The <code id="code-2012-6-3-12-10-36-35173372-2">pipeline</code> element allows for different command line alternatives to be inserted
+		  or linked to<ftnote id="ftnote-2012-3-19-14-12-25-86182196-1">Which means that
+		  they can be used by other pipelines.</ftnote>. A GUI could easily present them
+		  as user-selectable options. Note the extension mechanism to provide some
+		  support for changes to XProc (perhaps a step imported from another namespace)
+		  and the engine<xref id="xref-2012-3-19-11-39-51-91905995-"> (see
+		  <locator
+			xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.27#figure-2012-3-19-11-39-51-91905995-"
+			xlink:title="Extensions" id="locator-2012-3-19-11-39-51-91905995-"/>)</xref>.
+		  The extension capabilities are limited, however; any addition requiring
+		  preconfiguring or input beyond the basics will cause problems<xref
+		  id="xref-2012-6-4-9-15-58-33787595-2"> (see
+		  <locator
+			xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.46#section-2012-3-13-15-49-52-87255322-"
+			xlink:title="Limitations and Other Considerations"
+			id="locator-2012-6-4-9-15-58-33787595-2"/></xref>.</p> 
+		<figure id="figure-2012-3-19-11-39-51-91905995-"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002201:sv-SE:0.1"
+		  xlink:href="Bal2012nord012810.jpg"
+		  width="346" height="66" id="graphics-2012-3-19-11-39-51-91905995-"/> 
+		  <caption id="caption-2012-3-19-11-39-51-91905995-">Extensions</caption>
+		  
+		</figure> 
+		<p id="p-2012-3-19-11-39-51-91905995-">Here's an example with several
+		  command lines:</p> 
+		<code-block id="code-block-2012-3-12-12-49-37-24773547-4">&lt;pipeline&gt;
+  &lt;metadata&gt;
+    &lt;title&gt;PDF Output&lt;/title&gt;
+    &lt;description&gt;This process outputs PDF.&lt;/description&gt;
+  &lt;/metadata&gt;
+  &lt;!-- XProc script for PDF --&gt;
+  &lt;script href="[URN/URL for FO XPL]"/&gt;
+  &lt;cmdlines&gt;
+    &lt;cmdline id="cmd1"&gt;
+      ...
+    &lt;/cmdline&gt;
+    &lt;cmdline id="cmd2"&gt;
+      ...
+    &lt;/cmdline&gt;
+    &lt;cmdline id="cmd3"&gt;
+      ...
+    &lt;/cmdline&gt;
+  &lt;/cmdlines&gt;
+&lt;/pipeline&gt;</code-block> 
+		<p id="p-2012-3-12-12-49-37-24773547-5">A command line alternative is
+		  easily expressed as <code id="code-2012-0-10-14-54-14-1119451-2">/pipeline//cmdline[@id='cmd1']</code> and so easily transformed to a
+		  <file-path id="file-path-2012-3-12-12-49-37-24773547-2">.bat</file-path> file
+		  once selected. Also, the alternatives are easy to represent in a GUI, for
+		  example, with check boxes<ftnote id="ftnote-2012-3-18-19-28-47-86368104-">To
+		  generate a process run in batch.</ftnote> or a list of choices. The pipeline's <code id="code-2012-3-12-12-49-37-24773547-2">metadata</code> element contents can be used to add labels and help texts to the
+		  GUI<ftnote id="ftnote-2012-5-27-13-8-14-24212431-">The command line
+		  alternatives also include metadata for the same purpose.</ftnote>.</p> 
+		<p id="p-2012-3-18-19-28-47-86368104-">A pipeline structure instance with
+		  its associated command lines<ftnote
+		  id="ftnote-2012-3-18-19-28-47-86368104-1">And the packages, as defined in the
+		  next section.</ftnote> is <emph id="emph-2012-5-27-13-8-14-24212431-">a
+		  blueprint for possible ways to use the pipeline</emph>. There is no one-to-one
+		  correspondence with an actual XProc script; rather, the XML represents the
+		  available choices. For example, several command line alternatives might exist
+		  for a pipeline, a command line might include several alternative input
+		  stylesheets, etc. A user would have to make choices for each option before
+		  running the pipeline.</p> 
+		<p id="p-2012-3-18-19-28-47-86368104-1">The GUI needs to reflect this by
+		  only offering such choices once the prerequisite choices have been made (for
+		  example, you'd have to select a command line before selecting a
+		  stylesheet).</p> 
+		<note id="note-2012-3-12-14-32-39-77396494-1"> 
+		  <p id="p-2012-3-12-14-32-39-77396494-">Why not use the XProc script
+			 itself to generate the <file-path
+			 id="file-path-2012-3-12-14-32-39-77396494-">.bat</file-path> file and the GUI
+			 to handle the process with? First of all, XProc scripts do not easily offer the
+			 kind of modularity suggested above, nor can one XProc script express all
+			 possible variations. More importantly, XProc cannot handle referencing packages
+			 (see the next section) or the kind of runtime naming we need.</p> 
+		</note> 
+		<p id="p-2012-3-12-14-32-39-77396494-2">The <code id="code-2012-3-12-14-32-39-77396494-2">input</code> step in the below example points out the root XML, but the value is not
+		  known until runtime. The attribute <code id="code-2012-3-12-14-32-39-77396494-3">type="ti"</code> means that the system is expected to provide the content<ftnote
+		  id="ftnote-2012-3-19-14-12-25-86182196-2">Other possible values include
+		  <quote id="quote-2012-3-12-14-32-39-77396494-1">uri</quote> to point out
+		  referenced packages, described in the next section.</ftnote>.</p> 
+		<code-block id="code-block-2012-3-12-14-32-39-77396494-">&lt;input&gt;
+ &lt;port&gt;source&lt;/port&gt;
+ &lt;value type="ti"&gt;
+  &lt;!-- Runtime URN/URL --&gt;
+ &lt;/value&gt;
+&lt;/input&gt;</code-block> 
+	 </section> 
+	 <section id="section-2012-3-9-10-29-19-89702477-"> 
+		<title id="title-2012-3-9-10-29-19-89702477-">Packages</title> 
+		<p id="p-2012-3-12-14-32-39-77396494-4">A
+		  <emph id="emph-2012-3-12-14-32-39-77396494-">package</emph> is a collection of
+		  resources (XML, XSLT, etc) identified with URNs. As the URNs identify specific
+		  versions (and languages), a package can identify an arbitrary but well-defined
+		  set of files in the database. Usually but not always<ftnote
+		  id="ftnote-2012-3-13-8-46-15-6588943-">Standard texts for stylesheets, for
+		  example, could be stored in separate modules, without a
+		  <quote id="quote-2012-5-27-13-8-14-24212431-1">main</quote> module.</ftnote>,
+		  there will be a main file that links to the others. Here's an example FO
+		  stylesheet package:</p> 
+		<code-block id="code-block-2012-3-13-8-46-15-6588943-">&lt;package id="id-fo-package"&gt;
+  &lt;metadata&gt;
+    &lt;title&gt;XSL-FO Stylesheet Package&lt;/title&gt;
+    &lt;description&gt;FO stylesheets for
+      Company X.&lt;/description&gt;
+  &lt;/metadata&gt;
+  &lt;locator href="urn:x-example:xslfo:0012:3" type="root"/&gt;
+  &lt;locator href="urn:x-example:xslfo:0019:10"/&gt;
+  &lt;locator href="urn:x-example:xslfo:0117:21"/&gt;
+  &lt;locator href="urn:x-example:xslfo:0010:1"/&gt;
+ &lt;/package&gt;</code-block> 
+		<p id="p-2012-3-13-8-46-15-6588943-">The package consists of URN-based
+		  links to the stylesheet files, plus some metadata for the GUI. Also, the main
+		  stylesheet file is identified with a <code id="code-2012-3-13-8-46-15-6588943-2">type</code> attribute with the value <quote
+		  id="quote-2012-3-13-8-46-15-6588943-">root</quote>.</p> 
+		<figure id="figure-2012-3-17-14-29-0-29249958-1"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002196:sv-SE:0.1"
+		  xlink:href="Bal2012nord012811.jpg"
+		  width="207" height="52" id="graphics-2012-3-17-14-29-0-29249958-1"/> 
+		  <caption id="caption-2012-3-17-14-29-0-29249958-1">A Package Is
+			 Basically A Set of Links</caption> 
+		</figure> 
+		<p id="p-2012-3-13-8-46-15-6588943-1">If the package XML is identified
+		  with <code id="code-2012-3-13-8-46-15-6588943-3">urn:x-example:packages:123456:en-GB:1</code> in the CMS (the last part identifies the package version,
+		  <quote id="quote-2012-3-13-8-46-15-6588943-1">1</quote>), the relevant <code id="code-2012-3-13-8-46-15-6588943-4">input</code> in the initial pipeline processing XML from the last section is
+		  this:</p> 
+		<code-block id="code-block-2012-3-13-8-46-15-6588943-1">&lt;input&gt;
+  &lt;port&gt;stylesheet-fo&lt;/port&gt;
+  &lt;value type="uri"&gt;urn:x-example:packages:123456:en-GB:1&lt;/value&gt;
+&lt;/input&gt;</code-block> 
+		<p id="p-2012-3-13-8-46-15-6588943-2">When generating the pipeline's
+		  <file-path id="file-path-2012-3-13-8-46-15-6588943-">.bat</file-path> file, the
+		  whole package, including the package XML, is copied to the temp location, with
+		  URNs in the package XML replaced with corresponding URLs (for example, <code id="code-2012-5-27-13-8-14-24212431-">urn:x-example:xslfo:0012:3</code> with <file-path
+		  id="file-path-2012-3-13-8-46-15-6588943-1">main-fo.xsl</file-path>) . Each
+		  user-selectable stylesheet alternative in a pipeline's command line<xref
+		  id="xref-2012-6-3-12-10-36-35173372-"> (see
+		  <locator
+			xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.41#section-2012-2-26-11-28-16-53652616-1"
+			xlink:title="XProc and Calabash Command Lines"
+			id="locator-2012-6-3-12-10-36-35173372-"/>)</xref> would reference a different
+		  such package.</p> 
+		<p id="p-2012-3-13-8-46-15-6588943-3">Packages, then, provide the
+		  necessary abstraction layer to define input
+		  <emph id="emph-2012-3-13-8-46-15-6588943-">from the CMS</emph> to XProc
+		  pipeline processes.</p> 
+		<p id="p-2012-6-3-12-10-36-35173372-">As we've seen, the XML that
+		  describes the packages is fairly static, easily definable beforehand. With more
+		  frequent package updates, however, it might be useful to call the package with
+		  a wildcard in place of the URN version string:</p> 
+		<code-block id="code-block-2012-3-13-8-46-15-6588943-2">urn:x-example:packages:123456:en-GB:*</code-block> 
+		<p id="p-2012-3-13-8-46-15-6588943-4">The wildcard means
+		  <quote id="quote-2012-3-13-8-46-15-6588943-2">use latest version with workflow
+		  status <emph id="emph-2012-3-13-8-46-15-6588943-1">approved</emph></quote> for
+		  a user with technical author permissions, but
+		  <quote id="quote-2012-3-13-8-46-15-6588943-3">use latest version with workflow
+		  status <emph id="emph-2012-3-13-8-46-15-6588943-2">reviewing</emph></quote> for
+		  someone with test privileges. The permissions control how URNs are processed,
+		  significantly lessening the need to change or update system behaviour for small
+		  updates<ftnote id="ftnote-2012-3-13-8-46-15-6588943-1">It also allows
+		  <quote id="quote-2012-3-13-8-46-15-6588943-4">power</quote> users with specific
+		  privileges to test new features without having access to a test setup or
+		  affecting the normal, day-to-day work.</ftnote>.</p> 
+		<p id="p-2012-3-13-8-46-15-6588943-6">Finally, the package abstraction
+		  very neatly separates offline versioning (in subversion, in my case) of the
+		  participating files from their online versioning. The latter are a conscious
+		  decision from the developer to release a set of files, while the former is
+		  simply work in progress.</p> 
+	 </section> 
+	 <section id="section-2012-3-9-10-29-19-89702477-1"> 
+		<title id="title-2012-3-9-10-29-19-89702477-1">Putting It All
+		  Together</title> 
+		<p id="p-2012-3-13-11-15-27-15906474-">The
+		  <gui id="gui-2012-3-13-11-15-27-15906474-">Process Manager</gui> is meant to
+		  handle <emph id="emph-2012-3-13-11-15-27-15906474-">processes</emph> (the name
+		  sort of gives it away). Normally, a complete process and the primary action
+		  that process performs (such as outputting a PDF) are largely the same, but
+		  until now, it has not been possible to produce variants of the process in any
+		  case.</p> 
+		<p id="p-2012-3-13-11-15-27-15906474-1">It should be. For example, two
+		  different sites sharing the same CMS might use
+		  <emph id="emph-2012-3-13-11-15-27-15906474-1">almost</emph> the same basic
+		  process to publish documents with, with the same basic pipeline and options,
+		  but use different stylesheets for their respective brands. It would be useful
+		  to glue the pipelines and packages together to describe such variations.</p> 
+		<p id="p-2012-3-19-18-43-7-37824264-">Here's a basic XML structure
+		  defining two processes A and B that use more or less the same pipelines,
+		  command lines and packages:</p> 
+		<code-block id="code-block-2012-3-13-11-15-27-15906474-">&lt;processes&gt;
+    &lt;!-- Process for A --&gt;
+    &lt;process id="id-process-A"&gt;
+      &lt;metadata&gt;
+        &lt;!-- Metadata for A Process --&gt;
+      &lt;/metadata&gt;
+      &lt;!-- Pipelines for A --&gt;
+      &lt;pipelines&gt;
+        &lt;pipeline&gt;
+          &lt;metadata&gt;
+            &lt;!-- Metadata for pipeline for A --&gt;
+          &lt;/metadata&gt;
+          &lt;!-- XProc script for A FO --&gt;
+          &lt;script href="a.xpl"/&gt;           
+          &lt;cmdlines&gt;
+            &lt;cmdline&gt;
+              &lt;!-- Command line for A FO --&gt;
+            &lt;/cmdline&gt;
+            &lt;cmdline id="id-cmdline-fo-a-and-b"&gt;
+              &lt;!-- Command line for A and B --&gt;
+            &lt;/cmdline&gt;
+          &lt;/cmdlines&gt;
+        &lt;/pipeline&gt;
+      &lt;/pipelines&gt;
+      &lt;!-- Packages available for A --&gt;
+      &lt;packages&gt;
+        &lt;!-- Normalize stylesheet reference --&gt;
+        &lt;locator href="packages.xml#id-norm"/&gt;
+        &lt;package id="id-fo-a"&gt;
+          &lt;!-- FO stylesheet package for A --&gt;
+        &lt;/package&gt;
+        &lt;!-- Link to A and B FO stylesheet package --&gt;
+        &lt;locator href="packages.xml#id-fo-a-b"/&gt;
+      &lt;/packages&gt;
+    &lt;/process&gt;
+    
+    &lt;!-- Process for B --&gt;
+    &lt;process id="id-process-b"&gt;
+      &lt;metadata&gt;
+        &lt;!-- Metadata for B Process --&gt;
+      &lt;/metadata&gt;
+      &lt;!-- Pipelines available for B --&gt;
+      &lt;pipelines&gt;
+        &lt;pipeline&gt;
+          &lt;metadata&gt;
+            &lt;!-- Metadata for B pipeline --&gt;
+          &lt;/metadata&gt;
+          &lt;!-- XProc script for B FO --&gt;
+          &lt;script href="b.xpl"/&gt;
+          &lt;!-- Links to command lines --&gt;
+          &lt;cmdlines&gt;
+            &lt;!-- Link to A and B FO cmdline (above) --&gt;
+            &lt;locator href="#id-cmdline-fo-a-and-b"/&gt;
+          &lt;/cmdlines&gt;
+        &lt;/pipeline&gt;
+      &lt;/pipelines&gt;
+      &lt;!-- Packages available for B --&gt;
+      &lt;packages&gt;
+        &lt;!-- Normalize package ref --&gt;
+        &lt;locator href="#id-norm"/&gt;
+        &lt;!-- Link to A and B FO package --&gt;
+        &lt;locator href="packages.xml#id-fo-a-b"/&gt;
+      &lt;/packages&gt;
+    &lt;/process&gt;
+&lt;/processes&gt;</code-block> 
+		<p id="p-2012-3-13-15-49-52-87255322-">Both A and B link to
+		  <file-path id="file-path-2012-3-13-15-49-52-87255322-">packages.xml</file-path>
+		  that defines common packages:</p> 
+		<code-block id="code-block-2012-3-13-15-49-52-87255322-">&lt;packages&gt;
+  &lt;package id="id-norm"&gt;
+				&lt;!-- Normalize stylesheet package  --&gt;
+  &lt;/package&gt;
+  &lt;package id="id-fo-a-b"&gt;
+				&lt;!-- FO stylesheet package for A and B --&gt;
+  &lt;/package&gt;
+&lt;/packages&gt;</code-block> 
+		<p id="p-2012-3-18-19-28-47-86368104-2">A <code id="code-2012-3-18-19-28-47-86368104-">processes</code> instance is a blueprint for every possible
+		  <quote id="quote-2012-3-18-19-28-47-86368104-">allowed</quote> process, each of
+		  which is associated with one or more possible pipelines. The user has to select
+		  a process before selecting from the pipelines for that process.</p> 
+		<figure id="figure-2012-3-17-14-29-0-29249958-2"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002198:sv-SE:0.1"
+		  xlink:href="Bal2012nord012812.jpg"
+		  width="591" height="235" id="graphics-2012-3-17-14-29-0-29249958-2"/> 
+		  <caption id="caption-2012-3-17-14-29-0-29249958-2">Putting It All
+			 Together</caption> 
+		</figure> 
+		<p id="p-2012-3-13-15-49-52-87255322-1">The design is modular, so
+		  everything from command lines to packages can be reused. The modules are
+		  identified with URNs, just as everything else in the system, offering
+		  traceability and allowing whole processes to be repeated when required.</p> 
+		<!--<p id="p-2012-3-17-9-40-10-77171645-">In the system, the process XML
+		  (just as any other stored resource) uses workflow status information such as
+		  <quote id="quote-2012-3-17-9-40-10-77171645-">editing</quote>,
+		  <quote id="quote-2012-3-17-9-40-10-77171645-1">reviewing</quote>,
+		  <quote id="quote-2012-3-17-9-40-10-77171645-2">approved</quote>, etc, offering
+		  the basis for an XML-based project management feature. A process instance with
+		  specific options applied on a specific document could be used for logging and
+		  reporting purposes, showing what was done to what documents, with which
+		  workflows, etc.</p>-->
+	 </section> 
+  </section> 
+  <section id="section-2012-3-9-10-29-19-89702477-2"> 
+	 <title id="title-2012-3-9-10-29-19-89702477-2">Implementation and
+		Examples</title> 
+	 <p id="p-2012-3-17-9-40-10-77171645-1">The process XML is not a reality
+		yet, partly because I have to deal with paying customers and other
+		inconveniences, but also because my XForms/HTML5 skills really aren't on par
+		with what I need. Nevertheless, below are some comments and ideas about an
+		implementation.</p> 
+	 <section id="section-2012-3-13-11-15-27-15906474-"> 
+		<title id="title-2012-3-13-11-15-27-15906474-">Writing This Paper</title>
+		
+		<list id="list-2012-3-17-9-40-10-77171645-"> 
+		  <p id="p-2012-3-17-9-40-10-77171645-3">This whitepaper, written in our
+			 system, provided me with further motivation:</p> 
+		  <list-item id="list-item-2012-3-17-9-40-10-77171645-1"> 
+			 <p id="p-2012-3-17-9-40-10-77171645-4">The paper uses our basic XML
+				format. It's straight-forward to convert it to the conference XML<ftnote
+				id="ftnote-2012-3-17-12-31-27-74892337-">I have a DocBook script that does the
+				job.</ftnote>, but currently I have to do it outside the system.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-17-9-40-10-77171645-"> 
+			 <p id="p-2012-3-17-9-40-10-77171645-5">The conversion means replacing
+				URN-based links (cross-references and images) with relative URLs. Again, I have
+				to do this outside the system.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-17-12-31-27-74892337-"> 
+			 <p id="p-2012-3-17-12-31-27-74892337-">The paper and images are
+				zipped together before they are sent to Balisage. Yes, I have to do that
+				outside the system, too.</p> 
+		  </list-item> 
+		</list> 
+		<p id="p-2012-3-17-12-31-27-74892337-1">The additional processes (URN/URL
+		  conversion, export to DocBook, zip) are simple enough to implement, but right
+		  now I'd need a C# developer to do it. I'd have to explain what I want done and
+		  why, and the GUI would need changing. And it would all have to be done again if
+		  I wanted to add some other processing.</p> 
+	 </section> 
+	 <section id="section-2012-3-13-11-15-27-15906474-2"> 
+		<title id="title-2012-3-13-11-15-27-15906474-2">Generating GUIs</title> 
+		<p id="p-2012-3-18-19-28-47-86368104-3">The <code id="code-2012-3-18-19-28-47-86368104-1">processes</code> structure is a blueprint describing every available process to
+		  manipulate XML documents with. Every process is associated with one or more
+		  pipelines, run using one or more command lines, and each command line may allow
+		  for one or more stylesheets.</p> 
+		<p id="p-2012-5-29-13-22-0-72224896-4">An XForms (or HTML5) GUI generated
+		  from the process XML blueprint can help a user visualise these choices.<xref id="xref-2012-3-19-18-43-7-37824264-">
+		  <locator
+			xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.30#figure-2012-3-19-13-29-37-70038244-"
+			xlink:title="Process Selection Relations"
+			id="locator-2012-3-19-18-43-7-37824264-"/> provides a blueprint example. The
+		  Delivery process, for example, can use three pipelines but Validation only one.
+		  The <emph id="emph-2012-3-19-18-43-7-37824264-">Printed</emph> pipeline can
+		  only use one command line, but the <emph
+		  id="emph-2012-3-19-18-43-7-37824264-1">Web</emph> pipeline four.
+		  Etc.</xref></p> 
+		<figure id="figure-2012-3-19-13-29-37-70038244-"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002202:sv-SE:0.1"
+		  xlink:href="Bal2012nord012813.png"
+		  width="759" height="669" id="graphics-2012-3-19-13-29-37-70038244-"/> 
+		  <caption id="caption-2012-3-19-13-29-37-70038244-">Process Selection
+			 Relations</caption> 
+		</figure> 
+		<p id="p-2012-3-18-19-28-47-86368104-4">Using XSLT for GUI generation is
+		  the obvious choice as the underlying database is relational, SQL rather than
+		  XML, and there's no XQuery implementation<ftnote
+		  id="ftnote-2012-3-18-19-28-47-86368104-2">Doing this in a system based on, say,
+		  eXist or MarkLogic would probably be much easier.</ftnote>.</p> 
+		<p id="p-2012-3-18-19-28-47-86368104-5">The process XML requires input
+		  from the system for pointing out the root XML document to be processed. My
+		  knowledge of the JScript-based tree controls we use to select XML in a web
+		  browser is limited, but it is supposedly easy to query the tree and get lists
+		  of the XML (as URNs) and other resources, including translations and older
+		  versions of the listed XML.</p> 
+		<figure id="figure-2012-3-19-10-11-40-31495103-1"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002200:sv-SE:0.1"
+		  xlink:href="Bal2012nord012814.jpg"
+		  width="789" height="519" id="graphics-2012-3-19-10-11-40-31495103-1"/> 
+		  <caption id="caption-2012-3-19-10-11-40-31495103-1">Selecting the Root
+			 XML Document</caption> 
+		</figure> 
+		<p id="p-2012-3-18-19-28-47-86368104-6">The root XML selection is used as
+		  a starting point for pipeline processing. The next step is to generate a GUI
+		  from the process XML blueprint.<xref id="xref-2012-5-29-13-22-0-72224896-">
+		  <locator
+		  xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.39#figure-2012-3-19-10-11-40-31495103-"
+		  xlink:title="Process Selection Page Generated From XML"
+		  id="locator-2012-5-29-13-22-0-72224896-"/> shows a GUI example that follows the
+		  logic in
+		  <locator
+		  xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.39#figure-2012-3-19-13-29-37-70038244-"
+		  xlink:title="Process Selection Relations"
+		  id="locator-2012-5-29-13-22-0-72224896-1"/>.</xref></p> 
+		<figure id="figure-2012-3-19-10-11-40-31495103-"><graphics
+		  xlink:role="urn:x-cassis:r1:cos:00002199:sv-SE:0.2"
+		  xlink:href="Bal2012nord012815.png"
+		  id="graphics-2012-3-19-10-11-40-31495103-" width="1035" height="525"/> 
+		  <caption id="caption-2012-3-19-10-11-40-31495103-">Process Selection
+			 Page Generated From XML</caption> 
+		</figure> 
+		<p id="p-2012-3-18-19-28-47-86368104-7">Apologies for the crude mock-up.
+		  Generating new selection lists based on a previous selection can probably be
+		  represented better, but hopefully the principle is clear. The labels are
+		  fetched from the process metadata, as are help texts. Also, note the checkbox
+		  to enable logging; this is a command line alternative<ftnote
+		  id="ftnote-2012-3-18-19-28-47-86368104-3">Other such options can be similarly
+		  handled.</ftnote>.</p> 
+		<p id="p-2012-3-18-19-28-47-86368104-8">The selections provide data to
+		  refine the process instance. I'm not enough of a programmer, nor sufficiently
+		  familar with XForms, to tell you exactly how this is handled best. For example,
+		  the GUI needs to handle a <gui
+		  id="gui-2012-3-18-19-28-47-86368104-1">Back</gui> or
+		  <gui id="gui-2012-3-18-19-28-47-86368104-2">Previous</gui> button,
+		  <emph id="emph-2012-3-18-19-28-47-86368104-">Undo</emph>, and more, and I don't
+		  know what the best way to implement those would be. Here, I work from the
+		  assumption that the user's choices can be stored in a temporary process XML
+		  instance, used to generate the batch file to run the actual pipeline.</p> 
+	 </section> 
+	 <section id="section-2012-3-13-11-15-27-15906474-1"> 
+		<title id="title-2012-3-13-11-15-27-15906474-1">Generating .bat
+		  Files</title> 
+		<note id="note-2012-3-17-12-31-27-74892337-"> 
+		  <p id="p-2012-3-17-12-31-27-74892337-2">My current markup started life
+			 assuming that <emph id="emph-2012-3-17-12-31-27-74892337-">Calabash</emph> is
+			 used for XProc processing. It should handle other XProc engines, but this is
+			 outside the scope of this paper.</p> 
+		</note> 
+		<p id="p-2012-3-19-18-43-7-37824264-5">Pipelines are run using batch
+		  files generated from the process XML using XSLT, but first, the process XML
+		  must be <quote id="quote-2012-3-19-18-43-7-37824264-">narrowed down</quote> to
+		  an instance defining only a specific pipeline and options, as described
+		  above.</p> 
+		<list id="list-2012-3-17-12-31-27-74892337-"> 
+		  <p id="p-2012-3-17-12-31-27-74892337-5">Generating the batch file:</p> 
+		  <list-item id="list-item-2012-3-17-12-31-27-74892337-1"> 
+			 <p id="p-2012-3-17-12-31-27-74892337-8">Select an XML root document
+				URN from a list in the <gui id="gui-2012-3-17-12-31-27-74892337-1">Process
+				Manager</gui> GUI. Use it as input to the pipeline command line input in the
+				process XML blueprint<ftnote id="ftnote-2012-5-29-11-20-57-83845113-">How do we
+				know which input? The pipeline input values to be provided by the system are
+				identified as such using a <code id="code-2012-5-29-11-20-57-83845113-">type</code> attribute.</ftnote>.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-17-12-31-27-74892337-2"> 
+			 <p id="p-2012-3-17-12-31-27-74892337-6">Create a temp location for
+				the process.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-18-43-7-37824264-1"> 
+			 <p id="p-2012-3-19-18-43-7-37824264-1">Convert the process XML
+				blueprint into a GUI (see the previous section) to handle the rest of the
+				selection.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-5-29-13-22-0-72224896-1"> 
+			 <p id="p-2012-5-29-13-22-0-72224896-">Select a process from the
+				GUI.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-5-27-13-8-14-24212431-"> 
+			 <p id="p-2012-5-27-13-8-14-24212431-1">Select a pipeline from the
+				available choices for that process.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-5-29-13-22-0-72224896-2"> 
+			 <p id="p-2012-5-29-13-22-0-72224896-1">Select command line options
+				for the pipeline.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-17-12-31-27-74892337-3"> 
+			 <p id="p-2012-3-17-12-31-27-74892337-7">Select an XSL package. The
+				package is fetched from the system and placed in the temp location. The main
+				stylesheet temp URL is used as further input.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-5-29-13-22-0-72224896-"> 
+			 <p id="p-2012-5-29-13-22-0-72224896-2">Save the choices that are made
+				in a process XML instance.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-5-29-13-22-0-72224896-3"> 
+			 <p id="p-2012-5-29-13-22-0-72224896-3">Convert that instance to a
+				batch file.</p> 
+		  </list-item> 
+		</list> 
+		<p id="p-2012-3-19-18-43-7-37824264-3">The batch file then runs the
+		  selected pipeline and its options, parsing the root XML document and any linked
+		  resources for URNs, downloads the associated resources, eventually replacing
+		  URNs in links with temp URLs, and runs any XSL and other processing as
+		  specified by the pipeline.</p> 
+	 </section> 
+	 <section id="section-2012-3-13-11-15-27-15906474-3"> 
+		<title id="title-2012-3-13-11-15-27-15906474-3">Writing Process
+		  XML</title> 
+		<p id="p-2012-6-3-9-38-55-98458456-">When writing a new pipeline script
+		  (or editing an existing one), it is useful to simultaneously edit the process
+		  XML blueprint that will include the pipeline. Command line options might
+		  require updating or a new XSLT stylesheet might be needed with the pipeline. It
+		  makes sense to put the new pipeline in context so whatever options it has are
+		  handled.</p> 
+		<p id="p-2012-3-13-15-49-52-87255322-2">The process XML is edited in the
+		  same authoring environment that is used to write documents. The markup uses the
+		  same linking mechanism as the XML documents—XLink with URN-based links—so only
+		  some additional CSS styling and macros for editing are required; the rest is
+		  already in place. The results can be checked into the CMS, just as any other
+		  XML, with very few modifications<ftnote
+		  id="ftnote-2012-3-13-15-49-52-87255322-">Most have to do with giving the XML
+		  editor access to the template storage area in the CMS.</ftnote>.</p> 
+	 </section> 
+	 <section id="section-2012-3-13-15-49-52-87255322-"> 
+		<title id="title-2012-3-13-15-49-52-87255322-">Limitations and Other
+		  Considerations</title> 
+		<list id="list-2012-6-3-12-10-36-35173372-"> 
+		  <p id="p-2012-6-3-12-10-36-35173372-1">Some notable problem areas:</p> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-6"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-1"> Script
+				<quote id="quote-2012-6-4-9-15-58-33787595-">style</quote>. Some decisions need
+				to be made, such as which options to support and which XProc script designs to
+				allow (such as what kinds of input to expect for stylesheets). These decisions
+				need to be documented in a <quote id="quote-2012-6-3-12-10-36-35173372-">style
+				guide</quote> for writing process XML to avoid breaking the conversions.</p> 
+		  </list-item>
+		  <list-item id="list-item-2012-6-4-9-15-58-33787595-">
+			 <p id="p-2012-6-4-9-15-58-33787595-3">XProc engine configuration.
+				Setting Calabash configuration options, system properties, etc (<uri
+				id="uri-2012-6-4-9-15-58-33787595-3">http://xmlcalabash.com/docs/reference/configuration.html</uri>)
+				are not supported as of yet (see below).</p>
+		  </list-item> 
+		  <list-item id="list-item-2012-6-3-12-10-36-35173372-"> 
+			 <p id="p-2012-6-3-12-10-36-35173372-2">GUI design. A GUI that allows
+				for the dynamics of the process XML, including
+				<quote id="quote-2012-6-3-12-10-36-35173372-1">Undo</quote>,
+				<quote id="quote-2012-6-3-12-10-36-35173372-2">Back</quote> and such, requires
+				temporarily storing the choices made in the various stages during the process,
+				including identifying what <quote
+				id="quote-2012-6-3-12-10-36-35173372-3">Back</quote> means as opposed to
+				<quote id="quote-2012-6-3-12-10-36-35173372-4">Undo</quote>, but also to use
+				the temp information for immediate feedback in the GUI during processing.</p> 
+		  </list-item> 
+		</list> 
+		<list id="list-2012-3-19-10-11-40-31495103-"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-">Other parts are easier:</p> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-2">The XSLT for the conversions,
+				both to (and from) the GUI and to a
+				<file-path id="file-path-2012-3-19-10-11-40-31495103-1">.bat</file-path> file,
+				should be fairly straight-forward, once the above is clear.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-1"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-3">Hooking the process XML
+				functionality to the current root XML document selection in the system should
+				also be straight-forward. The queries to handle and fetch URNs are already in
+				place, as are creating and handling temp locations<ftnote
+				id="ftnote-2012-6-3-12-10-36-35173372-1">It might be preferable to handle the
+				<gui id="gui-2012-3-19-10-11-40-31495103-">Process Manager</gui> steps that
+				invoke the process XML itself as an XProc pipeline.</ftnote>.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-2"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-5">Additions to the XML editor
+				for the basic styling and handling of process XML are needed, but also
+				permissions and web services to allow admins to write and check in the process
+				XML. Both of these changes are trivial to implement.</p> 
+		  </list-item> 
+		</list> 
+		<p id="p-2012-6-4-9-15-58-33787595-">Many extensions<xref
+		  id="xref-2012-6-4-9-15-58-33787595-"> (see
+		  <locator
+			xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.46#ref-item-2012-6-4-9-15-58-33787595-1"
+			xlink:title="XML Calabash" id="locator-2012-6-4-9-15-58-33787595-"/>,
+		  <uri
+			id="uri-2012-6-4-9-15-58-33787595-4">http://xmlcalabash.com/docs/reference/extensions.html</uri>)</xref>
+		  fall into the engine domain as they happen completely behind the scenes; if the
+		  engine supports it, the process XML will, too,
+		  <emph id="emph-2012-6-4-9-15-58-33787595-">if</emph> they can be run
+		  transparently, without having to preconfigure the engine in some way. If they
+		  require engine configuration, setting system properties or specific input on
+		  the command line, they will fail as anything depending on setting a Calabash
+		  system property or configuration on the command line is currently not
+		  supported.</p>
+	 </section> 
+	 <section id="section-2012-3-19-10-11-40-31495103-"> 
+		<title id="title-2012-3-19-10-11-40-31495103-">Educating Users</title> 
+		<p id="p-2012-3-19-10-11-40-31495103-13">The final point I want to make
+		  is perhaps the most important one. The process XML is very useful when
+		  <emph id="emph-2012-3-19-10-11-40-31495103-2">educating</emph> users about a
+		  process, without requiring detailed knowledge about XProc, XSLT, or some other
+		  processing. It allows us to represent the process with just enough information
+		  for an overview because it <quote
+		  id="quote-2012-3-19-10-11-40-31495103-2">black-boxes</quote> every
+		  component.</p> 
+		<list id="list-2012-3-19-10-11-40-31495103-2"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-16">For example:</p> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-11"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-14">My developers today know a
+				lot about C# and SQL, but processing XML today requires a lot of effort, for
+				them to understand what I want to do and for me to understand what they can
+				help me with, and how.</p> 
+			 <p id="p-2012-3-19-10-11-40-31495103-17">The process XML allows me to
+				do the XML parts cleanly, without lengthy explanations or compromises, but also
+				for the developers to query the process XML for their purposes, for example, to
+				understand how to handle process data in the database. The process XML is a
+				clean interface between me and them.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-10"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-15">The process XML can be
+				visualised as a tree mapping process choices and options. If user permission
+				handling is added to the process XML, user category-specific descriptions can
+				be included.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-13"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-19">The process XML can be used
+				to simulate a process without actually processing anything. This is very useful
+				when training new users.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-12"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-20">Of course, the process XML
+				can be converted to SVG or other formats for more flexibility.</p> 
+		  </list-item> 
+		</list> 
+	 </section> 
+	 <section id="section-2012-3-13-11-15-27-15906474-4"> 
+		<title id="title-2012-3-13-11-15-27-15906474-4">And More</title> 
+		<list id="list-2012-3-19-10-11-40-31495103-1"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-7">I'm thinking about adding:</p> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-7"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-8">A more generic XProc engine <code id="code-2012-6-3-15-24-6-45415491-">cmdline</code> structure. The current one is not feature-complete.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-5"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-9">Better support for reshaped
+				or restyled GUIs for different requirements. Some of these might be
+				user-controlled while others might result from the user's document types,
+				product variants, etc.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-3-19-10-11-40-31495103-9"> 
+			 <p id="p-2012-3-19-10-11-40-31495103-11">Markup support for workflow
+				status and user permission information, providing workflow- or user-based
+				conditionality when selecting processes, pipelines, etc.</p> 
+		  </list-item> 
+		  <list-item id="list-item-2012-6-3-15-24-6-45415491-"> 
+			 <p id="p-2012-6-3-15-24-6-45415491-">And, of course, I'm working on a
+				demo implementation.</p> 
+		  </list-item> 
+		</list> 
+	 </section> 
+  </section> 
+  <section id="section-2012-3-9-10-29-19-89702477-3"> 
+	 <title id="title-2012-3-9-10-29-19-89702477-3">Conclusions</title> 
+	 <p id="p-2012-3-19-10-11-40-31495103-21">They say that there is nothing
+		quite as practical as a good theory. I'm not a programmer and cannot describe
+		the specifics of a good XForms or HTML5 GUI integrated in the
+		<gui id="gui-2012-3-19-10-11-40-31495103-1">Process Manager</gui>, but I can
+		describe the markup handling the GUI's semantics. The process XML happened
+		because of a practical problem, namely that we had a static GUI and system,
+		requiring coding for everything, but I wanted something more flexible,
+		something I could change without having to ask for help all the time.</p> 
+	 <list id="list-2012-3-19-10-11-40-31495103-3"> 
+		<p id="p-2012-3-19-10-11-40-31495103-22">In other words, I created a
+		  theory that I believe is practical:</p> 
+		<list-item id="list-item-2012-3-19-10-11-40-31495103-19"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-23">Expressing the processes,
+			 pipelines, etc as XML is a useful abstraction, providing the black-boxing of
+			 feature sets. The XML provides a blueprint for the total features available
+			 without having to go into specifics.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-19-10-11-40-31495103-17"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-24">It's easy to add new output
+			 media and formats, extra steps, etc, just as it should be with XProc, but it is
+			 also easy for me to write new processes with new pipelines and options, thereby
+			 changing the whole feature set of the
+			 <gui id="gui-2012-3-19-10-11-40-31495103-2">Process Manager</gui>, and do this
+			 in XML, using an XML editor.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-19-10-11-40-31495103-18"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-25">The process XML solves the
+			 problem with identifying <emph
+			 id="emph-2012-3-19-10-11-40-31495103-5">packages</emph> rather than single
+			 files for the pipelines, but also handling URNs and URLs for online and offline
+			 use, respectively, without compromising.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-19-10-11-40-31495103-14"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-26">The process XML is dynamic so
+			 the GUI needs to be, too. Generating the GUI from it offers the exact same
+			 dynamics.</p> 
+		</list-item> 
+		<list-item id="list-item-2012-3-19-10-11-40-31495103-16"> 
+		  <p id="p-2012-3-19-10-11-40-31495103-28">The process XML can visualise
+			 and describe the feature sets for any user category, without requiring detailed
+			 knowledge of the underlying mechanics.</p> 
+		</list-item> 
+	 </list> 
+  </section>
+  <section id="section-2012-6-4-9-15-58-33787595-">
+	 <title id="title-2012-6-4-9-15-58-33787595-2">Acknowledgments</title>
+	 <p id="p-2012-6-4-9-15-58-33787595-4">I'd like to thank Stefan Tisell and
+		Daniel Jonsson, both at Condesign, for their invaluable insights and input.
+		Also, my thanks need to go to Henrik Mårtensson. His ideas on pipeline
+		processing<xref id="xref-2012-6-4-9-15-58-33787595-1"> (see
+		<locator
+		xlink:href="urn:x-cassis:r1:cos:00002112:sv-SE:0.46#ref-item-2012-6-4-9-15-58-33787595-2"
+		xlink:title="eXtensible Filter Objects (XFO)"
+		id="locator-2012-6-4-9-15-58-33787595-1"/>)</xref> have certainly affected
+		mine.</p>
+	 <p id="p-2012-6-4-9-15-58-33787595-6">Any errors and omissions in this
+		paper, however, are purely mine.</p>
+  </section>
+</body>
+<back id="back-2012-6-4-9-15-58-33787595-">
+  <reference id="reference-2012-6-4-9-15-58-33787595-">
+	 <ref-item id="ref-item-2012-6-4-9-15-58-33787595-">
+		<doc-info id="doc-info-2012-6-4-9-15-58-33787595-">
+		  <title id="title-2012-6-4-9-15-58-33787595-">XProc: An XML Pipeline
+			 Language</title>
+		</doc-info>
+		<p id="p-2012-6-4-9-15-58-33787595-1"><uri
+		  id="uri-2012-6-4-9-15-58-33787595-">http://www.w3.org/TR/2010/REC-xproc-20100511/</uri></p>
+	 </ref-item>
+	 <ref-item id="ref-item-2012-6-4-9-15-58-33787595-1">
+		<doc-info id="doc-info-2012-6-4-9-15-58-33787595-1">
+		  <title id="title-2012-6-4-9-15-58-33787595-1">XML Calabash (also known
+			 as Stop Censorship)</title>
+		</doc-info>
+		<p id="p-2012-6-4-9-15-58-33787595-2">Calabash web page, at
+		  <uri id="uri-2012-6-4-9-15-58-33787595-1">http://xmlcalabash.com/</uri>. For
+		  the purposes of this paper, especially interesting are the sections on
+		  extensions (<uri
+		  id="uri-2012-6-4-9-15-58-33787595-2">http://xmlcalabash.com/docs/reference/extensions.html</uri>)
+		  and engine configuration (<uri
+		  id="uri-2012-6-4-9-15-58-33787595-5">http://xmlcalabash.com/docs/reference/configuration.html</uri>).</p>
+	 </ref-item>
+	 <ref-item id="ref-item-2012-6-4-9-15-58-33787595-2">
+		<doc-info id="doc-info-2012-6-4-9-15-58-33787595-2">
+		  <title id="title-2012-6-4-9-15-58-33787595-3">eXtensible Filter Objects
+			 (XFO)</title>
+		</doc-info>
+		<p id="p-2012-6-4-9-15-58-33787595-5">Whitepaper by Henrik Mårtensson
+		  about pipeline-based processing of XML, presented at XML Scandinavia 2001. XFO
+		  was implemented in Perl but the black-boxing of arbitrary feature sets was a
+		  useful abstraction in any context. Unfortunately, the paper no longer seems to
+		  be available online.</p>
+	 </ref-item>
+  </reference>
+</back></cos>

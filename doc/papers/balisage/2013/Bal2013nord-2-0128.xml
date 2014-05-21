@@ -1,0 +1,2973 @@
+<?xml-model href="/Users/System/Documents/SGML/DTD/Balisage/Balisage-1-3-rng/balisage-1-3.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<article xmlns="http://docbook.org/ns/docbook">
+    <title>ProX: XML for interfacing with XML for processing XML (and an XForm to go with
+        it)</title>
+    <info>
+        <abstract>
+            <para>The <emphasis>process XML</emphasis> or <emphasis>ProX</emphasis> for short was
+                introduced to create an abstraction layer around running XProc pipelines. While
+                XProc is XML, running XProc pipelines using an actual engine involves a lot more,
+                usually batch or shell scripts that configure the engine and whatever inputs and
+                options, etc, that the pipeline defines, which is something of a pain. Offering the
+                resulting configuration options to an end user in a GUI is difficult at best and a
+                nightmare for any conscientious developer.</para>
+            <para>This paper describes an XML-based abstraction layer that defines all those
+                configuration options. The XML is made available to the user so s/he can configure
+                the pipeline and whatever options it has, and save the configured process as an
+                instance that is then converted to a shell script that runs the configured pipeline,
+                greatly simplifying the configuration.</para>
+        </abstract>
+        <author xmlns:xlink="http://www.w3.org/1999/xlink">
+            <personname>
+                <firstname>Ari</firstname>
+                <surname>Nordström</surname>
+            </personname>
+            <personblurb>
+                <para>Ari Nordström is the resident XML guy at Condesign AB in Göteborg, Sweden. His
+                    information structures and solutions are used by Volvo Cars, Ericsson, and many
+                    others, with more added every year. His favourite XML specification remains
+                    XLink so quite a few of his frequent talks and presentations on XML focus on
+                    linking. </para>
+                <para>Ari spends some of his spare time projecting films at the Draken Cinema in
+                    Göteborg, which should explain why he wants to automate cinemas using XML. He
+                    now realises it's too late, however.</para>
+            </personblurb>
+            <email>ari.nordstrom@condesign.se</email>
+        </author>
+    </info>
+    <section xml:id="section_tfb_3rg_wj">
+        <title>ProX</title>
+        <section xml:id="section_rw3_rrg_wj">
+            <title>Reasons</title>
+            <para>XProc pipelines describe step-by-step processing of XML using XML. One step might
+                normalise a bunch of XML modules, the next validate the result and the last convert
+                the normalised XML to something more human-readable. It's easy to add various
+                conditionals, insert XQueries and include additional steps from XProc libraries, and
+                so on.</para>
+            <para>I think it is a very, very cool spec (<xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-xproc-spec"/>).</para>
+            <para>The pipelines are frequently extremely configurable, with options and parameters
+                and outputs and various pipeline engine-specific configuration options, and they
+                might be used as-is with several different stylesheets or other inputs. These in
+                turn may be configurable, defining index generation, TOC generation, paper sizes and
+                other options the stylesheet author has graciously provided as configurable with
+                parameters.</para>
+            <para>A pipeline is run using a pipeline engine of some description, frequently from a
+                shell script (for Calabash), from inside an XQuery, or some other kind of script.
+                The various configuration options, inputs, etc, are all defined in that script,
+                using whatever format and syntax the script uses. And here lies the problem.</para>
+            <para>Even though XProc is XML, processes XML, and uses XML as input, you have to write
+                that script. And the more complex or flexible the pipeline is, the more variations
+                there are when writing that script. And that script is not XML.</para>
+            <para>The pipelines are often part of a larger process that may or may not include other
+                pipelines. The end user might want to choose between several different pipelines,
+                then configure the one chosen with the various options and parameters, choose
+                between several input stylesheets and finally configure the chosen stylesheet. And
+                all this ends up in a script that is supposed to run the pipeline - the process that
+                surrounds the pipeline, actually.</para>
+            <para>It follows that the pipeline is only as flexible as the means to configure
+                it.</para>
+        </section>
+        <section xml:id="section_k4v_b5g_wj">
+            <title>Logic</title>
+            <para>Enter the process XML. It describes XProc pipelines and their configuration,
+                including any available stylesheets and other input, but also puts them all in the
+                context of <emphasis>processes</emphasis> that surround the pipelines, and it does
+                it all in XML files. There might be a <emphasis>Print</emphasis> process that
+                includes pipelines for producing PDF, and MIF, a <emphasis>Web</emphasis> process
+                that produces ePUB and HTML, and perhaps a <emphasis>Report</emphasis> process with
+                pipelines that output reports.</para>
+            <para>The structure is roughly this:</para>
+            <figure>
+                <title>ProX Structure</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012801.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The Process XML, ProX for short<footnote>
+                    <para>Turns out <quote>XProc</quote> was already taken, as was
+                            <quote>XPipe</quote> and some other exciting variations.</para>
+                </footnote>, is a <emphasis>blueprint</emphasis> that lists all available processes,
+                their associated pipelines, the command lines that configure these pipelines,
+                including the available input files used by the pipelines and the parameters used to
+                configure the inputs. It's a description of what is possible and the choices that
+                need to be made before there can be a specific pipeline to run.</para>
+            <para>Choosing a process limits the available pipelines to those listed inside that
+                process, choosing a pipeline limits the available command lines to those defined for
+                that pipeline, and so on, like this:</para>
+            <figure>
+                <title>ProX Logic</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012802.png" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>With all choices made, the blueprint is narrowed down to an
+                    <emphasis>instance</emphasis> that describes the running of a specific pipeline,
+                like so:</para>
+            <figure>
+                <title>A Configured Pipeline</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012803.png" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The blueprint is an abstraction layer for a generic pipeline engine, setting the
+                contexts in which it can run, how, and using what. The instance describes everything
+                needed to run a specific process in a specific context, which is really useful
+                because the instance can be converted to a suitable scripting format, whatever that
+                format may be.</para>
+            <para>All that is required, then, is some processing to make the choices available to a
+                user, some more processing to generate a script from the process instance, and
+                finally run that script.</para>
+        </section>
+        <section xml:id="section_pym_nyg_wj">
+            <title>Uses</title>
+            <para>I'm implementing ProX in a CMS as I write this. The CMS will be able to output
+                various formats and media using XProc pipelines, and quite a few of those pipelines
+                and their input stylesheets are very configurable. Until now, it has not been
+                possible to offer the end users these configuration options; even including a simple
+                validation in a publishing process has been cumbersome at best.</para>
+            <!--<para>ProX will change all that.</para>-->
+            <para>Some rather different requirements come from an eXist-based Publish on Demand
+                solution used to output individualised PDF documents for thousands of users,
+                filtered from a large and infinitely variable content base. The end users are not
+                allowed to change a single parameter, anywhere - their whole publishing user
+                interface consists of a <emphasis>Publish</emphasis> button - but the publishing
+                chain is complex, involving about a dozen pipelines that all gather content from
+                various sources, convert and manipulate it, and validate the results before sending
+                it on to the next step. When things go wrong, it is useful to if the publishing
+                chain can be configured in various ways to spot where the problem is.</para>
+            <para>ProX will offer configurable publishing processes for system administrators. It
+                will also help describe what processes there are in a given context (the complete
+                blueprint document) and list the specific requirements for running a specific
+                pipeline.</para>
+        </section>
+    </section>
+    <section xml:id="section_ifr_jxg_wj">
+        <title>ProX in Some Detail</title>
+        <para>The ProX schema is not particularly complicated. basically, it describes one or more
+                <emphasis>processes</emphasis> defined in a system. Every such process may use one
+            or more pipelines, and every pipeline may be configured with various command line
+            options, including zero or more input files frequently grouped as
+                <emphasis>packages</emphasis><footnote>
+                <para>Note that the <code>packages</code> structure in the illustration is common to
+                    all processes. Packages may also be included at process level, in which case
+                    they only apply to that process.</para>
+            </footnote> (more about this below). The packages are usually XSLT stylesheets, and
+            these, again, can be configured in various ways.</para>
+        <figure>
+            <title>Processes</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="img/Bal2013nord-2-012804.png" width="300px"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>The total XML is a list of things that are possible. The user will need to pick one
+            process, one pipeline, one set of command line options and the appropriate input
+            packages to end up with a specific process.</para>
+        <section xml:id="section_c3v_mxg_wj">
+            <title>Processes</title>
+            <para>The <code>process</code> structure groups related pipelines. </para>
+            <figure xml:id="id-process-fig">
+                <title>A Single Process</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012805.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The grouping is intentionally somewhat arbitrary. If a process is defined as
+                    <quote>Delivery</quote>, the associated pipelines might be <quote>Print</quote>,
+                    <quote>Web</quote> and <quote>ePUB</quote>, handling those outputs for delivery,
+                but, depending on the situation, a process might just as easily be defined as
+                    <emphasis>Print Publishing</emphasis>, leaving the online formats to another
+                process, say, <emphasis>Web Publishing</emphasis>. </para>
+            <note>
+                <para>Note that the <code>packages</code> are common to all pipelines in this
+                    particular process.</para>
+            </note>
+        </section>
+        <section xml:id="section_dcm_nxg_wj">
+            <title>Pipelines</title>
+            <para>A <emphasis>pipeline</emphasis> is an abstraction for a single XProc pipeline<footnote>
+                    <para>Or, conceivably, a single step.</para>
+                </footnote> and its associated inputs and configuration options.</para>
+            <figure xml:id="id-pipeline-fig">
+                <title>A Single Pipeline</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012806.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The <code>pipeline</code> element includes a <code>script</code> element that that
+                points out the actual XProc script, defined in a package, and one or more
+                    <code>cmdline</code> groups, that is, related configuration options for the
+                script. </para>
+        </section>
+        <section xml:id="section_qrx_nxg_wj">
+            <title>Command Lines</title>
+            <para>A <emphasis>command line</emphasis> (<code>cmdline</code>) is a group of related
+                configuration options for running the pipeline that group is associated with. A
+                pipeline may include one or more command lines.</para>
+            <figure>
+                <title>A Single Command Line Group</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012807.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The <code>cmdline</code> started out as the love child of various aspects of the
+                XProc spec and the XProc engine of (many people's) choice, Calabash, but the current
+                version attempts to be more generic in nature. It groups related configuration
+                options for an associated pipeline so that once the listed choices have been made,
+                the resulting <code>cmdline</code> instance is ready to run as-is.</para>
+            <para>The <code>cmdline</code> contains two basic parts, an engine configuration with
+                engine-specific options from configuration files to Saxon options, and an XProc
+                pipeline semantics-specific part that is more of a reflection of the spec<footnote>
+                    <para>ProX is very much a work in progress, and the design currently reflects
+                        the requirements of the system it is being implemented in.</para>
+                </footnote>.</para>
+            <para>The pipeline semantics define inputs, outputs, options, parameters, etc, that may
+                be defined either beforehand or at runtime by the system. </para>
+            <para>The <code>inputs</code> structure defines every choice available for selection
+                through one or more <code>input</code> elements.</para>
+            <figure>
+                <title>A Single Input</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012808.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The <code>input</code> element defines every kind of input available to the
+                pipeline. Note that not every input is made available as a choice for the user; some
+                are provided at runtime by the system, most notably the XML to be processed by the pipeline<footnote>
+                    <para>Not every pipeline needs the XML to be defined at runtime, either. For
+                        example, the system might use a pipeline to produce reports.</para>
+                </footnote>. The markup includes attributes for processing user-selectable input
+                (see <xref xmlns:xlink="http://www.w3.org/1999/xlink" linkend="section_h2y_zwy_wj"
+                />).</para>
+            <para>Some inputs may require parameters to be set. Typically, an XSLT stylesheet
+                package will use parameters to define various properties, so these are made
+                available in the <code>input</code> structure that points out the stylesheet. They
+                are also listed with their packages (see <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="section_ty5_4xg_wj"
+                />).</para>
+        </section>
+        <section xml:id="section_ty5_4xg_wj">
+            <title>Packages</title>
+            <para>A <emphasis>package</emphasis> is a group of related files needed for some aspect
+                of pipeline processing. Commonly, a package is referenced as a single
+                    <quote>resource</quote> by an input port.</para>
+            <figure>
+                <title>A Single Package</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012809.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The main part of <code>package</code> is a list of links (<code>locator</code>
+                elements) to the files that are part of the package<footnote>
+                    <para>A package may include binary files.</para>
+                </footnote>, of which one or more may be identified as <quote>main</quote> file that
+                imports the other files for use. </para>
+            <para>Packages are used by the process XML as an abstraction layer for an input; an
+                input always points out a package rather than a single file. The system can locate
+                the participating files using the package's file list when needed without having to
+                look elsewhere.</para>
+            <para>The XProc script is also defined in a package rather than directly as a URL in the
+                    <code>script</code> element. For a script comprising several physical files,
+                this is very useful. Similarly, the XProc engine configuration file (such as the one
+                used by Calabash) (and any other such files) is listed in a package so that the
+                system can retrieve everything required by a specific ProX instance before the
+                process runs.</para>
+            <para>Last but not least, a package may list the parameters that are available for that
+                package. A configurable parameter is marked as such using an attribute on
+                    <code>parameter</code>, and also includes the parameter's data type<footnote>
+                    <para>This is necessary when generating the user interface that allows the user
+                        to configure the parameter.</para>
+                </footnote>. Some parameters may be required, which is also reflected by the markup. </para>
+            <note>
+                <para>The parameters defined in <code>package</code> list package options that
+                        <emphasis>may</emphasis> be user-configurable. The parameters listed with a
+                    specific <code>input</code> in a <code>cmdline</code> are those that the system
+                    administrator had actally made available for configuration.</para>
+            </note>
+        </section>
+        <section xml:id="section_w3l_pk5_wj">
+            <title>Naming</title>
+            <para>ProX is being implemented in a URN-based system as I write this. Every resource in
+                it is identified and linked to using URNs rather than URLs - XML, obviously, but
+                also images and other content, as well as stylesheets, schemas, etc. The URNs are
+                unique within the system and include version and localisation information, like
+                so:</para>
+            <programlisting>urn:x-cassis:cos:00093445:sv-SE:0.19</programlisting>
+            <para>Every resource is version handled, so it is easy to retrieve a specific version.
+                And here's the neat part: ProX packages in the system identify resources in the
+                exact same way. A package is a list of URNs with with specific versions, meaning
+                that a specific package always identifies specific versions of every participating
+                file. Prox files in the system are identified in the same way so any package version
+                is identifiable and retrievable.</para>
+        </section>
+        <section xml:id="section_kh4_zc5_wj">
+            <title>Modularisation</title>
+            <para>The ProX XML does not need to be a single file. Processes, pipelines, command
+                lines and packages can all be modularised and reused. Note, for example, the
+                    <code>inset</code> elements in <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="id-process-fig"/> that are siblings to the <code>pipeline</code> and
+                    <code>package</code> elements; these are intended to link to pipeline and
+                package modules, respectively.</para>
+        </section>
+        <section xml:id="section_ncf_1d5_wj">
+            <title>Metadata</title>
+            <para>Every major ProX component (<code>process</code>, <code>pipeline</code>,
+                    <code>cmdline</code>, <code>package</code>) includes metadata used to identify
+                the component in a GUI, but also to include context-sensitive help in that
+                GUI.</para>
+        </section>
+        <section xml:id="section_x11_mjz_wj">
+            <title>Writing ProX</title>
+            <para>It is, of course, possible to write ProX XML in any XML editor. For my current
+                project, I've added an XMetaL-based environment that includes some styling but
+                otherwise uses the same features as the standard authoring environment in the
+                system, with an integration to the database with check-in/out and versioning,
+                URN-based linking, etc. </para>
+            <figure>
+                <title>Adding A Package Locator</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012810.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>Here, authoring ProX is easy. Packages are compiled by including XLinks to the
+                modules and then linked to from the elements that need them, using already
+                implemented XLink- and URN-based linking functionality.</para>
+        </section>
+    </section>
+    <section xml:id="section_hg4_rxg_wj">
+        <title>The ProX User Interface</title>
+        <para>The ProX blueprint was designed to be visualised in a GUI so the right process and
+            pipeline can be selected and configured<footnote>
+                <para>How much of the process is configurable is decided by the author of the
+                    blueprint.</para>
+            </footnote>. Conceivably, the system might allow for several different versions of the
+            basic blueprint, each for its intended user. A power user might have several
+            configuration options available to her while the casual user might only be allowed to
+            choose between the basic processes, leaving the details to the system.</para>
+        <para>The basic selection procedure is largely sequential. Here's the first concept
+            GUI:</para>
+        <figure xml:id="id-orig-concept-gui">
+            <title>GUI Concept</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="img/Bal2013nord-2-012811.png" width="300px"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>The pipeline, command line and package steps may all include additional configuration,
+            but the principle should be clear.</para>
+        <section xml:id="section_qzm_yn5_wj">
+            <title>Generating the GUI, Pt 1</title>
+            <para>There's an obvious candidate for creating a dynamic user interface based on XML
+                input: W3C's <emphasis>XForms</emphasis> specification (<xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-xforms-spec"/>). XForms
+                has a somewhat bad reputation (see, for example, <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-mvc-xforms-eric-vdl"/>,
+                Eric van der Vlist's terrific paper on [some of] the problems and some suggested
+                solutions ), with some even claiming it to be dead for all practical purposes, but
+                it is one of the few choices available for the purpose.</para>
+            <para>My first attempt at creating a ProX user interface used an XSLT stylesheet to
+                generate a <emphasis>FreeMind</emphasis> mind map:</para>
+            <figure>
+                <title>Generated Mind Map</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012812.png" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The FreeMind mind map format is XML, and thus easy to grasp and convert to (<xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-freemind-xsd"/>). The
+                idea here is to insert FreeMind marker symbols to the selected options (nodes) and
+                then convert the resulting FreeMind XML back to ProX, only including the marked
+                nodes. </para>
+            <para>Of course, this approach is not without its flaws. Nothing stops you from
+                inserting markers <emphasis>everywhere</emphasis>, which would result in useless
+                ProX markup. We need something that allows exactly what the markup allows, so while
+                a tree representation is useful and intuitive, it is only useful if a node can be
+                easily selected and its unselected siblings locked (including a clear visualisation
+                of the changed state).</para>
+            <para>The FreeMind format may or may not allow this, but I chose instead to have a
+                closer look at XForms.</para>
+        </section>
+        <section xml:id="section_sqy_ms5_wj">
+            <title>Design Choices</title>
+            <para>The process abstraction reflects a pipeline configuration from a process and
+                systems perspective, and the resulting workflow for a user in the above user
+                interfaces mostly reflects this approach. This is not necessarily wrong but the
+                user's view regarding processing her content might actually be very different. </para>
+            <section xml:id="section_e5s_zzf_xj">
+                <title>The User's POV</title>
+                <para>The original idea described a workflow like this:<orderedlist>
+                        <listitem>
+                            <para>Select process</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select pipeline</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select the pipeline's command line</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select among the stylesheet packages given as alternatives in the
+                                command line</para>
+                        </listitem>
+                    </orderedlist>
+                </para>
+                <para>This is really just a formalisation of <emphasis>one</emphasis> way of
+                    expressing a pipeline process. Only the last two (command line and stylesheet)
+                    included user-configurable options and the basic idea was to have them show up
+                    in a subform only when that step was selected.</para>
+                <para>The user probably doesn't care about the difference between configuring a
+                    pipeline and configuring a stylesheet, however. The objective is to run a
+                    process without distractions to the extent possible so better is probably:<orderedlist>
+                        <listitem>
+                            <para>Select process</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select pipeline</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select and configure stylesheet (or rather, process output)</para>
+                        </listitem>
+                    </orderedlist>
+                </para>
+                <para>And depending on the situation, this might be even more appropriate:<orderedlist>
+                        <listitem>
+                            <para>Select process</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select and configure output</para>
+                        </listitem>
+                    </orderedlist>
+                </para>
+                <para>This is perhaps too simplistic. While the user doesn't necessarily care about
+                    the difference between a process and a pipeline, the concept of a process
+                    surrounding the pipeline was introduced because the processes might be so
+                    different from each other that the abstraction becomes meaningful. The original
+                    concept (see <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                        linkend="id-orig-concept-gui"/>) lists <emphasis>Delivery</emphasis>,
+                        <emphasis>Reviews</emphasis>, <emphasis>Validation</emphasis> and
+                        <emphasis>Reports</emphasis> as examples of different processes, the idea
+                    being to reflect different work flows with some very different outputs as
+                    expected results.</para>
+                <para>I'd argue that the distinction is meaningful.</para>
+                <para>But do users need to know or care about the difference between the command
+                    line and stylesheet selections? Here, the answer is probably no. The pipeline
+                    does something in the defined workflow while the command line and stylesheet
+                    options configure the output. The difference between configuring the pipeline
+                    and the stylesheet is a subtle one; unless you are an admin, you probably won't
+                    care. Better (than the the concept GUI in <xref
+                        xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-orig-concept-gui"/>)
+                    is something like this:</para>
+                <figure xml:id="figure_dlj_rmj_xj">
+                    <title>Pipeline, Cmdline Configuration Mixed</title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="img/Bal2013nord-2-012813.jpg" width="300px"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure>
+                <para>To the end user, this XForm is about configuring <emphasis>output</emphasis>,
+                    not what's behind the scenes. The underlying XML does not change; with the GUI
+                    is adapted for different user categories, the same XML can provide an admin with
+                    a different UI. The difference happens depending on how the initial ProX is
+                    processed to generate a form.</para>
+                <para>The <quote>right</quote> answer, then, is that these are all possible, simply
+                    by preprocessing ProX and by writing appropriate XForms.</para>
+            </section>
+            <section xml:id="section_n4d_s1g_xj">
+                <title>The Admin's POV</title>
+                <para>The underlying XML is in no way changed when simplifying the selection process
+                    for a user. What changes is the form, and possibly some preprocessing. The above
+                    suggests a simple GUI, with most of the configuration already made. All the
+                    admin needs to do is to write the ProX blueprint with
+                        <emphasis>complete</emphasis> command lines, with all of the choices split
+                    into separate command line groups as listed in the GUI. </para>
+                <para>The GUI shown in <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                        linkend="figure_dlj_rmj_xj"/> is generated from this example:</para>
+                <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;?xml-model href="file:/home/ari/mystuff/SGML/DTD/Process-XML/RelaxNG/processes.rnc" type="application/relax-ng-compact-syntax"?>
+&lt;processes 
+   id="processes-2013-4-9-16-53-8-39562387-" 
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+   &lt;!-- Print Publishing Process -->
+   &lt;process id="id-pdf-process">
+      &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-">
+         &lt;title id="title-2013-4-9-16-53-8-39562387-">Print Publishing&lt;/title>
+         &lt;description id="description-2013-4-9-16-53-8-39562387-">
+            &lt;p id="p-2013-4-9-16-53-8-39562387-">Print publishing for COSML documents&lt;/p>
+         &lt;/description>
+      &lt;/metadata>
+      &lt;pipelines id="pipelines-2013-4-9-16-53-8-39562387-">
+         
+         &lt;!-- PDF Pipeline -->
+         &lt;pipeline id="id-pipeline-pdf-1">
+            &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-1">
+               &lt;title id="title-2013-4-9-16-53-8-39562387-1">Publish PDF&lt;/title>
+               &lt;description id="description-2013-4-9-16-53-8-39562387-1">
+                  &lt;p id="p-2013-4-9-16-53-8-39562387-1">Normalizes, validates and converts a COSML document to PDF&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;script xmlns:xlink="http://www.w3.org/1999/xlink" type="pkg"
+               id="script-2013-4-9-16-53-8-39562387-"
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xproc-pdf"
+               xlink:title=" XProc Pipeline for Normalize, Validate and PDF Normalizes, validates and publishes in PDF a COSML document "/>
+            &lt;cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-">
+               
+               &lt;!-- COSML Internal XSL -->
+               &lt;cmdline id="id-cmdline-cos-internal-pdf">
+                  &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-2">
+                     &lt;title id="title-2013-4-9-16-53-8-39562387-2">COS Internal Template&lt;/title>
+                     &lt;description id="description-2013-4-9-16-53-8-39562387-2">
+                        &lt;p id="p-2013-4-9-16-53-8-39562387-2">Configures the pipeline for the "COS Internal" template&lt;/p>
+                     &lt;/description>
+                  &lt;/metadata>
+                  &lt;engine-config>
+                     &lt;config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  &lt;/engine-config>
+                  &lt;inputs id="inputs-2013-4-9-16-53-8-39562387-">
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-">document&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-"
+                           mimetype="application/xml">DOCUMENT-PLACEHOLDER&lt;/value>
+                     &lt;/input>
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-1">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-1">stylesheet&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xslfo-cosml"
+                           xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-1"
+                           xlink:title=" XSL-FO Package for COSML PDF Converts COSML documents to XSL-FO format for COS PDF layout "/>
+                        &lt;params id="params-2013-4-9-16-53-8-39562387-">
+                           &lt;!-- Index generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean" 
+                              id="param-2013-4-9-16-53-8-39562387-">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-2">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-">generate.index&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-4-9-16-53-8-39562387-2">false&lt;/value>
+                           &lt;/param>
+                           &lt;!-- XEP Extensions -->
+                           &lt;param 
+                              choice="no" 
+                              id="param-2013-4-9-16-53-8-39562387-1">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-3">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-1">xep.extensions&lt;/name>
+                              &lt;value xmlns:xlink="http://www.w3.org/1999/xlink" type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-3"
+                                 >0&lt;/value>
+                           &lt;/param>
+                           &lt;!-- XSL-FO Bookmark Generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39562387-2">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-2">xslfo.bookmarks&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-4">true&lt;/value>
+                           &lt;/param>
+                           &lt;!-- TOC Generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39514778-2">
+                              &lt;port id="port-2013-4-9-16-53-8-9653444-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-1928364-2">create.toc&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-3">true&lt;/value>
+                           &lt;/param>
+                           &lt;!-- TOC Depth -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="list1"
+                              id="param-2013-4-9-16-53-8-2385485-2">
+                              &lt;port id="port-2013-7-10-16-34-8-9283444-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-7-10-16-50-3-1946564-2">toc.depth&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-4">2&lt;/value>
+                              &lt;value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-1" 
+                                 type="string">1&lt;/value>
+                              &lt;value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-2" 
+                                 type="string">3&lt;/value>
+                           &lt;/param>
+                        &lt;/params>
+                     &lt;/input>
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-2">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-5">stylesheet-norm&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-normalize"
+                           xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-5"
+                           xlink:title=" Normalize XSLT Stylesheet for applics filtering and module normalization for COSML documents "/>
+                     &lt;/input>
+                  &lt;/inputs>
+                  &lt;options id="options-2013-4-9-16-53-8-39562387-">
+                     &lt;option choice="no" id="option-2013-4-9-16-53-8-39562387-">
+                        &lt;name id="name-2013-4-9-16-53-8-39562387-3">pdf&lt;/name>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-6">PDF-PLACEHOLDER.pdf&lt;/value>
+                     &lt;/option>
+                  &lt;/options>
+               &lt;/cmdline>
+               
+               &lt;!-- COSML Formal XSL -->
+               &lt;cmdline id="id-cmdline-cos-formal-pdf">
+                  &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-3">
+                     &lt;title id="title-2013-4-9-16-53-8-39562387-3">COS Formal Template&lt;/title>
+                     &lt;description id="description-2013-4-9-16-53-8-39562387-3">
+                        &lt;p id="p-2013-4-9-16-53-8-39562387-3">Configures the pipeline for the "COS Formal" template&lt;/p>
+                     &lt;/description>
+                  &lt;/metadata>
+                  &lt;engine-config>
+                     &lt;config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  &lt;/engine-config>
+                  &lt;inputs id="inputs-2013-4-9-16-53-8-39562387-1">
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-3">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-6">document&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-7">DOCUMENT-PLACEHOLDER&lt;/value>
+                     &lt;/input>
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-4">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-7">stylesheet&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="package-xslfo-cosml.xml#id-xslfo-cosml" 
+                           xlink:type="simple"
+                           id="value-2013-4-9-16-53-8-39562387-8"/>
+                     &lt;/input>
+                     &lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-5">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-8">stylesheet-norm&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" type="pkg"
+                           xlink:href="package-normalize.xml#id-normalize" 
+                           xlink:type="simple"
+                           id="value-2013-4-9-16-53-8-39562387-9"/>
+                     &lt;/input>
+                  &lt;/inputs>
+                  &lt;options id="options-2013-4-9-16-53-8-39562387-1">
+                     &lt;option choice="no" id="option-2013-4-9-16-53-8-39562387-1">
+                        &lt;name id="name-2013-4-9-16-53-8-39562387-4">pdf&lt;/name>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="external"
+                           xlink:type="simple" 
+                           id="value-2013-4-9-16-53-8-39562387-10"
+                           mimetype="application/pdf">PDF-PLACEHOLDER.pdf&lt;/value>
+                     &lt;/option>
+                  &lt;/options>
+               &lt;/cmdline>
+            &lt;/cmdlines>
+         &lt;/pipeline>
+      &lt;/pipelines>
+      
+      &lt;!-- Packages for Print -->
+      &lt;packages 
+         xml:base="file:///e:/SGML/DTD/Cassis/Process-XML/"
+         id="packages-2013-4-9-16-53-8-39562387-">
+         
+         &lt;!-- XProc Normalize, Validate, XSLFO Pipeline Package -->
+         &lt;package id="id-xproc-pdf">
+            &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-4">
+               &lt;title id="title-2013-4-9-16-53-8-39562387-4">XProc Pipeline for Normalize, Validate and PDF&lt;/title>
+               &lt;description id="description-2013-4-9-16-53-8-39562387-4">
+                  &lt;p id="p-2013-4-9-16-53-8-39562387-4">Normalizes, validates and publishes in PDF a COSML document&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;!-- publish-cosml-pdf.xpl -->
+            &lt;locator 
+               type="main" 
+               xlink:href="urn:x-cassis:r1:cos:00002715:sv-SE:0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               id="locator-2013-4-10-10-32-24-12830403-" />
+         &lt;/package>
+         
+         
+         &lt;!-- COSML Internal XSL-FO Package -->
+         &lt;package id="id-xslfo-cosml">
+            &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-5">
+               &lt;title id="title-2013-4-9-16-53-8-39562387-5">XSL-FO Package for COSML PDF&lt;/title>
+               &lt;description id="description-2013-4-9-16-53-8-39562387-5">
+                  &lt;p id="p-2013-4-9-16-53-8-39562387-5">Converts COSML documents to XSL-FO format
+                     for COS PDF layout&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            
+            &lt;!-- Stylesheet parameters -->
+            &lt;params id="params-2013-4-9-16-53-8-39562387-1">
+               &lt;!-- Index generation -->
+               &lt;param id="param-2013-4-9-16-53-8-39562387-3">
+                  &lt;port id="port-2013-4-9-16-53-8-39562387-9">xslt-params&lt;/port>
+                  &lt;name id="name-2013-4-9-16-53-8-39562387-5">generate.index&lt;/name>
+                  &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-11">0&lt;/value>
+               &lt;/param>
+               &lt;!-- XEP Extensions -->
+               &lt;param id="param-2013-4-9-16-53-8-39562387-4">
+                  &lt;port id="port-2013-4-9-16-53-8-39562387-10">xslt-params&lt;/port>
+                  &lt;name id="name-2013-4-9-16-53-8-39562387-6">xep.extensions&lt;/name>
+                  &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-12">0&lt;/value>
+               &lt;/param>
+               &lt;!-- XSL-FO Bookmark Generation -->
+               &lt;param id="param-2013-4-9-16-53-8-39562387-5">
+                  &lt;port id="port-2013-4-9-16-53-8-39562387-11">xslt-params&lt;/port>
+                  &lt;name id="name-2013-4-9-16-53-8-39562387-7">xslfo.bookmarks&lt;/name>
+                  &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-13">1&lt;/value>
+               &lt;/param>
+            &lt;/params>
+            
+            &lt;!-- XSLT -->
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000232:sv-SE:0.6" 
+               xlink:title="COS Internal XSLT"
+               type="main" id="locator-2013-4-9-16-53-8-39562387-1"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000074:sv-SE:0.11"
+               id="locator-2013-4-9-16-53-8-39562387-2"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000059:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-3"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000070:sv-SE:0.15"
+               id="locator-2013-4-9-16-53-8-39562387-4" 
+               xlink:title="Layout"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000876:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-5" 
+               xlink:title="bookmarks.xsl"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000075:sv-SE:0.17"
+               id="locator-2013-4-9-16-53-8-39562387-6"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000072:sv-SE:0.10"
+               id="locator-2013-4-9-16-53-8-39562387-7" 
+               xlink:title="meta-data.xsl"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000078:sv-SE:0.9"
+               id="locator-2013-4-9-16-53-8-39562387-8" 
+               xlink:title="TOC"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000062:sv-SE:0.9"
+               id="locator-2013-4-9-16-53-8-39562387-9"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000233:sv-SE:0.8"
+               id="locator-2013-4-9-16-53-8-39562387-10"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000061:sv-SE:0.29"
+               id="locator-2013-4-9-16-53-8-39562387-11"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000065:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-12"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000071:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-13"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000077:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-14"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000079:sv-SE:0.7"
+               id="locator-2013-4-9-16-53-8-39562387-15"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000060:sv-SE:0.7"
+               id="locator-2013-4-9-16-53-8-39562387-16"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000064:sv-SE:0.8"
+               id="locator-2013-4-9-16-53-8-39562387-17"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000066:sv-SE:0.2"
+               id="locator-2013-4-9-16-53-8-39562387-18"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000069:sv-SE:0.3"
+               id="locator-2013-4-9-16-53-8-39562387-19"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000063:sv-SE:0.3"
+               id="locator-2013-4-9-16-53-8-39562387-20"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000785:sv-SE:0.6"
+               id="locator-2013-4-9-16-53-8-39562387-21"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000076:sv-SE:0.10" type="aux" xlink:title="Strings"
+               id="locator-2013-4-9-16-53-8-39562387-22"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000230:sv-SE:0.1" type="aux"
+               id="locator-2013-4-9-16-53-8-39562387-23"/>
+            &lt;locator xmlns:xlink="http://www.w3.org/1999/xlink"
+               xlink:href="urn:x-cassis:r1:cos:00000426:sv-SE:0.1" type="aux"
+               id="locator-2013-4-9-16-53-8-39562387-24" xlink:title="tux.jpg"/>
+         &lt;/package>
+      &lt;/packages>
+   &lt;/process>
+   
+   &lt;!-- Wep PublishingProcess -->
+   &lt;process id="id-web-process">
+      &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-6">
+         &lt;title id="title-2013-4-9-16-53-8-39562387-6">Web Publishing&lt;/title>
+         &lt;description id="description-2013-4-9-16-53-8-39562387-6">
+            &lt;p id="p-2013-4-9-16-53-8-39562387-6">Publishes COSML documents for web output&lt;/p>
+         &lt;/description>
+      &lt;/metadata>
+      
+      &lt;pipelines id="pipelines-2013-4-9-16-53-8-39562387-1">
+         
+         &lt;!-- Pipeline for HTML -->
+         &lt;pipeline id="id-pipeline-web-1">
+            &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-7">
+               &lt;title id="title-2013-4-9-16-53-8-39562387-7">Publish HTML&lt;/title>
+               &lt;description id="description-2013-4-9-16-53-8-39562387-7">
+                  &lt;p id="p-2013-4-9-16-53-8-39562387-7">Normalizes, validates and publishes COSML documents as single-file HTML&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;script id="script-2013-4-9-16-53-8-39562387-1"
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-1"
+               xlink:title="XProc COSML2XHTMLNormalises, validates and converts COSML to XHTML."
+               type="pkg"/>
+            &lt;cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-1">
+               
+               &lt;!-- Single-file HTML Config -->
+               &lt;cmdline id="id-cmdline-single-file-HTML-1">
+                  &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-8">
+                     &lt;title id="title-2013-4-9-16-53-8-39562387-8">COS HTML&lt;/title>
+                     &lt;description id="description-2013-4-9-16-53-8-39562387-8">
+                        &lt;p id="p-2013-4-9-16-53-8-39562387-8">Configures the pipeline for single-file HTML&lt;/p>
+                     &lt;/description>
+                  &lt;/metadata>
+                  &lt;engine-config>
+                     &lt;config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  &lt;/engine-config>
+                  &lt;inputs>
+                     &lt;input>
+                        &lt;port>document&lt;/port>
+                        &lt;value 
+                           id="id-html-docroot"
+                           input-type="doc-root" 
+                           type="external"/>
+                     &lt;/input>
+                     &lt;input id="input-2013-5-19-11-12-49-71312191-1">
+                        &lt;port>stylesheet&lt;/port>
+                        &lt;value
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-"
+                           xlink:title="COSML XHTML XSLTConverts COSML to XHTML" 
+                           type="pkg"/>
+                     &lt;/input>
+                     &lt;input id="input-2013-5-19-11-12-49-71312191-">
+                        &lt;port>stylesheet-norm&lt;/port>
+                        &lt;value 
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#id-normalize"
+                           xlink:title=" Normalize XSLT Stylesheet for applics filtering and module normalization for COSML documents "
+                           type="pkg"/>
+                     &lt;/input>
+                  &lt;/inputs>
+                  &lt;options>
+                     &lt;option>
+                        &lt;name>htm&lt;/name>
+                        &lt;value 
+                           id="id-htm-out"
+                           type="external" 
+                           output-type="primary"/>
+                     &lt;/option>
+                  &lt;/options>
+               &lt;/cmdline>
+            &lt;/cmdlines>
+         &lt;/pipeline>
+      &lt;/pipelines>
+      
+      &lt;!-- Web Publishing Packages -->
+      &lt;packages>
+         
+         &lt;!-- XProc for COSML to XHTML -->
+         &lt;package id="package-2013-5-19-11-12-49-71312191-1">
+            &lt;metadata>
+               &lt;title>XProc COSML2XHTML&lt;/title>
+               &lt;description>
+                  &lt;p>XProc to normalise, validate and convert COSML to XHTML.&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;locator 
+               id="id-xhtml-xproc"
+               type="main" 
+               xlink:href="urn:x-cassis:r1:cos:00002756:sv-SE:0.2"
+               xlink:title="publish-cosml-html.xpl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink"/>
+         &lt;/package>
+         
+         &lt;!-- XSLT for COSML to XHTML -->
+         &lt;package id="package-2013-5-19-11-12-49-71312191-">
+            &lt;metadata>
+               &lt;title>COSML XHTML XSLT&lt;/title>
+               &lt;description>
+                  &lt;p>Converts COSML to XHTML&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;locator 
+               id="id-xhtml-xslt"
+               xlink:href="urn:x-cassis:r1:cos:00002755:sv-SE:0.1"
+               xlink:title="cosml2html-ti.xsl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               type="main"/>
+         &lt;/package>
+      &lt;/packages>
+   &lt;/process>
+   
+   &lt;!-- Content Validation Process -->
+   &lt;process id="process-2013-5-19-11-12-49-71312191-">
+      &lt;metadata>
+         &lt;title>Content Validation&lt;/title>
+         &lt;description>
+            &lt;p>Content validation processes&lt;/p>
+         &lt;/description>
+      &lt;/metadata>
+      
+      &lt;!-- Content Validation Pipelines -->
+      &lt;pipelines>
+         
+         &lt;!-- Xref Check Pipeline -->
+         &lt;pipeline id="pipeline-2013-5-19-11-12-49-71312191-">
+            &lt;metadata>
+               &lt;title>Cross-reference Check&lt;/title>
+               &lt;description>
+                  &lt;p>Pipeline for checking cross-references in COSML documents&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;script
+               xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-3"
+               xlink:title="XProc Xref CheckGenerates a module list for XML in scope, checks the xrefs and produces a report"
+               type="pkg"/>
+            &lt;cmdlines>
+               
+               &lt;!-- Xref Validation Config -->
+               &lt;cmdline id="cmdline-2013-5-19-11-12-49-71312191-">
+                  &lt;metadata>
+                     &lt;title>Xref Check Configuration&lt;/title>
+                     &lt;description>
+                        &lt;p>Configures the cross-reference check and report&lt;/p>
+                     &lt;/description>
+                  &lt;/metadata>
+                  &lt;engine-config>
+                     &lt;config type="pkg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#id-conf-calabash"/>
+                  &lt;/engine-config>
+                  &lt;inputs>
+                     &lt;input>
+                        &lt;port>map&lt;/port>
+                        &lt;value 
+                           type="external" 
+                           input-type="map"/>
+                     &lt;/input>
+                     &lt;input id="input-2013-5-19-11-12-49-71312191-2">
+                        &lt;port>stylesheet&lt;/port>
+                        &lt;value
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.6#package-2013-5-19-11-12-49-71312191-2"
+                           xlink:title="XSLT Xref CheckValidates cross-references in publication"
+                           type="pkg"/>
+                     &lt;/input>
+                  &lt;/inputs>
+                  &lt;options>
+                     &lt;option>
+                        &lt;name>htm&lt;/name>
+                        &lt;value id="id-value-xref-htm" type="external" mimetype="text/xhtml"/>
+                     &lt;/option>
+                     &lt;option>
+                        &lt;name>file-url&lt;/name>
+                        &lt;value id="id-file-url" type="external" mimetype="text/xml"/>
+                     &lt;/option>
+                  &lt;/options>
+               &lt;/cmdline>
+            &lt;/cmdlines>
+         &lt;/pipeline>
+      &lt;/pipelines>
+      
+      &lt;packages>
+         
+         &lt;!-- XProc for Xref Check -->
+         &lt;package id="package-2013-5-19-11-12-49-71312191-3">
+            &lt;metadata>
+               &lt;title>XProc Xref Check&lt;/title>
+               &lt;description>
+                  &lt;p>Generates a module list for XML in scope, checks the xrefs and produces a report&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;locator 
+               id="id-xproc-xref"
+               xlink:href="urn:x-cassis:r1:cos:00002757:sv-SE:0.2"
+               xlink:title="xref-check-cosml.xpl" 
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               type="main"/>
+         &lt;/package>
+         
+         &lt;!-- XSLT for Xref Check -->
+         &lt;package id="package-2013-5-19-11-12-49-71312191-2">
+            &lt;metadata>
+               &lt;title>XSLT Xref Check&lt;/title>
+               &lt;description>
+                  &lt;p>Validates cross-references in publication&lt;/p>
+               &lt;/description>
+            &lt;/metadata>
+            &lt;locator 
+               id="id-xslt-xref"
+               xlink:href="urn:x-cassis:r1:cos:00002754:sv-SE:0.1"
+               xlink:title="link-target-check-multifile.xsl"
+               xmlns:xlink="http://www.w3.org/1999/xlink" 
+               type="main"/>
+         &lt;/package>
+      &lt;/packages>
+   &lt;/process>
+   
+   &lt;packages id="packages-2013-4-9-16-53-8-39562387-1">
+      
+      &lt;!-- XSLT for Normalizing COSML -->
+      &lt;package id="id-normalize" type="xslt">
+         &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-9">
+            &lt;title id="title-2013-4-9-16-53-8-39562387-9">Normalize XSLT&lt;/title>
+            &lt;description id="description-2013-4-9-16-53-8-39562387-9">
+               &lt;p id="p-2013-4-9-16-53-8-39562387-9">Stylesheet for applics filtering and module
+                  normalization for COSML documents&lt;/p>
+            &lt;/description>
+         &lt;/metadata>
+         &lt;!-- No parameters required. -->
+         &lt;locator 
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="urn:x-cassis:r1:cos:00000073:sv-SE:0.4"
+            id="locator-2013-4-9-16-53-8-39562387-26" 
+            type="main" 
+            xlink:title="Normalize XSLT"/>
+      &lt;/package>
+      
+      &lt;!-- Calabash Engine Configuration File -->
+      &lt;package id="id-conf-calabash">
+         &lt;metadata id="metadata-2013-5-2-21-40-30-37001288-">
+            &lt;title id="title-2013-5-2-21-40-30-37001288-">Calabash Configuration&lt;/title>
+            &lt;description id="description-2013-5-2-21-40-30-37001288-">
+               &lt;p id="p-2013-5-2-21-40-30-37001288-">Configures Calabash&lt;/p>
+            &lt;/description>
+         &lt;/metadata>
+         &lt;locator 
+            xlink:href="urn:x-cassis:r1:cos:00002745:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" 
+            type="main" 
+            id="id-loc-calabash-config"/>
+      &lt;/package>
+      
+      
+      
+      &lt;!-- Wrapper ProX Resources -->
+      &lt;package id="id-wrapper-resources">
+         &lt;metadata id="metadata-2013-5-2-21-40-30-37001288-1">
+            &lt;title id="title-2013-5-2-21-40-30-37001288-1">Wrapper Pipeline Processing&lt;/title>
+            &lt;description id="description-2013-5-2-21-40-30-37001288-1">
+               &lt;p id="p-2013-5-2-21-40-30-37001288-1">These files are used for running the wrapper pipeline.&lt;/p>
+            &lt;/description>
+         &lt;/metadata>
+
+         &lt;locator xlink:href="urn:x-cassis:r1:cos:00002735:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-wrapper-xpl"/>
+         
+         &lt;locator xlink:href="urn:x-cassis:r1:cos:00002732:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox-fix"/>
+         
+         &lt;locator xlink:href="urn:x-cassis:r1:cos:00002733:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-urn2url"/>
+         
+         &lt;locator xlink:href="urn:x-cassis:r1:cos:00002731:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2bat"/>
+         
+         &lt;locator xlink:href="urn:x-cassis:r1:cos:00002734:sv-SE:0.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink" id="id-prox2shell-config"/>
+      &lt;/package>
+      
+      &lt;!-- XForms -->
+      &lt;package id="id-xform">
+         &lt;metadata>
+            &lt;title>ProX XForms Package&lt;/title>
+            &lt;description>
+               &lt;p>XForms for selecting and configuring a process, based on a ProX blueprint.&lt;/p>
+            &lt;/description>
+         &lt;/metadata>
+         &lt;locator 
+            xlink:href="urn:prox:xform:0.1" 
+            type="main" 
+            id="id-loc-xform"/>
+      &lt;/package>
+   &lt;/packages>
+&lt;/processes>
+</programlisting>
+                <para>The point here is that this could easily be (mostly) all that is required;
+                    while additional configuration may be useful, it is perfectly feasible to limit
+                    the choices to a straight-forward wizard-like behaviour.</para>
+            </section>
+        </section>
+        <section xml:id="section_h2y_zwy_wj">
+            <title>Configuration and Parameter Handling</title>
+            <para>The ProX RNC schema includes a set of attributes used by any element that may
+                offer configuration choices by the user:</para>
+            <programlisting>choice.att =
+    attribute choice { "yes" | "no" }?,  # [ a:defaultValue = "no" ] 
+    attribute group { xsd:IDREF }?,
+    attribute ctype { "boolean" | "list" | "list1" | xsd:string | xsd:decimal | xsd:date }?,
+    attribute req { "yes" | "no" }?</programlisting>
+            <para>The <code>choice</code> attribute indicates if the parameter is configurable,
+                while <code>ctype</code> indicates the type of user input required. </para>
+            <para>The <code>group</code> attribute is an <code>IDREF</code> to a related parameter
+                and indicates a dependency to that parameter. For example, a parameter may be used
+                to set the table of contents depth, but it is useless if another parameter has
+                turned off the TOC generation. The first parameter needs to include a
+                    <code>group</code>
+                <code>IDREF</code> to the second so only relevant options are made available when
+                configuring a ProX blueprint. </para>
+            <para>The configuration options available in a <code>cmdline</code> are made available
+                to the user by defining them as choices in the ProX blueprint. For example, logging
+                alternatives might be made available like so:</para>
+            <programlisting>&lt;engine-config>
+    &lt;config 
+        type="pkg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        xlink:href="calabash-config.xml"/>
+    &lt;log-style 
+        id="id-log" 
+        choice="yes" 
+        ctype="list1" 
+        style="off"/>
+    &lt;log-style 
+        group="id-log" 
+        choice="yes" 
+        ctype="list1" 
+        style="plain"/>
+&lt;/engine-config></programlisting>
+            <para>Here, the logging options are made available as a <quote>list1</quote>, much like
+                a <quote>radio button</quote> list for a user interface. Note the <code>id</code>
+                and <code>group</code> attributes in the first and second <code>log-style</code>
+                elements: the <code>group</code> attribute is an <code>IDREF</code> that references
+                the <code>id</code> in the first. The choice that contains the <code>id</code>
+                attribute referenced by the other is the default.</para>
+            <para>A true/false <code>schema-aware</code> option may only have two values and can
+                therefore be represented like this:</para>
+            <programlisting>&lt;schema-aware process="true" choice="yes" ctype="boolean"/></programlisting>
+            <para>Here, a default value is given in the <code>process</code> attribute. Note the
+                    <code>ctype</code> attribute that <emphasis>identifies the type to be used when
+                    representing the choice for the user</emphasis>. The XForm template will show
+                this as a checkbox in normal circumstances.</para>
+            <para>Data types are necessary when representing XSLT parameter alternatives. This one
+                decides if an index should be generated by a PDF publishing pipeline:</para>
+            <programlisting>&lt;!-- Index generation -->
+&lt;param 
+    choice="yes" 
+    ctype="boolean" 
+    id="param-2013-4-9-16-53-8-39562387-">
+    &lt;port id="port-2013-4-9-16-53-8-39562387-2">xslt-params&lt;/port>
+    &lt;name id="name-2013-4-9-16-53-8-39562387-">generate.index&lt;/name>
+    &lt;value 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        type="string"
+        xlink:type="simple" 
+        id="value-2013-4-9-16-53-8-39562387-2">false&lt;/value>
+&lt;/param></programlisting>
+            <para><code>choice="yes"</code> means that this is a user-configurable option, with the
+                default given by the contents. This will render as a checkbox (see <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-param-config"/>), as
+                    <code>param/@ctype="boolean"</code> is used to bind it to an
+                    <code>xs:boolean</code> in the XForm. </para>
+            <para>These two parameters decide if and how a TOC will be generated:</para>
+            <programlisting>&lt;!-- TOC Generation -->
+&lt;param 
+    choice="yes" 
+    ctype="boolean"
+    id="param-2013-4-9-16-53-8-39514778-2">
+    &lt;port id="port-2013-4-9-16-53-8-9653444-4">xslt-params&lt;/port>
+    &lt;name id="name-2013-4-9-16-53-8-1928364-2">create.toc&lt;/name>
+    &lt;value 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        type="string"
+        xlink:type="simple" 
+        id="value-2013-7-10-16-53-8-764625737-3">true&lt;/value>
+&lt;/param>
+&lt;!-- TOC Depth -->
+&lt;param 
+    choice="yes" 
+    ctype="list1"
+    id="param-2013-4-9-16-53-8-2385485-2"
+    group="value-2013-7-10-16-53-8-764625737-3">
+    &lt;port id="port-2013-7-10-16-34-8-9283444-4">xslt-params&lt;/port>
+    &lt;name id="name-2013-7-10-16-50-3-1946564-2">toc.depth&lt;/name>
+    &lt;value 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        type="string"
+        xlink:type="simple" 
+        id="value-2013-7-10-16-53-8-764625737-4">2&lt;/value>
+    &lt;value
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        id="value-13-07-10-12345-1" 
+        type="string">1&lt;/value>
+    &lt;value
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        id="value-13-07-10-12345-2" 
+        type="string">3&lt;/value>
+&lt;/param></programlisting>
+            <para>The first <code>param</code> is an ON/OFF switch for TOC generation (hence the
+                    <code>@ctype="boolean"</code>), while the second allows choosing the number of
+                section levels to be included in the TOC. Since the second <code>param</code> would
+                be meaningless without the first being set to <quote>true</quote>, the second
+                    <code>param</code> includes a <code>group</code> attribute that is an
+                    <code>IDREF</code> to the first <code>param</code>, which means that the second
+                value depends on the first. The <code>group</code> reference is used in the XForm to
+                show or hide controls, depending on their relevance.</para>
+            <para>The second <code>param</code> has <code>ctype="list1"</code>, which means that the
+                listed <code>value</code>s should be represented as a <code>list1</code> in the
+                XForm. The first is used as default when processing.</para>
+            <note>
+                <para>When compiling the package that lists a stylesheet's participating module, the
+                    package needs to always include definitions for any parameters that are not
+                    explicitly set by the stylesheets. </para>
+            </note>
+        </section>
+        <section xml:id="section_hzm_by3_xj">
+            <title>System Context</title>
+            <para>The ProX blueprint configuration described above only tells how to configure a
+                process, not what XML if any it processes, other than indirectly. It tells
+                    <emphasis>how</emphasis> to do something, not <emphasis>what</emphasis> it
+                should apply the process to. Of course, for any process involving an XML file to be
+                processed, there will be a matching input in the pipeline, but the point here is
+                that the XML is only identified at runtime, <emphasis>if</emphasis> it is identified<footnote>
+                    <para>Some processes may not need an XML file to apply the process to.</para>
+                </footnote>.</para>
+            <para>The system where proX is being implemented allows for two basic workflows: either
+                the process is configured first and the XML to be processed is pointed out later, or
+                the other way around. The first is useful for new processes and for any process that
+                does not involve an XML file. If an XML file needs to be selected, it can be located
+                by the system using its in-place browsing capabilities after the ProX instance is
+                configured and saved, that is, when a publishing process has been fully configured
+                and saved.</para>
+            <para>Today, the system uses something called a <quote>configuration</quote> to point
+                out the XML to be processed. The configuration is an XML file that points out a root
+                XML file, including language and version, along with some system-specific metadata,
+                and then publishes it using an XSL-FO stylesheet<footnote>
+                    <para>The system will fetch any XML modules linked by the root XML, after wich a
+                        normalisation process is carried out, and only then are the FO stylesheets
+                        applied.</para>
+                </footnote>: </para>
+            <programlisting>&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;CassisTIConfiguration>
+  &lt;Versioning>-1&lt;/Versioning>
+  &lt;VersionInfo />
+  &lt;PortalID>0&lt;/PortalID>
+  &lt;ConfigURN>urn:x-cassis:r1:cos:00002216:sv-SE:0.2&lt;/ConfigURN>
+  &lt;ConfigID>2216&lt;/ConfigID>
+  &lt;ConfigVersionID>-1&lt;/ConfigVersionID>
+  &lt;ForProcessMgr>true&lt;/ForProcessMgr>
+  &lt;Name>Balisage 2012 Whitepaper&lt;/Name>
+  &lt;NoOfNamingFields>0&lt;/NoOfNamingFields>
+  &lt;NamingFields />
+  &lt;Code />
+  &lt;Description>Balisage 2012 whitepaper&lt;/Description>
+  &lt;ThumbNailImage />
+  &lt;Modules />
+  &lt;XmlModuleID>2112&lt;/XmlModuleID>
+  &lt;XmlModuleFolderID>83&lt;/XmlModuleFolderID>
+  &lt;XmlModuleName>Bal2012nord0128.xml&lt;/XmlModuleName>
+  &lt;XmlModuleURN>urn:x-cassis:r1:cos:00002112:sv-SE:0.43&lt;/XmlModuleURN>
+  &lt;XmlModuleLanguageID>2&lt;/XmlModuleLanguageID>
+  &lt;XmlModuleVersionMajor>0&lt;/XmlModuleVersionMajor>
+  &lt;XmlModuleVersionMinor>43&lt;/XmlModuleVersionMinor>
+  &lt;LanguageID>2&lt;/LanguageID>
+  &lt;VersionMajor>0&lt;/VersionMajor>
+  &lt;VersionMinor>2&lt;/VersionMinor>
+  &lt;Applicabilities />
+  &lt;Applics />
+&lt;/CassisTIConfiguration></programlisting>
+            <para>With ProX-based pipeline processing added, the XSL-FO is just one of several
+                stylesheets run by the pipelines, and so, if a system configuration pointing out a
+                root XML file is opened first, the user must <emphasis>associate</emphasis> a saved
+                process with the configuration or configure a new one before the XML can be
+                processed.</para>
+            <para>The <quote>configuration</quote> files that point out the root XML and some
+                system-specific metadata now also list each and every saved ProX instance (basically
+                an instance of the blueprint code in <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="section_n4d_s1g_xj"/>)
+                associated with that specific configuration, including a default PDF publishing
+                instance, so there will be at least one process to use. New ones can be defined
+                later.</para>
+            <programlisting>&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;CassisTIConfiguration>
+  ...
+  &lt;Description>Balisage 2012 whitepaper&lt;/Description>
+  ...
+  &lt;Processes>
+    &lt;Process>
+      &lt;!-- Blueprint -->
+      &lt;ProXBlueprint>
+        &lt;ID>&lt;!-- System ID -->&lt;/ID>
+        &lt;URN>&lt;!-- Blueprint URN -->&lt;/URN>
+        &lt;ProXName>&lt;!-- Name of blueprint -->&lt;/ProXName>
+      &lt;/ProXBlueprint>
+      &lt;!-- Instances associated with config, selectable by user -->
+      &lt;ProXInstance>
+        &lt;ID>&lt;/ID>
+        &lt;URN>urn:x-cassis:r1:cos:00008295:en-GB:0.5&lt;/URN>
+        &lt;ProXName>PDF Publishing&lt;/ProXName>
+      &lt;/ProXInstance>
+    &lt;/Process>
+    ...
+  &lt;/Processes>
+&lt;/CassisTIConfiguration></programlisting>
+            <para>The configuration file is used by the system by something called <emphasis>Process
+                    Manager</emphasis> as a shortcut for processing XML, including translation
+                handling of the XML. I tend to liken it to a postit note placed on a specific XML
+                document (comprising of several modules in specific versions), describing a specific
+                process such as the PDF publishing for customer delivery of a specific version and
+                translation of the document. For more on this, see <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-balVol08-Nordstrom01"
+                />.</para>
+        </section>
+    </section>
+    <section xml:id="section_rvp_fr5_wj">
+        <title>XForms: Generating the GUI, Pt 2</title>
+        <para>I set out to do the user interface with XForms, but as promising the standard was for
+            me, getting my head around the MVC model was not easy.</para>
+        <para>My first hypothesis was to read the relevant nodes from the blueprint, list the
+                <code>process</code> metadata's <code>title</code> contents in a
+                <code>select1</code>
+            <code>itemset</code>, select one and copy it to the target instance, then repeat for the
+                <code>pipeline</code>, <code>cmdline</code> and <code>package</code> choices. This
+            was a wizard-like approach, with every wizard step showing and hiding the appropriate
+            configurations in a switch/case form.</para>
+        <para>Having banged my head against the wall trying a <code>copy</code> inside an
+                <code>itemset</code>, Mark Lawson pointed out that <emphasis>XSLTForms</emphasis>
+            does not support <code>copy</code> and suggested a far easier way. In a somewhat
+            shortened form:</para>
+        <programlisting>
+&lt;?xml-stylesheet href="xsltforms/xsltforms-1.0RC/xsltforms/xsltforms.xsl" type="text/xsl"?>
+&lt;?xsltforms-options debug="no"?>
+&lt;html 
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xf="http://www.w3.org/2002/xforms">
+    &lt;head>
+        &lt;link type="text/css" rel="stylesheet" href="style.css"/>
+        &lt;title>Cassis Process Configuration&lt;/title>
+        
+        &lt;!-- Model -->
+        &lt;xf:model>
+            &lt;!-- Temp data from the selections -->
+            &lt;xf:instance id="scratchpad">
+                &lt;data xmlns="">
+                    &lt;theprocess/>
+                    &lt;thepipeline/>
+                    &lt;thecmds/>
+                    &lt;thepackages/>
+                    &lt;commonpackages/>
+                &lt;/data>
+            &lt;/xf:instance>
+            
+            &lt;!-- Target for built process -->
+            &lt;xf:instance id="mytarget">
+                &lt;data xmlns="">
+                    &lt;processes> &lt;/processes>
+                &lt;/data>
+            &lt;/xf:instance>
+            
+            &lt;!-- Source ProX Blueprint -->
+            &lt;xf:instance 
+                src="prox-blueprint.xml" 
+                id="mysource"/>
+            &lt;xf:bind 
+                type="xs:boolean" 
+                nodeset="instance('mysource')//param[@ctype='boolean']/value"/>
+            
+            &lt;!-- Set the list defaults to be first values in the ProX instance -->
+            &lt;xf:action ev:event="xforms-ready">
+                &lt;xf:setvalue 
+                    ref="theprocess" 
+                    value="instance('mysource')/process[1]/@id"/>
+                &lt;xf:setvalue 
+                    ref="thepipeline" 
+                    value="instance('mysource')/process[1]/pipelines/pipeline[1]/@id"/>
+                &lt;xf:setvalue 
+                    ref="thecmds" 
+                    value="instance('mysource')/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[1]/@id"/>
+                &lt;xf:setvalue 
+                    ref="thepackages"/>
+                &lt;xf:setvalue 
+                    ref="commonpackages" 
+                    value="instance('mysource')/processes/packages"/>
+            &lt;/xf:action>
+            
+            &lt;!-- Save the configured proX instance -->
+            &lt;xf:submission 
+                ref="instance('mytarget')/processes" 
+                replace="instance" 
+                method="put" 
+                action="prox-instance.xml" 
+                id="save"/>
+        &lt;/xf:model>
+    &lt;/head>
+    &lt;body>
+        &lt;h3>Process Configuration&lt;/h3>
+        &lt;table>
+            &lt;tr>
+                &lt;td>
+                    &lt;!-- Process -->
+                    &lt;fieldset>
+                        &lt;legend>Process&lt;/legend>
+                        &lt;div class="block-form">
+                            &lt;xf:select1 
+                                appearance="compact" 
+                                incremental="false" 
+                                ref="theprocess">
+                                &lt;xf:label/>
+                                &lt;xf:item id="item-proc-dummy">
+                                    &lt;xf:label>Select a process&lt;/xf:label>
+                                    &lt;xf:value>Nothing&lt;/xf:value>
+                                &lt;/xf:item>
+                                &lt;xf:itemset 
+                                    id="item-proc" 
+                                    nodeset="instance('mysource')/process">
+                                    &lt;xf:label ref="./metadata/title"/>
+                                    &lt;xf:value ref="./@id"/>
+                                &lt;/xf:itemset>
+                                &lt;xf:setvalue 
+                                    ref="../thepipeline" 
+                                    ev:event="DOMFocusIn" 
+                                    value="'Nothing'"/>
+                            &lt;/xf:select1>
+                        &lt;/div>
+                    &lt;/fieldset>
+                &lt;/td>
+                &lt;td>
+                    &lt;!-- Pipeline -->
+                    &lt;fieldset>
+                        &lt;legend>Pipeline&lt;/legend>
+                        &lt;div class=" block-form">
+                            &lt;xf:select1 
+                                appearance="compact" 
+                                incremental="false" 
+                                ref="thepipeline" 
+                                id="id-pipe">
+                                &lt;xf:label/>
+                                &lt;xf:item id="item-pipe-dummy">
+                                    &lt;xf:label>Select a pipeline&lt;/xf:label>
+                                    &lt;xf:value>Nothing&lt;/xf:value>
+                                &lt;/xf:item>
+                                &lt;xf:itemset 
+                                    id="item-pipe" 
+                                    nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline">
+                                    &lt;xf:label ref="./metadata/title"/>
+                                    &lt;xf:value ref="@id"/>
+                                &lt;/xf:itemset>
+                                &lt;xf:setvalue 
+                                    ref="../thecmds" 
+                                    ev:event="DOMFocusIn" 
+                                    value="'Nothing'"/>
+                            &lt;/xf:select1>
+                        &lt;/div>
+                    &lt;/fieldset>
+                &lt;/td>
+                &lt;td>
+                    &lt;!-- Commands -->
+                    &lt;fieldset>
+                        &lt;legend>Output&lt;/legend>
+                        &lt;div class="block-form">
+                            &lt;xf:select1 
+                                appearance="compact" 
+                                incremental="false" 
+                                ref="thecmds" 
+                                id="id-cmd">
+                                &lt;xf:label/>
+                                &lt;xf:item id="item-cmd-dummy">
+                                    &lt;xf:label>Select output options&lt;/xf:label>
+                                    &lt;xf:value>Nothing&lt;/xf:value>
+                                &lt;/xf:item>
+                                &lt;xf:itemset 
+                                    id="item-cmd" 
+                                    nodeset="instance('mysource')/process[@id = instance('scratchpad')/theprocess]/pipelines/pipeline[@id = instance('scratchpad')/thepipeline]/cmdlines/cmdline">
+                                    &lt;xf:label ref="metadata/title"/>
+                                    &lt;xf:value ref="@id"/>
+                                &lt;/xf:itemset>
+                            &lt;/xf:select1>
+                        &lt;/div>
+                    &lt;/fieldset>
+                    
+                &lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td class="debug">
+                    &lt;xf:output ref="instance('mysource')//process[@id=instance('scratchpad')/theprocess]/metadata/title">
+                        &lt;xf:label>Selected: &lt;/xf:label>
+                    &lt;/xf:output>
+                &lt;/td>
+                
+                &lt;td class="debug">
+                    &lt;xf:output ref="instance('mysource')//pipeline[@id=instance('scratchpad')/thepipeline]/metadata/title">
+                        &lt;xf:label>Selected: &lt;/xf:label>
+                    &lt;/xf:output>
+                &lt;/td>
+                &lt;td class="debug">
+                    &lt;xf:output ref="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]/metadata/title">
+                        &lt;xf:label>Selected: &lt;/xf:label>
+                    &lt;/xf:output>
+                &lt;/td>
+            &lt;/tr>
+        &lt;/table>
+        &lt;xf:trigger>
+            &lt;xf:label>Save&lt;/xf:label>
+            &lt;xf:action ev:event="DOMActivate">
+                &lt;xf:delete nodeset="instance('mytarget')/processes/process"/>
+                &lt;xf:delete nodeset="instance('mytarget')/processes/packages"/>
+                &lt;xf:insert context="instance('mytarget')/processes" origin="instance('mysource')/process[@id = instance('scratchpad')/theprocess]"/>
+                &lt;xf:insert context="instance('mytarget')/processes" origin="instance('mysource')/packages" if="instance('mysource')/packages"/>
+                &lt;xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[@id != instance('scratchpad')/thepipeline]"/>
+                &lt;xf:delete nodeset="instance('mytarget')/processes/process[1]/pipelines/pipeline[1]/cmdlines/cmdline[@id != instance('scratchpad')/thecmds]"/>
+                &lt;xf:send submission="save"/>
+            &lt;/xf:action>
+        &lt;/xf:trigger>
+    &lt;/body>
+&lt;/html></programlisting>
+        <para>Note the following:<itemizedlist>
+                <listitem>
+                    <para>The <code>scratchpad</code> instance, containing IDs of the selected ProX
+                        components.</para>
+                </listitem>
+                <listitem>
+                    <para>The <code>target</code> instance and the <code>trigger</code> that writes
+                        to it near the end.</para>
+                </listitem>
+                <listitem>
+                    <para>And, of course, the <code>select1</code>s handling the
+                            <code>process</code>, <code>pipeline</code> and <code>cmdline</code>
+                        <code>ID</code>s, respectively.</para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        <para>This produces a GUI that writes the selected <code>id</code> to the scratchpad,
+            refreshing the next <code>select1</code>
+            <code>itemset</code>, until done, like so:</para>
+        <figure xml:id="figure_hxq_rnj_xj">
+            <title>The Basic ProX GUI</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="img/Bal2013nord-2-012813.jpg" width="300px"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>The result is saved to a target ProX instance: <code>instance('mysource')/process[@id
+                = instance('scratchpad')/theprocess]</code> is copied using <code>insert</code>. The
+            pipelines and command lines that do <emphasis>not</emphasis> match the IDs in the
+            scratchpad instance, <code>pipeline[@id != instance('scratchpad')/thepipeline]</code>
+            and <code>cmdline[@id != instance('scratchpad')/thecmds]</code>, respectively, are then
+            deleted from the target. </para>
+        <section xml:id="section_psw_1t5_wj">
+            <title>Single-Choice Problems</title>
+            <para>The first working GUI looked like this:</para>
+            <figure>
+                <title>Bal2013nord-2-012812.jpg</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012814.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>With two or more of each choice, it worked perfectly, but if only single choice
+                was available, this resulted in the IDs not being updated in the scratchpad
+                instance:</para>
+            <figure xml:id="figure_dhq_cd1_xj">
+                <title>Pipeline ID Not Updated</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012815.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>Note that while the process is selected and its ID listed, the pipeline ID listed
+                in the scratchpad debug output (below the form) belongs to a previous selection
+                rather than the apparently selected one. The <code>cmdline</code>
+                <code>ID</code> in the scratchpad also belongs to a previous selection, but the
+                current <code>cmdline</code> selection does not show any values at all. If the
+                current state was written to a process instance, the selections would be wrong and
+                the process would fail.</para>
+            <para>This happened because the selected <code>process</code> contained only a single
+                    <code>pipeline</code> and value changed-events do not fire as expected in
+                single-item lists. </para>
+            <para>Better is to add a <emphasis>static</emphasis>
+                <code>item</code>s before the <code>itemset</code>s, like this:</para>
+            <programlisting>&lt;xf:select1 
+    appearance="compact" 
+    incremental="false" 
+    ref="theprocess">
+    &lt;xf:label/>
+    &lt;xf:item id="item-proc-dummy">
+        &lt;xf:label>Select a process&lt;/xf:label>
+        &lt;xf:value>Nothing&lt;/xf:value>
+    &lt;/xf:item>
+    &lt;xf:itemset ...>
+        ...
+    &lt;/xf:itemset>
+    ...
+&lt;/xf:select1></programlisting>
+            <para>This introduces a <quote>dummy</quote> value, ensuring that the form is updated
+                regardless of the number of items. To make sure that the selection of a
+                    <quote>parent</quote> forces the update of the <quote>child</quote>, you set the
+                value of the <quote>child</quote> to a dummy value, forcing the user to actively
+                choose an option. For example, if you change the pipeline selection, this makes sure
+                that the next option in line, the command line list, is updated with a static
+                value:</para>
+            <programlisting>&lt;xf:select1 ...>
+    &lt;xf:label/>
+    ...
+    &lt;xf:setvalue 
+        ref="../thecmds" 
+        ev:event="DOMFocusIn" 
+        value="'Nothing'"/>
+&lt;/xf:select1></programlisting>
+            <para>This setup has all kinds of advantages: styling becomes easier (a nonexistent list
+                can't be easily fixed in the CSS, as far as I know; see <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="figure_dhq_cd1_xj"/>),
+                subforms that configure aspects of the selected group can be shown, and conditions
+                for saving the configured process can be imposed, not allowing a Save before all
+                selections have been made.</para>
+        </section>
+        <section>
+            <title>User-configurable Parameters</title>
+            <para>The user-configurable stylesheet parameters are set in the <code>input</code>
+                structure (see <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="section_qrx_nxg_wj"/>) that links to the package. Here's a complete
+                    <code>input</code> for a stylesheet used by a PDF publishing pipeline:</para>
+            <programlisting>&lt;input choice="no" id="input-2013-4-9-16-53-8-39562387-1">
+                        &lt;port id="port-2013-4-9-16-53-8-39562387-1">stylesheet&lt;/port>
+                        &lt;value 
+                           xmlns:xlink="http://www.w3.org/1999/xlink" 
+                           type="pkg"
+                           xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xslfo-cosml"
+                           xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-1"
+                           xlink:title=" XSL-FO Package for COSML PDF Converts COSML documents 
+                                         to XSL-FO format for COS PDF layout "/>
+                        &lt;params id="params-2013-4-9-16-53-8-39562387-">
+                           &lt;!-- Index generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean" 
+                              id="param-2013-4-9-16-53-8-39562387-">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-2">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-">generate.index&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-4-9-16-53-8-39562387-2">false&lt;/value>
+                           &lt;/param>
+                           &lt;!-- XEP Extensions -->
+                           &lt;param 
+                              choice="no" 
+                              id="param-2013-4-9-16-53-8-39562387-1">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-3">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-1">xep.extensions&lt;/name>
+                              &lt;value xmlns:xlink="http://www.w3.org/1999/xlink" type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-3"
+                                 >0&lt;/value>
+                           &lt;/param>
+                           &lt;!-- XSL-FO Bookmark Generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39562387-2">
+                              &lt;port id="port-2013-4-9-16-53-8-39562387-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-39562387-2">xslfo.bookmarks&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" id="value-2013-4-9-16-53-8-39562387-4">true&lt;/value>
+                           &lt;/param>
+                           &lt;!-- TOC Generation -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="boolean"
+                              id="param-2013-4-9-16-53-8-39514778-2">
+                              &lt;port id="port-2013-4-9-16-53-8-9653444-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-4-9-16-53-8-1928364-2">create.toc&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-3">true&lt;/value>
+                           &lt;/param>
+                           &lt;!-- TOC Depth -->
+                           &lt;param 
+                              choice="yes" 
+                              ctype="list1"
+                              id="param-2013-4-9-16-53-8-2385485-2"
+                              group="value-2013-7-10-16-53-8-764625737-3">
+                              &lt;port id="port-2013-7-10-16-34-8-9283444-4">xslt-params&lt;/port>
+                              &lt;name id="name-2013-7-10-16-50-3-1946564-2">toc.depth&lt;/name>
+                              &lt;value 
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                 type="string"
+                                 xlink:type="simple" 
+                                 id="value-2013-7-10-16-53-8-764625737-4">2&lt;/value>
+                              &lt;value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-1" 
+                                 type="string">1&lt;/value>
+                              &lt;value
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 id="value-13-07-10-12345-2" 
+                                 type="string">3&lt;/value>
+                           &lt;/param>
+                        &lt;/params>
+                     &lt;/input></programlisting>
+            <para>Note that not all of the parameters are made available as choices
+                    (<code>choice="no"</code>).</para>
+            <para>Having the parameter definitions include data types greatly simplifies generating
+                a GUI. As the values are not usually typed in the stylesheets that use them, the
+                proX blueprint author must take care to define data types for every parameter made
+                available as a user-configurable option.</para>
+            <para>The configuration options are shown or hidden using a grouping of forms in
+                combination with CSS that hides a disabled group in the XForm<footnote>
+                    <para>Provided that they are made available to the user in the first
+                        place.</para>
+                </footnote>. The following group generates controls for a selected command line
+                    (<code>cmdline</code>). It is hidden if there are no user-configurable
+                parameters for that <code>cmdline</code>.</para>
+            <programlisting>&lt;xf:group 
+    ref="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]//param[@choice='yes' 
+         and @ctype='boolean']">
+    &lt;div class="block-form">
+        &lt;fieldset class="config">
+            &lt;legend>Configuration&lt;/legend>
+            
+            &lt;xf:repeat 
+                id="b-ctrl"
+                nodeset="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]//param[@choice='yes' and @ctype='boolean']">
+                &lt;xf:input 
+                    ref="value" 
+                    appearance="full">
+                    &lt;xf:label>
+                        &lt;xf:output ref="../name"/>
+                    &lt;/xf:label>
+                &lt;/xf:input>
+            &lt;/xf:repeat>
+            
+            &lt;xf:repeat 
+                nodeset="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]//param[@ctype='list1' and (not(@group) or (@group=//param[@choice='yes']/@id))]">
+                &lt;xf:select1 
+                    appearance="minimal" 
+                    incremental="false" 
+                    ref="value">
+                    &lt;xf:label>
+                        &lt;xf:output ref="../name"/>
+                    &lt;/xf:label>
+                    &lt;xf:itemset nodeset="instance('mysource')//cmdline[@id=instance('scratchpad')/thecmds]//param[@ctype='list1' and (not(@group) or (@group=//param[@choice='yes']/@id))]/value">
+                        &lt;xf:label ref="."/>
+                        &lt;xf:value ref="@id"/>
+                    &lt;/xf:itemset>
+                &lt;/xf:select1>
+            &lt;/xf:repeat>
+        &lt;/fieldset>
+    &lt;/div>
+&lt;/xf:group></programlisting>
+            <para>The current GUI design gathers all configurable options within the
+                    <code>cmdline</code> group rather than having any of them appear when the
+                pipeline is selected. This is a design choice rather than a technical one; see <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="section_sqy_ms5_wj"
+                />.</para>
+            <figure xml:id="id-param-config">
+                <title>Parameter Configuration</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="img/Bal2013nord-2-012816.jpg" width="300px"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <para>The above is able to generate boolean and single-choice list controls. Of course,
+                other controls may be added, for example, to select a date or enter a text string to
+                be included in the process output.</para>
+        </section>
+    </section>
+    <section xml:id="section_igv_5t5_wj">
+        <title>Initiating and Running ProX</title>
+        <para>Running the overall process, that is, initiating and running the ProX XForms template,
+            saving the resulting ProX instance and converting it to a shell script or batch file (or
+            some other file executing a pipeline engine) involves the following:<orderedlist>
+                <listitem>
+                    <para>Locate and fetch the ProX blueprint. Normalise, if necessary.</para>
+                </listitem>
+                <listitem>
+                    <para>Locate and fetch all files that are part of the processing as defined by
+                        the blueprint, including the input XML, stylesheets, XProc, XForms XHTML,
+                        configuration files, etc. Map their URNs to temporary URLs in a resource map
+                        XML file (see <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                            linkend="id-resource-map"/>).</para>
+                </listitem>
+                <listitem>
+                    <para>Generate any runtime URLs for the target files for the process, as defined
+                        by the blueprint. Map these in the resource map XML, adding the ProX IDs
+                        (see <xref xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-targets"
+                        />) where needed.</para>
+                </listitem>
+                <listitem>
+                    <para>Preprocess the XForms XHTML, adding the URL to the ProX blueprint and
+                        other information required by the XForm.</para>
+                </listitem>
+                <listitem>
+                    <para>Open the the XForms XHTML.</para>
+                </listitem>
+                <listitem>
+                    <para>Make choices in the XForm as necessary. Save (and close) the a ProX
+                        instance. </para>
+                </listitem>
+                <listitem>
+                    <para>Replace any URNs in the source XML to be processed with matching temporary
+                        URNs.</para>
+                </listitem>
+                <listitem>
+                    <para>Add runtime information to the ProX instance (input XML, target URLs,
+                        etc). </para>
+                </listitem>
+                <listitem>
+                    <para>Convert the ProX instance to a shell script.</para>
+                </listitem>
+                <listitem>
+                    <para>Run the script.</para>
+                </listitem>
+                <listitem>
+                    <para>Capture the output.</para>
+                </listitem>
+            </orderedlist></para>
+        <para>All of the above is handled by a wrapper XProc pipeline (<xref
+                xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-wrapper"/>).</para>
+        <section xml:id="id-resource-map">
+            <title>The Resource Map</title>
+            <para>When processing an XML file, the system needs to list all files required by the
+                wrapper pipeline process and the resulting child pipeline process in a
+                    <emphasis>resource map XML file</emphasis>, mapping their URNs to temporary
+                URLs. This includes the XML to be processed, of course, but also any images and
+                other non-XML data. Every XSLT stylesheet required for the processing (for the
+                wrapper process as well as the child process) must be listed, as must all XProc
+                scripts and whatever files they require.</para>
+            <para>Also, the system must generate temporary URLs (and, depending on the result, URNs)
+                for any resulting files.</para>
+            <para>The resource map is then used as the sole input by the wrapper pipeline
+                process.</para>
+            <para>All of these files are either listed directly in the ProX blueprint (when known),
+                or pointed out indirectly, using the attribute <citation>type</citation> set to
+                    <quote>external</quote>. A ProX process starts with the generation of a basic
+                resource map file, using a simple XSLT stylesheet applied to the ProX
+                blueprint.</para>
+            <para>The resource map looks like this:</para>
+            <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;resource-map>
+   
+   &lt;!-- Source Modules Listed here -->
+   &lt;docs>
+      
+      &lt;!-- NOTE: The doc lists can contain duplicate modules, with the same URN/URL
+           pairs. The ProX wrapper XProc and XSLT will handle them. -->
+      
+      &lt;!-- Document #1 -->
+      &lt;!-- One doc, with root and modules incl images -->
+      &lt;doc id="">
+         
+         &lt;!-- Root document from Process Manager configuration -->
+         &lt;!-- ProX instance needs this value -->
+         &lt;!-- //*/@type=''external' and //*/@input-type='doc-root' -->
+         &lt;root>
+            &lt;resource>
+               &lt;urn>urn:testroot&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/test-root.xml&lt;/url>
+               &lt;type>doc-root&lt;/type>
+               &lt;prox-id>value-2013-4-9-16-53-8-39562387-&lt;/prox-id>
+            &lt;/resource>
+         &lt;/root>
+         
+         &lt;!-- All modules linked from root or its descendants -->
+         &lt;!-- XML, images, etc -->
+         &lt;modules>
+            &lt;resource>
+               &lt;urn>urn:image1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/image3.jpg&lt;/url>
+               &lt;type>jpg&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset1.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset2.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset3&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset3.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset4&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset4.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:block-inset1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/block-inset1.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+         &lt;/modules>    
+      &lt;/doc>
+      
+      
+      &lt;!-- Document #2 -->
+      &lt;doc id="">
+         
+         &lt;!-- Root document from Process Manager configuration -->
+         &lt;!-- ProX instance needs this value -->
+         &lt;!-- //*/@type=''external' and //*/@input-type='doc-root' -->
+         &lt;root>
+            &lt;resource>
+               &lt;urn>urn:testroot&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/test-root.xml&lt;/url>
+               &lt;type>doc-root&lt;/type>
+               &lt;prox-id>id-html-docroot&lt;/prox-id>
+            &lt;/resource>
+         &lt;/root>
+         
+         &lt;!-- All modules linked from root or its descendants -->
+         &lt;!-- XML, images, etc -->
+         &lt;modules>
+            &lt;resource>
+               &lt;urn>urn:image1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/image3.jpg&lt;/url>
+               &lt;type>jpg&lt;/type>
+               &lt;transl>1&lt;/transl>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset1.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset2.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset3&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset3.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:inset4&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/inset4.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:block-inset1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/block-inset1.xml&lt;/url>
+               &lt;type>xml&lt;/type>
+            &lt;/resource>
+         &lt;/modules>    
+      &lt;/doc>
+      
+   &lt;/docs>
+   
+   
+   &lt;!-- Runtime targets -->
+   &lt;targets>
+      &lt;resource>
+         &lt;urn>URN-FOR-OUTPUT&lt;/urn>
+         &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/my-pdf-internal-file.pdf&lt;/url>
+         &lt;type>primary&lt;/type>
+         &lt;prox-id>value-2013-4-9-16-53-8-39562387-6&lt;/prox-id>
+      &lt;/resource>
+      &lt;resource>
+         &lt;urn>URN2-FOR-OUTPUT&lt;/urn>
+         &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/my-pdf-formal-file.pdf&lt;/url>
+         &lt;type>primary&lt;/type>
+         &lt;prox-id>value-2013-4-9-16-53-8-39562387-10&lt;/prox-id>
+      &lt;/resource>
+      &lt;resource>
+         &lt;urn>URN-FOR-XREF-XHTML-LOG&lt;/urn>
+         &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/my-xref-check.htm&lt;/url>
+         &lt;type>primary&lt;/type>
+         &lt;prox-id>id-value-xref-htm&lt;/prox-id>
+      &lt;/resource>
+      &lt;resource>
+         &lt;urn>URN-FOR-FILES-LIST-XML&lt;/urn>
+         &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/files.xml&lt;/url>
+         &lt;type>secondary&lt;/type>
+         &lt;prox-id>id-file-url&lt;/prox-id>
+      &lt;/resource>
+      &lt;resource>
+         &lt;urn>URN-FOR-HTM-OUT&lt;/urn>
+         &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/my-xhtml-out.htm&lt;/url>
+         &lt;type>primary&lt;/type>
+         &lt;prox-id>id-htm-out&lt;/prox-id>
+      &lt;/resource>
+   &lt;/targets>
+   
+   &lt;!-- ProX blueprint and saved instance(s) -->
+   &lt;prox>
+      &lt;!-- Blueprint used to get instance is here -->
+      &lt;blueprints>
+         &lt;resource id="id-prox-blueprint">
+            &lt;urn>URN-OF-PROX-BLUEPRINT&lt;/urn>
+            &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox-blueprint.xml&lt;/url>
+            &lt;type>&lt;/type>
+            &lt;prox-id>&lt;/prox-id>
+         &lt;/resource>    
+      &lt;/blueprints>
+      
+      &lt;!-- Saved instance to run with wrapper is here -->
+      &lt;!-- All these are associated with .config files -->
+      &lt;!-- Input to wrapper pipeline -->
+      &lt;instances>
+         &lt;resource id="id-prox-saved-instance">
+            &lt;urn>URN-OF-SAVED-PROX-INSTANCE&lt;/urn>
+            &lt;!--&lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/test-instance.xml&lt;/url>-->
+            &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox-instance.xml&lt;/url>
+            &lt;type>&lt;/type>
+            &lt;prox-id>&lt;/prox-id>
+         &lt;/resource>
+      &lt;/instances>
+   &lt;/prox>
+   
+   &lt;!-- Resources used by ProX Processes -->
+   &lt;prox-resources>
+      
+      &lt;!-- PDF Publishing XProc -->
+      &lt;package>
+         &lt;name>XProc Pipeline for Normalize, Validate
+                  and PDF&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002715:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/XProc/publish-cosml-pdf.xpl&lt;/url>
+               &lt;prox-id>locator-2013-4-10-10-32-24-12830403-&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- PDF Publishing XSL-FO, Internal -->
+      &lt;package>
+         &lt;name>XSL-FO Package for COSML PDF&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000232:sv-SE:0.6&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/cos-fo-internal.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-1&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000074:sv-SE:0.11&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/param.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-2&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000059:sv-SE:0.2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/attribute-set.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-3&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000070:sv-SE:0.15&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/layout.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-4&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000876:sv-SE:0.2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/bookmarks.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-5&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000075:sv-SE:0.17&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/static-content.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-6&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000072:sv-SE:0.10&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/meta-data.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-7&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000078:sv-SE:0.9&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/toc.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-8&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000062:sv-SE:0.9&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/body.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-9&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000233:sv-SE:0.8&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/sections.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-10&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000061:sv-SE:0.29&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/block.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-11&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000065:sv-SE:0.6&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/inline.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-12&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000071:sv-SE:0.6&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/list.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-13&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000077:sv-SE:0.6&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/table.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-14&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000079:sv-SE:0.7&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/xref.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-15&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000060:sv-SE:0.7&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/back.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-16&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000064:sv-SE:0.8&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/index.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-17&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000066:sv-SE:0.2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/inset.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-18&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000069:sv-SE:0.3&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/l10n.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-19&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000063:sv-SE:0.3&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/extension.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-20&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000785:sv-SE:0.6&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/demo.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-21&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000076:sv-SE:0.10&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/strings.xml&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-22&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000230:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/logotyp.jpg&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-23&lt;/prox-id>
+            &lt;/resource>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000426:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/tux.jpg&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-24&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- XHTML Publishing XProc -->
+      &lt;package>
+         &lt;name>XProc COSML2XHTML&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002756:sv-SE:0.2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/XProc/publish-cosml-html.xpl&lt;/url>
+               &lt;prox-id>id-xhtml-xproc&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- XHTML Publishing XSLT -->
+      &lt;package>
+         &lt;name>COSML XHTML XSLT&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002755:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/Conversions/cosml2html-ti.xsl&lt;/url>
+               &lt;prox-id>id-xhtml-xslt&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- Xref Check XProc -->
+      &lt;package>
+         &lt;name>XProc Xref Check&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002757:sv-SE:0.2&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/XProc/xref-check-cosml.xpl&lt;/url>
+               &lt;prox-id>id-xproc-xref&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- Xref Check XSLT -->
+      &lt;package>
+         &lt;name>XSLT Xref Check&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002754:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/Conversions/link-target-check-multifile.xsl&lt;/url>
+               &lt;prox-id>id-xslt-xref&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- Standard Normalize XSLT for Publishing -->
+      &lt;package>
+         &lt;name>Normalize XSLT&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00000073:sv-SE:0.4&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Cassis/FO/normalize.xsl&lt;/url>
+               &lt;prox-id>locator-2013-4-9-16-53-8-39562387-26&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- Calabash Engine Configuration -->
+      &lt;package>
+         &lt;name>Calabash Configuration&lt;/name>
+         &lt;resources>
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002745:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/xmlcalabash-1.0.9-94/conf-calabash.xml&lt;/url>
+               &lt;prox-id>id-loc-calabash-config&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+   &lt;/prox-resources>
+   
+   
+   &lt;!-- Wrapper stuff -->
+   &lt;wrapper-pipeline>
+      
+      &lt;!-- Wrapper Pipeline Resources -->
+      &lt;package>
+         &lt;name>Wrapper Pipeline Processing&lt;/name>
+         &lt;resources>
+            &lt;!-- Wrapper Pipeline -->
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002735:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox-wrapper.xpl&lt;/url>
+               &lt;prox-id>id-wrapper-xpl&lt;/prox-id>
+            &lt;/resource>
+            &lt;!-- ProX Instance Update -->
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002732:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox-fix.xsl&lt;/url>
+               &lt;prox-id>id-prox-fix&lt;/prox-id>
+            &lt;/resource>
+            &lt;!-- URN2URL for XML Input -->
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002733:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/urn2url.xsl&lt;/url>
+               &lt;prox-id>id-urn2url&lt;/prox-id>
+            &lt;/resource>
+            &lt;!-- ProX Instance Conversion to Shell Script -->
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002731:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox2shell.xsl&lt;/url>
+               &lt;prox-id>id-prox2bat&lt;/prox-id>
+            &lt;/resource>
+            &lt;!-- Engine parameters required by ProX to Shell Script conversion -->
+            &lt;resource>
+               &lt;urn>urn:x-cassis:r1:cos:00002734:sv-SE:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox2shell-config.xml&lt;/url>
+               &lt;prox-id>id-prox2shell-config&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+      
+      &lt;!-- XForm for ProX Process Configuration -->
+      &lt;package>
+         &lt;name>ProX XForm&lt;/name>
+         &lt;resources>
+            &lt;!-- XForm for proX Blueprint Handling -->
+            &lt;resource>
+               &lt;urn>urn:prox:xform:0.1&lt;/urn>
+               &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/prox-xform.xml&lt;/url>
+               &lt;prox-id>id-loc-xform&lt;/prox-id>
+            &lt;/resource>
+         &lt;/resources>
+      &lt;/package>
+   &lt;/wrapper-pipeline>
+&lt;/resource-map>
+</programlisting>
+            <para>This is a complete resource map example, matching the example ProX blueprint in
+                    <xref xmlns:xlink="http://www.w3.org/1999/xlink" linkend="section_n4d_s1g_xj"/>.
+                Note that some of the URNs are for testing purposes only, while others come from the
+                actual system.</para>
+            <para>The resource map is very much like a recipe; it lists every ingredient for every
+                ProX process.</para>
+            <section>
+                <title>Docs</title>
+                <para>The <code>docs</code> structure lists the input XML and any linked files. More
+                    than one document may be listed, and some of those documents may be duplicates
+                    because they originate from different pipelines or processes (as is the case in
+                    the above resource map). For example, the same document may be used for both PDF
+                    and web publishing in a single resulting process instance, and therefore be
+                    listed several times. The wrapper pipeline will only process distinct values,
+                    however, and there will be no physical duplicates in the temporary processing
+                    folder.</para>
+            </section>
+            <section xml:id="id-targets">
+                <title>Targets</title>
+                <para>The <code>targets</code> structure lists the runtime target URLs generated by
+                    the system. Every target URL is paired with a <emphasis>ProX ID</emphasis> so
+                    that the subsequent processing can place the right URL in the right place in the
+                    ProX instance:</para>
+                <programlisting>&lt;targets>
+    ...
+    &lt;resource>
+        &lt;urn>URN-FOR-FILES-LIST-XML&lt;/urn>
+        &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/files.xml&lt;/url>
+        &lt;type>secondary&lt;/type>
+        &lt;prox-id>id-file-url&lt;/prox-id>
+    &lt;/resource>
+    &lt;resource>
+        &lt;urn>URN-FOR-HTM-OUT&lt;/urn>
+        &lt;url>file:///home/ari/mystuff/SGML/DTD/Process-XML/refactor/my-xhtml-out.htm&lt;/url>
+        &lt;type>primary&lt;/type>
+        &lt;prox-id>id-htm-out&lt;/prox-id>
+    &lt;/resource>
+&lt;/targets></programlisting>
+                <para>Notable is that ProX defines different types of output: <quote>primary</quote>
+                    (see above) means that the file is something that the system should save, while
+                        <quote>secondary</quote> is a throwaway, a temporary URL that can be
+                    discarded. There's also <quote>log</quote>, that means that the file can be
+                    displayed by the system when the process has completed, but what happens to the
+                    file later is up to the system to decide.</para>
+            </section>
+            <section>
+                <title>ProX Resources</title>
+                <para>The <code>prox</code> and <code>prox-resources</code> structures list the ProX
+                    blueprint and the ProX (runtime) instance URN/URL pairs, and the files used by
+                    the processes described by the blueprint. The latter include any XSLT, XProc,
+                    XML, etc, required for processing, but also any other types of files, whatever
+                    they may be.</para>
+            </section>
+            <section>
+                <title>Wrapper Resources</title>
+                <para>The <code>wrapper-pipeline</code> structure lists the resources required by
+                    the wrapper pipeline, including the XForm and the wrapper pipeline
+                    itself.</para>
+            </section>
+        </section>
+        <section xml:id="id-wrapper">
+            <title>The Wrapper Pipeline</title>
+            <para>The wrapper pipeline has but one main task: to configure the child pipeline
+                process. In principle, this involves producing a ProX instance from the blueprint,
+                and then converting that instance to a shell script that is used to run the child
+                pipeline process.</para>
+            <para>The wrapper pipeline requires a single input, the resource map XML file. It
+                assumes that the process is carried out in a temporary folder, and that every
+                required file is listed in the resource map and moved by the system to the temp
+                folder; currently, there is no way for the wrapper to ask the system for a specific
+                file based on its URN, even though that functionality is planned in a future
+                version.</para>
+            <para>In a perfect world, the wrapper should be initiated by the system and then take
+                over all of the processing, including configuring<footnote>
+                    <para>The XForm needs to know the URL of the ProX blueprint to be used, and it
+                        needs to be handed a temporary URL for the runtime ProX instance that
+                        results (and a permanent new URN, if the process is saved for later).</para>
+                </footnote> and opening the XForm used to configure the Prox blueprint, wait for the
+                user to make her choices and save the resulting instance, and then continue the
+                wrapper pipeline process in preparation for the child process. In reality, there are
+                a few problems, however:</para>
+            <para>There is currently no <quote>wait step</quote> defined in the XProc spec (see Kurt
+                Cagle's proposal at <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="id-kurt-cagle-xproc"/>, or my subsequent thread at <xref
+                    xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-wait-for-user"/>). There
+                is no easy way to have a pipeline wait for user input before continuing. What comes
+                the closest is an XProc hack that looks something like this<footnote>
+                    <para>And yes, the hack does include conditionals for OS X and Windows, in
+                        addition to Linux. Know that OS X is a pain if you want to try this at
+                        home.</para>
+                </footnote>:</para>
+            <programlisting>&lt;!-- Open ProX Blueprint in Browser -->
+&lt;!-- Opens with an XForms profile in order
+         to start a separate browser instance -->
+&lt;p:choose name="browse">
+    &lt;!-- Linux -->
+    &lt;p:when test="$os='linux'">
+        &lt;p:exec 
+            cx:depends-on="fix-xform"
+            command="/usr/bin/iceweasel">
+            &lt;p:input port="source">
+                &lt;p:empty/>
+            &lt;/p:input>
+            &lt;p:with-option name="args" select="concat('-P &amp;quot;XForms&amp;quot; -no-remote ',$xform-url)"/>
+        &lt;/p:exec>
+        &lt;p:sink/>
+    &lt;/p:when>
+    
+    &lt;!-- Mac OS X -->
+    &lt;p:when test="$os='osx'">
+        ...
+    &lt;/p:when>
+    
+    &lt;!-- Windows -->
+    &lt;p:when test="$os='win'">
+        ...
+    &lt;/p:when>
+&lt;/p:choose></programlisting>
+            <para>What happens here is basically that while there is no way to tell something like
+                an <code>http-request</code> to wait, at least Calabash will happily wait for the
+                    <code>p:exec</code> to complete (meaning in the above example that the browser
+                process is killed) before continuing with the next step, <emphasis>if</emphasis> the
+                XForm is opened in a new thread; if you use your default browser and it happens to
+                be running, the wrapper won't know that it should wait. The hack also requires the
+                use of the <code>cx:depends-on</code> extension step to make sure that they'll all
+                wait until the <code>p:exec</code> is done.</para>
+            <para>After the ProX instance is saved and the browse process killed, the wrapper
+                continues by preprocessing the input XML (see below) and the ProX instance that was
+                just saved (also see below), before finally converting the instance to a shell
+                script, running that shell script, and handling any logs or reports resulting from
+                the wrapper or child processes.</para>
+            <para>When the wrapper process ends, it is up to the system to take care of the
+                resulting files and to delete any temporary content, including the temp folder where
+                the action took place.</para>
+            <section>
+                <title>URN to URL</title>
+                <para>The input XML is frequently modularised, like so: </para>
+                <figure>
+                    <title>Modularised XML</title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="img/Bal2013nord-2-012817.png" width="300px"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure>
+                <para>The system uses URNs for all of its linking, which means that whenever an XML
+                    document is published, each participating module must first be preprocessed to
+                    replace the URN-based links with temporary URL-based ones. Only then can the XML
+                    be normalised<footnote>
+                        <para><emphasis>If</emphasis> the child pipeline normalises it; the wrapper
+                            does not.</para>
+                    </footnote>.</para>
+                <para>The wrapper pipeline runs an XSLT script that maps URNs to URLs using the
+                    resource map. </para>
+            </section>
+            <section>
+                <title>ProX Fixes</title>
+                <para>A similar preprocessing step is required on the saved ProX instance. It
+                    contains a number of URNs that need to be replaced with URLs, but also several
+                    empty runtime targets that need values from the resource map.</para>
+            </section>
+            <section xml:id="section_jws_pxg_wj">
+                <title>Converting to a Shell Script</title>
+                <para>The preprocessed ProX instance is then converted to a shell script (in the
+                    case of Calabash) using an XSLT stylesheet:</para>
+                <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+    
+    &lt;xsl:output method="xml" indent="no"/>
+    &lt;xsl:strip-space 
+        elements="cmdline script engine-config inputs options params"/>
+    
+    &lt;xsl:param 
+        name="map-url"/>
+    
+    &lt;xsl:param 
+        name="os"/>
+    
+    &lt;xsl:param 
+        name="debug" 
+        select="'yes'"/>
+    
+    &lt;xsl:template match="/">
+        &lt;bat>
+            &lt;xsl:choose>
+                &lt;xsl:when test="$os='win'">
+                    &lt;xsl:text>REM Generated for Windows&lt;/xsl:text>
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                &lt;/xsl:when>
+                &lt;xsl:when test="$os='osx'">
+                    &lt;xsl:value-of
+                        select="document('prox-xslt2bat-configuration.xml')/config/calabash/shell[@os='osx']/text()"/>
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                    &lt;xsl:text># Generated for OS X&lt;/xsl:text>
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                &lt;/xsl:when>
+                &lt;xsl:when test="$os='linux'">
+                    &lt;xsl:value-of
+                        select="document('prox-xslt2bat-configuration.xml')/config/calabash/shell[@os='linux']/text()"/>
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                    &lt;xsl:text># Generated for Linux&lt;/xsl:text>
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                &lt;/xsl:when>
+            &lt;/xsl:choose>
+            &lt;xsl:apply-templates/>    
+        &lt;/bat>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="processes">
+        &lt;xsl:apply-templates/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="process">
+        &lt;xsl:apply-templates select=".//metadata"/>
+        &lt;xsl:text>java -classpath &lt;/xsl:text>
+        &lt;xsl:choose>
+            &lt;xsl:when test="$os='win'">
+                &lt;xsl:value-of
+                    select="document('prox-xslt2bat-configuration.xml')/config/calabash/classpath[@os='win']/text()"/>        
+            &lt;/xsl:when>
+            &lt;xsl:when test="$os='osx'">
+                &lt;xsl:value-of
+                    select="document('prox-xslt2bat-configuration.xml')/config/calabash/classpath[@os='osx']/text()"/>
+            &lt;/xsl:when>
+            &lt;xsl:when test="$os='linux'">
+                &lt;xsl:value-of
+                    select="document('prox-xslt2bat-configuration.xml')/config/calabash/classpath[@os='linux']/text()"/>
+            &lt;/xsl:when>
+        &lt;/xsl:choose>
+        
+        &lt;xsl:text> com.xmlcalabash.drivers.Main &lt;/xsl:text>
+        &lt;xsl:apply-templates select="pipelines/pipeline"/>
+        
+        &lt;!-- Debug mode -->
+        &lt;xsl:if test="$debug='yes'">
+            &lt;xsl:choose>
+                &lt;xsl:when test="$os='osx' or $os='linux'">
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                    &lt;xsl:text>read -p "Press [Enter] to continue..."&lt;/xsl:text>
+                &lt;/xsl:when>
+                &lt;xsl:when test="$os='win'">
+                    &lt;xsl:text>&amp;#x0A;&lt;/xsl:text>
+                    &lt;xsl:text>pause&lt;/xsl:text>
+                &lt;/xsl:when>
+            &lt;/xsl:choose>
+        &lt;/xsl:if>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="pipeline">
+        &lt;!--        &lt;xsl:apply-templates select="metadata"/>-->
+        &lt;xsl:apply-templates select="cmdlines/cmdline"/>
+        &lt;xsl:text> &lt;/xsl:text>
+        &lt;xsl:apply-templates select="script"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="script">
+        &lt;!-- @xlink:href refers to package -->
+        &lt;xsl:choose>
+            &lt;xsl:when test="@type='pkg'">
+                &lt;xsl:call-template name="fragment-id"/>
+            &lt;/xsl:when>
+            &lt;xsl:otherwise>
+                &lt;xsl:value-of select="."/>
+            &lt;/xsl:otherwise>
+        &lt;/xsl:choose>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="cmdline">
+        &lt;xsl:apply-templates select="engine-config"/>
+        &lt;xsl:apply-templates select="inputs"/>
+        &lt;xsl:apply-templates select="outputs"/>
+        &lt;xsl:apply-templates select="options"/>
+        &lt;xsl:apply-templates select="params"/>
+    &lt;/xsl:template>
+    
+    &lt;!-- XProc Engine-specific Configuration -->
+    &lt;xsl:template match="enginge-config">
+        &lt;xsl:apply-templates select="config"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="config">
+        &lt;xsl:text>--config&lt;/xsl:text>
+        &lt;xsl:text> &lt;/xsl:text>
+        &lt;xsl:call-template name="fragment-id"/>
+        &lt;xsl:text> &lt;/xsl:text>
+    &lt;/xsl:template>
+    
+    
+    
+    &lt;!-- Inputs -->
+    
+    &lt;xsl:template match="inputs">
+        &lt;xsl:apply-templates select="input"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="input">
+        &lt;xsl:choose>
+            &lt;xsl:when test="matches(port,'map')">
+                &lt;!-- Standard input for map URL -->
+                &lt;xsl:text>--input map=&lt;/xsl:text>
+                &lt;xsl:value-of select="$map-url"/>
+                &lt;xsl:text> &lt;/xsl:text>
+            &lt;/xsl:when>
+            &lt;xsl:otherwise>
+                &lt;xsl:text>--input &lt;/xsl:text>
+                &lt;xsl:value-of select="port"/>
+                &lt;xsl:text>=&lt;/xsl:text>
+                &lt;xsl:apply-templates select="value"/>
+                &lt;xsl:text> &lt;/xsl:text>
+                &lt;xsl:apply-templates select="params"/>        
+            &lt;/xsl:otherwise>
+        &lt;/xsl:choose>
+    &lt;/xsl:template>
+    
+    
+    
+    &lt;!-- Options -->
+    
+    &lt;xsl:template match="options">
+        &lt;xsl:apply-templates select="option"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="option">
+        &lt;xsl:value-of select="name"/>
+        &lt;xsl:text>=&lt;/xsl:text>
+        &lt;xsl:apply-templates select="value"/>
+        &lt;xsl:text> &lt;/xsl:text>
+    &lt;/xsl:template>
+    
+    
+    
+    &lt;!-- Parameters for XSLT -->
+    
+    &lt;xsl:template match="params">
+        &lt;xsl:apply-templates select="param"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="param">
+        &lt;xsl:text>--with-param &lt;/xsl:text>
+        &lt;xsl:value-of select="port"/>
+        &lt;xsl:text>@&lt;/xsl:text>
+        &lt;xsl:value-of select="name"/>
+        &lt;xsl:text>=&lt;/xsl:text>
+        &lt;xsl:apply-templates select="value"/>
+        &lt;xsl:text> &lt;/xsl:text>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="value">
+        &lt;xsl:choose>
+            &lt;xsl:when test="@type='pkg'">
+                &lt;xsl:call-template name="fragment-id"/>
+            &lt;/xsl:when>
+            &lt;xsl:when test="@type='external'">
+                &lt;!-- "ti" previously -->
+                &lt;!-- External value -->
+                &lt;xsl:value-of select="." exclude-result-prefixes="#all"/>
+            &lt;/xsl:when>
+            &lt;xsl:when test="@type='uri'">
+                &lt;!-- Single-resource URI -->
+                &lt;xsl:value-of select="."/>
+            &lt;/xsl:when>
+            &lt;!-- Fallback: single file assumed -->
+            &lt;xsl:otherwise>
+                &lt;xsl:value-of select="."/>
+            &lt;/xsl:otherwise>
+        &lt;/xsl:choose>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template name="fragment-id">
+        &lt;xsl:variable name="href" select="./@xlink:href"/>
+        &lt;xsl:choose>
+            &lt;xsl:when test="contains(@xlink:href,'#')">
+                &lt;xsl:value-of
+                    select="//package[@id=substring-after($href,'#')]/locator[@type='main']/@xlink:href"/>
+            &lt;/xsl:when>
+            &lt;xsl:otherwise>
+                &lt;xsl:value-of select="//package[@id=$href]/locator[@type='main']/@xlink:href"/>
+            &lt;/xsl:otherwise>
+        &lt;/xsl:choose>
+    &lt;/xsl:template>
+    
+    
+    
+    &lt;!-- Metadata Handling -->
+    
+    &lt;xsl:template match="metadata">
+        &lt;xsl:apply-templates/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="title">
+        &lt;xsl:text>echo &lt;/xsl:text>
+        &lt;xsl:value-of select="normalize-space(.)"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="description">
+        &lt;xsl:apply-templates select="p"/>
+    &lt;/xsl:template>
+    
+    &lt;xsl:template match="p">
+        &lt;xsl:text>echo &lt;/xsl:text>
+        &lt;xsl:value-of select="normalize-space(.)"/>
+    &lt;/xsl:template>
+    
+    
+&lt;/xsl:stylesheet>
+</programlisting>
+                <para>This does not process any engine-specific options, nor does it handle
+                        <code>data-input</code>s.</para>
+                <para>Note that the XSLT uses a configuration file that lists the
+                        <code>CLASSPATH</code>s and other OS- and system-specific strings.</para>
+            </section>
+        </section>
+        <section>
+            <title>Child Process and Capturing Output</title>
+            <para>The shell script (or batch file) that results from the conversion is saved and
+                then run using a <code>p:exec</code> step:</para>
+            <programlisting>&lt;!-- Store generated shell script and run it -->
+&lt;p:choose>
+    &lt;!-- Linux -->
+    &lt;p:when test="$os='linux'">
+        &lt;!-- Save shell script -->
+        &lt;p:store method="text" name="save-bat">
+            &lt;p:with-option name="href" select="'out2.sh'"/>
+        &lt;/p:store>
+        &lt;!-- Run -->
+        &lt;p:exec 
+            source-is-xml="false" 
+            result-is-xml="false" 
+            name="run-bat" 
+            cx:depends-on="save-bat">
+            &lt;p:with-option name="command" select="'sh'"/>
+            &lt;p:with-option name="args" select="'./out2.sh'"/>
+            &lt;p:with-option name="cwd" select="substring($tmp-url,6, string-length($tmp-url)-1)"/>
+            &lt;p:log port="errors" href="error.txt"/>
+            &lt;p:input port="source">
+                &lt;p:empty/>
+            &lt;/p:input>
+        &lt;/p:exec>
+        &lt;p:sink/>
+    &lt;/p:when>
+    
+    &lt;!-- OS X -->
+    &lt;p:when test="$os='osx'">
+        ...
+    &lt;/p:when>
+    
+    &lt;!-- Windows -->
+    &lt;p:when test="$os='win'">
+        ...
+    &lt;/p:when>
+&lt;/p:choose></programlisting>
+            <para>And yes, again, there are OS-specific hacks in there. While the system is purely
+                Windows, I much prefer developing on Linux or Mac, and so made the necessary changes
+                for at least a rudimentary OS independence.</para>
+        </section>
+        <section xml:id="section_fc4_2bz_wj">
+            <title>XForms Engine</title>
+            <para>The XForm currently runs on <emphasis>XSLTForms</emphasis>. The decision to use
+                XSLTForms was a practical one; I'm running it locally for ProX user interfaces,
+                without a server, but XSLTForms is just as easy to get to run on the server.</para>
+            <para>There are some mostly minor but noteworthy issues:<itemizedlist>
+                    <listitem>
+                        <para>
+                            <code>xf:code</code> is not implemented so <code>xf:insert</code> must
+                            be used instead. No biggie, but it helps to know about it.</para>
+                    </listitem>
+                    <listitem>
+                        <para>For local use (seems to be the same on Windows, OS X and Linux), the
+                            stylesheet PI pointing out the XSLT not only needs to be relative; the
+                            XSLT needs to be in a descendant directory. This is very strange and it
+                            took me some time before I noticed what was going on.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Local submissions using relative URLs (for example, as described at
+                                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://en.wikibooks.org/wiki/XForms/Submit">https://en.wikibooks.org/wiki/XForms/Submit</link>) fail silently
+                            on a Windows machine. It seems that Microsoft never introduced a
+                            standard way of expressing their relative file paths, but
+                                <code>action="file://myfile.xml"</code> works.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Local submits, even with the right relative URLs, will always enforce
+                            a <emphasis>Save As</emphasis> dialogue. This is annoying but only a
+                            problem locally where the file system is, in fact, at risk.</para>
+                    </listitem>
+                    <listitem>
+                        <para>And, depending on the platform, the Java applet run when submitting
+                            can cause endless grief, from warnings when running it to failing,
+                            either silently or with a bang. OS X is particularly difficult in this
+                            respect.</para>
+                    </listitem>
+                    <listitem>
+                        <para>And lastly, XSLTForms converts XForms to HTML and JavaScript. Running
+                            this locally can cause some unpredictability, depending on the browser.
+                            On Windows, <emphasis>Internet Explorer</emphasis> can frequently refuse
+                            to run code that works without a hitch in <emphasis>Firefox</emphasis>
+                            and <emphasis>Safari</emphasis>. On the other hand, on that same Windows
+                            machine, <emphasis>Safari</emphasis> then quit running XSLTForms
+                            altogether, following a Java update.</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>Run from a server, XSLTForms works like a charm.</para>
+        </section>
+        <section xml:id="section_xs1_jcz_wj">
+            <title>XProc Engine</title>
+            <para>Currently, I'm using Calabash (<xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="id-xmlcalabash"/>) to run the pipelines configured with ProX. This is
+                unlikely to change any time soon for the system being implemented now; there aren't
+                that many viable alternatives that aren't part of a competitor's product. ProX
+                started out as a reflection of the Calabash way of doing things.</para>
+            <para>There are other systems, though, where another engine might better match the
+                system's requirements. <emphasis>eXist</emphasis>, for example, includes
+                    <emphasis>xprocxq</emphasis> (<xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="id-xprocxq"/>), an XQuery-based XProc engine that is configured using
+                an XML-based set of parameters. Converting a ProX instance to the xprocxq format
+                should be uncomplicated but the engine's current state in eXist makes it difficult
+                to test. A new version for <emphasis>MarkLogic</emphasis> was announced recently,
+                and presented (<xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="id-jimf-xmllondon"/>) at <emphasis>XML London</emphasis> in June
+                2013.</para>
+        </section>
+    </section>
+    <section>
+        <title>End Notes</title>
+        <section>
+            <title>What The Future Holds</title>
+            <para>ProX is still a work in progress, even though it's now running locally and on a
+                pre-release system. Here are some of my future plans:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Add (and expand?) metadata where needed. The main structures
+                            (<code>process</code>, <code>pipeline</code>, <code>cmdline</code>)
+                        include metadata used to generate help for these sections, but just as
+                        useful would be to add it to all user-configurable structures. Stylesheet
+                        parameters, for one, would greatly benefit from help texts, but also from
+                        better GUI display names (see <xref
+                            xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-param-config"
+                        />).</para>
+                </listitem>
+                <listitem>
+                    <para>GUI localisation. XForms is not easily modularised in reusable components
+                        (it's not, at all), but it would be useful to move any GUI labels and help
+                        texts to a file that can be localised.</para>
+                </listitem>
+                <listitem>
+                    <para>A ProX implementation for eXist. XProc is not currently well supported in
+                        eXist itself. <emphasis>xprocxq</emphasis> is more or less broken in it, as
+                        is the <emphasis>Calabash</emphasis> module, but it is perfectly feasible to
+                        run XProc pipelines outside eXist itself using James Sulak's XProc extension
+                        library (<xref xmlns:xlink="http://www.w3.org/1999/xlink" linkend="id-sulak"
+                        />, <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                            linkend="id-xmlprague-2013-existential"/>).</para>
+                </listitem>
+                <listitem>
+                    <para>Various XForms additions and fixes, specifically a standardised XForm
+                        preprocessing step in the wrapper script that might be used to handle a
+                        modularised XForms GUI.</para>
+                </listitem>
+                <listitem>
+                    <para>To lessen the dependency on the resource map XML: Resource retrieval in
+                        the system based on a known URN (something like <code>getUrl(Urn)</code>).
+                        Also, target URL generation and better handling of the temporary folder in
+                        the system.</para>
+                </listitem>
+                <listitem>
+                    <para>Prepare and release an open source version of the ProX package. A few of
+                        the scripts in ProX are system-specific, but it should be straight-forward
+                        to do a generic version.</para>
+                </listitem>
+            </itemizedlist>
+        </section>
+        <section xml:id="section_qsd_bbh_wj">
+            <title>Last But Not Least</title>
+            <para>
+                <emphasis>Huge</emphasis> thanks must go to Mark Lawson, who not only pointed out
+                that <code>xf:copy</code> is currently not supported by
+                    <emphasis>XSLTForms</emphasis>, but also wrote the XForm that is the basis for
+                the ProX GUI (see <xref xmlns:xlink="http://www.w3.org/1999/xlink"
+                    linkend="section_rvp_fr5_wj"/>). That's another way of saying that he provided
+                all of the basic XForms logic and I only had to add to it.</para>
+            <para>Thanks also to Norman Walsh, without whom I certainly wouldn't be writing a paper
+                involving XProc, to Jim Fuller, who has provided me with valuable XProc hints and
+                tips on numerous occasions, and to my friend Henrik Mårtensson who patiently helped
+                me get ProX to run on my Mac.</para>
+            <para>Thanks must also go to the Balisage program committee and their brilliant blurb.
+                If you read this, the blurb is probably why.</para>
+            <para>Finally, any errors and omissions on these pages should be attributed to me, and
+                me only. You can lead a horse to the water but you can't make it drink.</para>
+        </section>
+    </section>
+    <bibliography>
+        <title>Bibliography</title>
+        <bibliomixed xml:id="id-balVol08-Nordstrom01">Using XML to Implement XML, Ari Nordström
+                <link>http://www.balisage.net/Proceedings/vol8/html/Nordstrom01/BalisageVol8-Nordstrom01.html</link></bibliomixed>
+        <bibliomixed xml:id="id-xproc-spec">XProc: An XML Pipeline Language,
+                Recommendation<link>http://www.w3.org/TR/xproc/</link></bibliomixed>
+        <bibliomixed xml:id="id-xmlcalabash">XML
+            Calabash<link>http://xmlcalabash.com/</link></bibliomixed>
+        <bibliomixed xml:id="id-calabash">XML Calabash Reference, Norman Walsh
+                <link>http://xmlcalabash.com/docs/reference/</link></bibliomixed>
+        <bibliomixed xml:id="id-xprocxq">xprocxq in eXist, James Fuller. Documentation currently
+            missing at <link>http://exist-db.org/exist/apps/doc/xproc/xproc.xml</link></bibliomixed>
+        <bibliomixed xml:id="id-freemind-xsd">FreeMind XML
+                format<link>http://freemind.cvs.sourceforge.net/viewvc/freemind/freemind/freemind.xsd?revision=1.2&amp;view=markup</link></bibliomixed>
+        <bibliomixed xml:id="id-xforms-spec">XForms 1.1
+                Recommendation<link>http://www.w3.org/TR/xforms/</link></bibliomixed>
+        <bibliomixed xml:id="id-mvc-xforms-eric-vdl">When MVC becomes a burden for XForms, Eric van
+            der Vlist
+                <link>http://eric.van-der-vlist.com/blog/2013/06/17/when-mvc-becomes-a-burden-for-xforms-xml-london-2013/</link></bibliomixed>
+        <bibliomixed xml:id="id-kurt-cagle-xproc">Re: Immediate Market Needs for
+                XProc<link>http://lists.w3.org/Archives/Public/xproc-dev/2009May/0030.html</link></bibliomixed>
+        <bibliomixed xml:id="id-wait-for-user">Wait for User Input (xproc-dev
+                thread)<link>http://lists.w3.org/Archives/Public/xproc-dev/2013May/0008.html</link></bibliomixed>
+        <bibliomixed xml:id="id-jimf-xmllondon">Architecture of xproc.xq an XProc
+                processor<link>http://es.slideshare.net/jimfuller2009/xml-london-2013-architecture-of-xprocxq-an-xproc-processor</link></bibliomixed>
+        <bibliomixed xml:id="id-sulak">eXist XProc Extension
+                Library<link>https://github.com/jsulak/eXist-XProc-Library</link></bibliomixed>
+        <bibliomixed xml:id="id-xmlprague-2013-existential">eXistential Issues in Farming, XML Prague
+                2013<link>http://archive.xmlprague.cz/2013/files/xmlprague-2013-proceedings.pdf</link></bibliomixed>
+    </bibliography>
+</article>
