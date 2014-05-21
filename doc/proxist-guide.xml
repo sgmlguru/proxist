@@ -1117,6 +1117,7 @@
         <title>Processes Schema Reference</title>
         <para>This section contains an element reference for the <filename>processes</filename>
             Relax NG schema.</para>
+        <!--Needs content models, attribute list descriptions-->
         <section xml:id="section_xls_gz1_24">
             <title>cmdline</title>
             <para><tag>cmdline</tag> describes a single set of allowed configurable options for a
@@ -1257,6 +1258,48 @@
                 help text, a <tag>param</tag> element lists the parameter port used by the pipeline
                 (in a <tag>port</tag> element), the parameter's name (in a <tag>name</tag> element)
                 and the parameter's allowed value or values (in<tag>value</tag> elements).</para>
+            <section xml:id="section_atx_rch_24">
+                <title>Attributes</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>choice</term>
+                        <listitem>
+                            <para>Indicates whether or not the parameter is
+                                user-configurable.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>ctype</term>
+                        <listitem>
+                            <para>Denotes the type of XSLT parameter and used to create the
+                                appropriate kind of presentation in the ProX user interface (allowed
+                                values are <quote>boolean</quote>, <quote>list</quote>,
+                                    <quote>list1</quote>, <quote>string</quote>,
+                                    <quote>decimal</quote> or <quote>date</quote>, approximately
+                                matching XForms component types).</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>group</term>
+                        <listitem>
+                            <para>
+                                <tag>@group</tag> is an <code>IDREF</code> to a related parameter
+                                and indicates a dependency to that parameter. For example, a
+                                parameter may be used to set the table of contents depth, but it is
+                                useless if another parameter has turned off the TOC generation. The
+                                first parameter needs to include a <code>group</code>
+                                <code>IDREF</code> to the second so only relevant options are made
+                                available when configuring a ProX blueprint. </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>req</term>
+                        <listitem>
+                            <para>Indicates if the parameter is required.</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </section>
         </section>
         <section xml:id="section_ush_qjb_24">
             <title>params</title>
@@ -1339,6 +1382,57 @@
                     <quote>external</quote>, for example, identifies a runtime value while
                     <quote>pkg</quote> identifies a package reference.</para>
             <para>TBA mimetype, input-type, output-type attributes</para>
+            <section xml:id="section_u34_gtg_24">
+                <title>Attributes</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>input-type</term>
+                        <listitem>
+                            <para>Identifies the type of input XML, when <tag>value</tag> is used by
+                                an <tag>input</tag> element to identify input XML to the pipeline.
+                                    <quote>doc-root</quote> implies a modularised XML document root
+                                file.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>mimetype</term>
+                        <listitem>
+                            <para>Identifies the MIME type of an in- or output value, required for
+                                various pre- and post-processing tasks such as correctly naming a
+                                resulting output file.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>output-type</term>
+                        <listitem>
+                            <para>Identifies the type of output; <quote>primary</quote> denotes a
+                                primary pipeline result, such as a PDF resulting from an XSL-FO
+                                conversion, while <quote>secondary</quote> denotes an auxiliary
+                                result such as a log file.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>type</term>
+                        <listitem>
+                            <para>Identifies the processing type of value.</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </section>
         </section>
+    </section>
+    <section xml:id="section_mcz_1xg_24">
+        <title>Common Attributes</title>
+        <variablelist>
+            <varlistentry>
+                <term>id</term>
+                <listitem>
+                    <para>Uniquely identifies an element. When used to identify <tag>value</tag>s,
+                        the <tag>id</tag> value should correspond with a resource in the resource
+                        map file with a matching <tag>prox-id</tag> value. In this way, the resource
+                        map can be used to look up runtime values.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
     </section>
 </article>
