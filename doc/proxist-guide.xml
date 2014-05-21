@@ -139,7 +139,7 @@
             of these links also identifies any entry points to the XSLT package.</para>
         <para>And so on. The ProX XML is a complete list of <emphasis>everything</emphasis> the
             pipeline is allowed to do in the system.</para>
-        <para>But ProX takes things fiurther than that. The <tag>pipeline</tag>, in ProX speak, is
+        <para>But ProX takes things fiurther than that. The <tag>pipeline</tag>, in ProX-speak, is
             part of a <tag>process</tag> that may include other <tag>pipeline</tag>s. For example,
             you might have a <quote>print publishing</quote>
             <tag>process</tag> that includes pipelines for PDF output, Word output, WordPerfect
@@ -1114,7 +1114,7 @@
             wrapper-pipeline...</para>
     </section>
     <section xml:id="section_v5w_fy1_24">
-        <title>Processes Schema Reference</title>
+        <title>ProX Schema Reference</title>
         <para>This section contains an element reference for the <filename>processes</filename>
             Relax NG schema.</para>
         <!--Needs content models, attribute list descriptions-->
@@ -1127,6 +1127,11 @@
             <title>cmdlines</title>
             <para><tag>cmdlines</tag> is a wrapper element grouping all allowed command lines
                     (<tag>cmdline</tag> elements) for a specific pipeline.</para>
+            <note>
+                <para>Rather than defining user-configurable XProc alternatives inside a
+                        <tag>cmdline</tag>, for example, defining the selectable input stylesheets,
+                    you should define such occurrences in separate command lines altogether.</para>
+            </note>
         </section>
         <section xml:id="section_dmc_25b_24">
             <title>config</title>
