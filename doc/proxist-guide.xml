@@ -6,7 +6,7 @@
     <info>
         <title>ProXist</title>
         <author>
-            <orgname/>
+            <personname><firstname>Ari</firstname><surname>Nordström</surname></personname>
             <address>
                 <city>City</city>
                 <street>Street</street>
@@ -50,7 +50,8 @@
                         containing a Relax NG schema, XProc pipelines and XSLT stylesheets. COSML is
                         simply a schema, RelaX NG these days but originally a DTD that was and is my
                         private general-purpose XML for documentation purposes<footnote>
-                            <para>Except, obviously, this document.</para>
+                            <para>Except, obviously, this document. I should probably do a ProXist
+                                version for DocBook.</para>
                         </footnote>. The XProc and XSLT are for doing various things with COSML
                         documents.</para>
                 </listitem>
@@ -58,6 +59,14 @@
         </section>
         <section xml:id="section_mlk_nj3_2n">
             <title>Installation</title>
+            <note>
+                <para>As I write this (May, 2014), the XProc support in eXist is somewhat confusing.
+                    ProXist requires Jim Fuller's XML Calabash module with his recent updates, and a
+                    Calabash version with bug fixes for its URI handling problems in bindings. There
+                    is a new Calabash module available, however, installable via the Package
+                    Manager, that seems to support most if not all of the features required by
+                    ProXist, but right now, ProXist does not support it.</para>
+            </note>
             <procedure>
                 <para>To get the basic ProXist demo running, follow these steps:</para>
                 <step>
@@ -65,8 +74,9 @@
                 </step>
                 <step>
                     <para>Configure eXist with whatever packages you need, such as a PDF rendering
-                        engine if you require something else than FOP. Instructions at
-                            <uri>Wikibooks - Wolfgang - TBA</uri>.</para>
+                        engine if you require something else than FOP. See <xref
+                            xlink:href="proxist-guide.xml#id-xq-exist-xslfo"/>.
+                        <!--Instructions at <uri>Wikibooks - Wolfgang - TBA</uri>-->.</para>
                 </step>
                 <step>
                     <para>Get the modified Calabash JAR at <uri>XXX</uri> and replace the standard
@@ -1386,7 +1396,6 @@
                 ennumerated list of <tag>type</tag> attribute values. The attribute value
                     <quote>external</quote>, for example, identifies a runtime value while
                     <quote>pkg</quote> identifies a package reference.</para>
-            <para>TBA mimetype, input-type, output-type attributes</para>
             <section xml:id="section_u34_gtg_24">
                 <title>Attributes</title>
                 <variablelist>
@@ -1440,4 +1449,25 @@
             </varlistentry>
         </variablelist>
     </section>
+    <bibliography>
+        <title>Further Reading</title>
+        <bibliomixed xml:id="id-balVol08-Nordstrom01">Using XML to Implement XML, Ari Nordström
+                <bibliosource>http://www.balisage.net/Proceedings/vol8/html/Nordstrom01/BalisageVol8-Nordstrom01.html</bibliosource>
+        </bibliomixed>
+        <bibliomixed xml:id="id-bal2013-prox">ProX: XML for interfacing with XML for processing XML
+            (and an XForm to go with it)
+                <bibliosource>http://www.balisage.net/Proceedings/vol11/html/Nordstrom02/BalisageVol11-Nordstrom02.html</bibliosource>
+        </bibliomixed>
+        <bibliomixed xml:id="id-xproc-spec">XProc: An XML Pipeline Language, Recommendation
+                <bibliosource>http://www.w3.org/TR/xproc/</bibliosource>
+        </bibliomixed>
+        <bibliomixed xml:id="id-xmlcalabash">XML Calabash
+                <bibliosource>http://xmlcalabash.com/</bibliosource>
+        </bibliomixed>
+        <bibliomixed xml:id="id-bibl-proxist-github">ProX on Github
+                <bibliosource>https://github.com/sgmlguru</bibliosource>
+        </bibliomixed>
+        <bibliomixed xml:id="id-xq-exist-xslfo">Generating PDF from XSL-FO Files
+                <bibliosource>http://en.wikibooks.org/wiki/XQuery/Generating_PDF_from_XSL-FO_files</bibliosource></bibliomixed>
+    </bibliography>
 </article>

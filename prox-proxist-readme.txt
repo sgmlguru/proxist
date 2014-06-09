@@ -36,3 +36,10 @@ TBA eXist installation
 
 * <option> should probably include <metadata>, as should the
   Calabash config elements.
+
+* ProXist requires Jim Fuller's XML Calbash eXist module, that in
+  turn requires a calabash.jar that includes fixes for URI
+  handling, also by Jim. Neither one is in active development,
+  but a Calabash module by Dmitriy Shabanov is, and seems at a
+  quick glance to be more feature-complete. ProXist, therefore,
+  probably needs to be rewritten for that module.
