@@ -163,7 +163,7 @@
                 <title>Basic ProX Structure</title>
                 <mediaobject>
                     <imageobject>
-                        <imagedata fileref="images/processes-RNC.png"/>
+                        <imagedata fileref="images/processes-RNC.png" width="400pt"/>
                     </imageobject>
                 </mediaobject>
             </figure></para>
@@ -182,7 +182,7 @@
                 <title>The ProXist GUI</title>
                 <mediaobject>
                     <imageobject>
-                        <imagedata fileref="images/chrome-proxist-app.png"/>
+                        <imagedata fileref="images/chrome-proxist-app.png" width="400pt"/>
                     </imageobject>
                 </mediaobject>
             </figure></para>
@@ -359,7 +359,7 @@
                     <title>The <tag>process</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012805.jpg"/>
+                            <imagedata fileref="images/Bal2013nord-2-012805.jpg" width="400pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
@@ -375,7 +375,7 @@
                     <title>The <tag>pipeline</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012806.jpg"/>
+                            <imagedata fileref="images/Bal2013nord-2-012806.jpg" width="400pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
@@ -390,7 +390,7 @@
                     <title>The <tag>cmdline</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012807.jpg"/>
+                            <imagedata fileref="images/Bal2013nord-2-012807.jpg" width="400pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
@@ -398,7 +398,7 @@
                     <title>The <tag>input</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012808.jpg"/>
+                            <imagedata fileref="images/Bal2013nord-2-012808.jpg" width="400pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
@@ -440,7 +440,7 @@
                     <title>The <tag>package</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012809.jpg"/>
+                            <imagedata fileref="images/Bal2013nord-2-012809.jpg" width="400pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
@@ -499,11 +499,14 @@
                 from the <tag>script</tag> element. The <tag>script</tag> element includes link to
                 the package in <tag>xlink:href</tag>:</para>
             <programlisting>&lt;pipeline id="id-pipeline-pdf-1">
-    &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-1">
-        &lt;title id="title-2013-4-9-16-53-8-39562387-1">Publish PDF&lt;/title>
-        &lt;description id="description-2013-4-9-16-53-8-39562387-1">
-            &lt;p id="p-2013-4-9-16-53-8-39562387-1">Normalizes, validates and 
-                                                  converts a COSML document to PDF&lt;/p>
+    &lt;metadata 
+        id="metadata-2013-4-9-16-53-8-39562387-1">
+        &lt;title 
+            id="title-2013-4-9-16-53-8-39562387-1">Publish PDF&lt;/title>
+        &lt;description 
+            id="description-2013-4-9-16-53-8-39562387-1">
+            &lt;p id="p-2013-4-9-16-53-8-39562387-1">Normalizes, 
+                validates and  converts a COSML document to PDF&lt;/p>
         &lt;/description>
     &lt;/metadata>
     &lt;script 
@@ -511,7 +514,7 @@
         id="script-2013-4-9-16-53-8-39562387-" 
         xlink:href="urn:x-cassis:r1:cos:00002712:sv-SE:0.1#id-xproc-pdf" 
         xlink:title="XProc Pipeline for Normalize, Validate and PDF Normalizes, 
-                     validates and publishes in PDF a COSML document "/>
+        validates and publishes in PDF a COSML document "/>
     &lt;cmdlines id="cmdlines-2013-4-9-16-53-8-39562387-">
         
         ...
@@ -523,14 +526,23 @@
             <para>The package that is referenced may be elsewhere in the same physical ProX
                 blueprint or in a separate module:</para>
             <programlisting>&lt;package id="id-xproc-pdf">
-    &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-4">
-        &lt;title id="title-2013-4-9-16-53-8-39562387-4">XProc Pipeline for Normalize, Validate and PDF&lt;/title>
-        &lt;description id="description-2013-4-9-16-53-8-39562387-4">
-            &lt;p id="p-2013-4-9-16-53-8-39562387-4">Normalizes, validates and publishes in PDF a COSML document&lt;/p>
+    &lt;metadata 
+        id="metadata-2013-4-9-16-53-8-39562387-4">
+        &lt;title 
+            id="title-2013-4-9-16-53-8-39562387-4">XProc 
+            Pipeline for Normalize, Validate and PDF&lt;/title>
+        &lt;description 
+            id="description-2013-4-9-16-53-8-39562387-4">
+            &lt;p id="p-2013-4-9-16-53-8-39562387-4">Normalizes, 
+                validates and publishes in PDF 
+                a COSML document&lt;/p>
         &lt;/description>
     &lt;/metadata>
     &lt;!-- publish-cosml-pdf.xpl -->
-    &lt;locator type="main" xlink:href="urn:x-cassis:r1:cos:00002715:sv-SE:0.1" id="locator-2013-4-10-10-32-24-12830403-"/>
+    &lt;locator 
+        type="main" 
+        xlink:href="urn:x-cassis:r1:cos:00002715:sv-SE:0.1" 
+        id="locator-2013-4-10-10-32-24-12830403-"/>
 &lt;/package></programlisting>
             <para>Note the <tag>package</tag> element's <tag>id</tag> attribute value.</para>
         </section>
@@ -550,92 +562,141 @@
                 package, never to external resources.</para>
             <para>Here's a functionally complete package for an XSL-FO package:</para>
             <programlisting>&lt;package id="id-xslfo-cosml">
-    &lt;metadata id="metadata-2013-4-9-16-53-8-39562387-5">
-        &lt;title id="title-2013-4-9-16-53-8-39562387-5">XSL-FO Package for COSML PDF&lt;/title>
-        &lt;description id="description-2013-4-9-16-53-8-39562387-5">
-            &lt;p id="p-2013-4-9-16-53-8-39562387-5">Converts COSML documents to XSL-FO format for COS
+    &lt;metadata 
+        id="metadata-2013-4-9-16-53-8-39562387-5">
+        &lt;title 
+            id="title-2013-4-9-16-53-8-39562387-5">XSL-FO 
+            Package for COSML PDF&lt;/title>
+        &lt;description 
+            id="description-2013-4-9-16-53-8-39562387-5">
+            &lt;p id="p-2013-4-9-16-53-8-39562387-5">Converts 
+                COSML documents to XSL-FO format for COS
                 PDF layout&lt;/p>
         &lt;/description>
     &lt;/metadata>
-
+    
     &lt;!-- Stylesheet parameters -->
-    &lt;params id="params-2013-4-9-16-53-8-39562387-1">
+    &lt;params 
+        id="params-2013-4-9-16-53-8-39562387-1">
         &lt;!-- Index generation -->
-        &lt;param id="param-2013-4-9-16-53-8-39562387-3">
-            &lt;port id="port-2013-4-9-16-53-8-39562387-9">xslt-params&lt;/port>
-            &lt;name id="name-2013-4-9-16-53-8-39562387-5">generate.index&lt;/name>
-            &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-11">0&lt;/value>
+        &lt;param 
+            id="param-2013-4-9-16-53-8-39562387-3">
+            &lt;port 
+                id="port-2013-4-9-16-53-8-39562387-9">xslt-params&lt;/port>
+            &lt;name 
+                id="name-2013-4-9-16-53-8-39562387-5">generate.index&lt;/name>
+            &lt;value 
+                type="string" 
+                id="value-2013-4-9-16-53-8-39562387-11">0&lt;/value>
         &lt;/param>
         &lt;!-- XEP Extensions -->
-        &lt;param id="param-2013-4-9-16-53-8-39562387-4">
-            &lt;port id="port-2013-4-9-16-53-8-39562387-10">xslt-params&lt;/port>
-            &lt;name id="name-2013-4-9-16-53-8-39562387-6">xep.extensions&lt;/name>
-            &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-12">0&lt;/value>
+        &lt;param 
+            id="param-2013-4-9-16-53-8-39562387-4">
+            &lt;port 
+                id="port-2013-4-9-16-53-8-39562387-10">xslt-params&lt;/port>
+            &lt;name 
+                id="name-2013-4-9-16-53-8-39562387-6">xep.extensions&lt;/name>
+            &lt;value 
+                type="string" 
+                id="value-2013-4-9-16-53-8-39562387-12">0&lt;/value>
         &lt;/param>
         &lt;!-- XSL-FO Bookmark Generation -->
-        &lt;param id="param-2013-4-9-16-53-8-39562387-5">
-            &lt;port id="port-2013-4-9-16-53-8-39562387-11">xslt-params&lt;/port>
-            &lt;name id="name-2013-4-9-16-53-8-39562387-7">xslfo.bookmarks&lt;/name>
-            &lt;value type="string" id="value-2013-4-9-16-53-8-39562387-13">1&lt;/value>
+        &lt;param 
+            id="param-2013-4-9-16-53-8-39562387-5">
+            &lt;port 
+                id="port-2013-4-9-16-53-8-39562387-11">xslt-params&lt;/port>
+            &lt;name 
+                id="name-2013-4-9-16-53-8-39562387-7">xslfo.bookmarks&lt;/name>
+            &lt;value 
+                type="string" 
+                id="value-2013-4-9-16-53-8-39562387-13">1&lt;/value>
         &lt;/param>
     &lt;/params>
-
+    
     &lt;!-- XSLT -->
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000232:sv-SE:0.6" 
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000232:sv-SE:0.6" 
         xlink:title="COS Internal XSLT"
         type="main" id="locator-2013-4-9-16-53-8-39562387-1"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000074:sv-SE:0.11"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000074:sv-SE:0.11"
         id="locator-2013-4-9-16-53-8-39562387-2"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000059:sv-SE:0.2"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000059:sv-SE:0.2"
         id="locator-2013-4-9-16-53-8-39562387-3"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000070:sv-SE:0.15"
-        id="locator-2013-4-9-16-53-8-39562387-4" xlink:title="Layout"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000876:sv-SE:0.2"
-        id="locator-2013-4-9-16-53-8-39562387-5" xlink:title="bookmarks.xsl"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000075:sv-SE:0.17"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000070:sv-SE:0.15"
+        id="locator-2013-4-9-16-53-8-39562387-4" 
+        xlink:title="Layout"/>
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000876:sv-SE:0.2"
+        id="locator-2013-4-9-16-53-8-39562387-5" 
+        xlink:title="bookmarks.xsl"/>
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000075:sv-SE:0.17"
         id="locator-2013-4-9-16-53-8-39562387-6"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000072:sv-SE:0.10"
-        id="locator-2013-4-9-16-53-8-39562387-7" xlink:title="meta-data.xsl"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000078:sv-SE:0.9"
-        id="locator-2013-4-9-16-53-8-39562387-8" xlink:title="TOC"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000062:sv-SE:0.9"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000072:sv-SE:0.10"
+        id="locator-2013-4-9-16-53-8-39562387-7" 
+        xlink:title="meta-data.xsl"/>
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000078:sv-SE:0.9"
+        id="locator-2013-4-9-16-53-8-39562387-8" 
+        xlink:title="TOC"/>
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000062:sv-SE:0.9"
         id="locator-2013-4-9-16-53-8-39562387-9"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000233:sv-SE:0.8"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000233:sv-SE:0.8"
         id="locator-2013-4-9-16-53-8-39562387-10"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000061:sv-SE:0.29"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000061:sv-SE:0.29"
         id="locator-2013-4-9-16-53-8-39562387-11"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000065:sv-SE:0.6"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000065:sv-SE:0.6"
         id="locator-2013-4-9-16-53-8-39562387-12"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000071:sv-SE:0.6"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000071:sv-SE:0.6"
         id="locator-2013-4-9-16-53-8-39562387-13"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000077:sv-SE:0.6"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000077:sv-SE:0.6"
         id="locator-2013-4-9-16-53-8-39562387-14"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000079:sv-SE:0.7"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000079:sv-SE:0.7"
         id="locator-2013-4-9-16-53-8-39562387-15"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000060:sv-SE:0.7"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000060:sv-SE:0.7"
         id="locator-2013-4-9-16-53-8-39562387-16"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000064:sv-SE:0.8"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000064:sv-SE:0.8"
         id="locator-2013-4-9-16-53-8-39562387-17"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000066:sv-SE:0.2"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000066:sv-SE:0.2"
         id="locator-2013-4-9-16-53-8-39562387-18"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000069:sv-SE:0.3"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000069:sv-SE:0.3"
         id="locator-2013-4-9-16-53-8-39562387-19"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000063:sv-SE:0.3"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000063:sv-SE:0.3"
         id="locator-2013-4-9-16-53-8-39562387-20"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000785:sv-SE:0.6"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000785:sv-SE:0.6"
         id="locator-2013-4-9-16-53-8-39562387-21"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000076:sv-SE:0.10" 
-        type="aux" xlink:title="Strings"
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000076:sv-SE:0.10" 
+        type="aux" 
+        xlink:title="Strings"
         id="locator-2013-4-9-16-53-8-39562387-22"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000230:sv-SE:0.1" 
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000230:sv-SE:0.1" 
         type="aux"
         id="locator-2013-4-9-16-53-8-39562387-23"/>
-    &lt;locator xlink:href="urn:x-cassis:r1:cos:00000426:sv-SE:0.1" 
+    &lt;locator 
+        xlink:href="urn:x-cassis:r1:cos:00000426:sv-SE:0.1" 
         type="aux"
         id="locator-2013-4-9-16-53-8-39562387-24" 
         xlink:title="tux.jpg"/>
-&lt;/package>
-</programlisting>
+&lt;/package></programlisting>
             <para>As with most other examples, the references are URNs, but obviously, they don't
                 have to be.</para>
             <para>The topmost <tag>locator</tag> element includes a <tag>type</tag> attribute with
@@ -660,15 +721,18 @@
                     module.</para>
             </footnote>. It also lists any resources used by ProX, but these are static and are
             already defined in a <quote>resource map template</quote>.</para>
-        <para>Here's a complete generated example (the one used by the XML Prague ProXist
-            demo):</para>
+        <para>Here's a complete generated example (the one used by the XML Prague ProXist demo)<footnote>
+                <para>$REST = http://localhost:8080/exist/rest</para>
+                <para>$TMP = xmldb:exist:///db/work/tmp</para>
+                <para>$COSML = xmldb:exist:///db/work/system/cosml</para>
+            </footnote>:</para>
         <programlisting>&lt;resource-map>
     &lt;docs>
         &lt;doc>
             &lt;root>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/prague-demo-root.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/prague-demo-root.xml&lt;/url>
                     &lt;type>doc-root&lt;/type>
                     &lt;prox-id>value-2013-4-9-16-53-8-39562387-&lt;/prox-id>
                     &lt;prox-id>value-2013-4-9-16-53-8-39562387-7&lt;/prox-id>
@@ -679,47 +743,47 @@
             &lt;modules>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/section1.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/section1.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/image1.png&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/image1.png&lt;/url>
                     &lt;type>png&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/image2.gif&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/image2.gif&lt;/url>
                     &lt;type>gif&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/section2.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/section2.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/subsection1.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/subsection1.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/subsection2.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/subsection2.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/section3.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/section3.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/image3.png&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/image3.png&lt;/url>
                     &lt;type>png&lt;/type>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn/>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/docs/XMLPrague/subsection3.xml&lt;/url>
+                    &lt;url>$REST/db/work/docs/XMLPrague/subsection3.xml&lt;/url>
                     &lt;type>xml&lt;/type>
                 &lt;/resource>
             &lt;/modules>
@@ -728,61 +792,61 @@
     &lt;targets>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root.pdf&lt;/url>
+            &lt;url>$TMP/prague-demo-root.pdf&lt;/url>
             &lt;type>primary&lt;/type>
             &lt;prox-id>value-2013-4-9-16-53-8-39562387-6&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root-id-normalized-pdf-int.xml&lt;/url>
+            &lt;url>$TMP/prague-demo-root-id-normalized-pdf-int.xml&lt;/url>
             &lt;type>secondary&lt;/type>
             &lt;prox-id>id-normalized-pdf-int&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root.pdf&lt;/url>
+            &lt;url>$TMP/prague-demo-root.pdf&lt;/url>
             &lt;type>primary&lt;/type>
             &lt;prox-id>value-2013-4-9-16-53-8-39562387-10&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root-id-normalized-pdf-formal.xml&lt;/url>
+            &lt;url>$TMP/prague-demo-root-id-normalized-pdf-formal.xml&lt;/url>
             &lt;type>secondary&lt;/type>
             &lt;prox-id>id-normalized-pdf-formal&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root.html&lt;/url>
+            &lt;url>$TMP/prague-demo-root.html&lt;/url>
             &lt;type>primary&lt;/type>
             &lt;prox-id>id-htm-out&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root-id-normalized-html.xml&lt;/url>
+            &lt;url>$TMP/prague-demo-root-id-normalized-html.xml&lt;/url>
             &lt;type>secondary&lt;/type>
             &lt;prox-id>id-normalized-html&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root.html&lt;/url>
+            &lt;url>$TMP/prague-demo-root.html&lt;/url>
             &lt;type>primary&lt;/type>
             &lt;prox-id>id-value-xref-htm&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/files.xml&lt;/url>
+            &lt;url>$TMP/files.xml&lt;/url>
             &lt;type>fixed&lt;/type>
             &lt;prox-id>files&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root.xml&lt;/url>
+            &lt;url>$TMP/prague-demo-root.xml&lt;/url>
             &lt;type>primary&lt;/type>
             &lt;prox-id>id-mm-out&lt;/prox-id>
         &lt;/resource>
         &lt;resource>
             &lt;urn/>
-            &lt;url>xmldb:exist:///db/work/tmp/prague-demo-root-id-normalized-mm.xml&lt;/url>
+            &lt;url>$TMP/prague-demo-root-id-normalized-mm.xml&lt;/url>
             &lt;type>secondary&lt;/type>
             &lt;prox-id>id-normalized-mm&lt;/prox-id>
         &lt;/resource>
@@ -792,7 +856,7 @@
         &lt;blueprints>
             &lt;resource id="id-prox-blueprint">
                 &lt;urn>URN-OF-PROX-BLUEPRINT&lt;/urn>
-                &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xml/prox-blueprint.xml&lt;/url>
+                &lt;url>$REST/db/work/system/prox/xml/prox-blueprint.xml&lt;/url>
                 &lt;type/>
                 &lt;prox-id/>
             &lt;/resource>
@@ -810,13 +874,13 @@
             &lt;/resource>
             &lt;resource id="id-prox-xform-xmldb-instance">
                 &lt;urn>URN-OF-TARGET-PROX-INSTANCE&lt;/urn>
-                &lt;url>xmldb:exist:///db/work/tmp/prox-instance.xml&lt;/url>
+                &lt;url>$TMP/prox-instance.xml&lt;/url>
                 &lt;type/>
                 &lt;prox-id/>
             &lt;/resource>
             &lt;resource id="id-prox-saved-instance">
                 &lt;urn>URN-OF-SAVED-PROX-INSTANCE&lt;/urn>
-                &lt;url>http://localhost:8080/exist/rest/db/work/tmp/prox-instance.xml&lt;/url>
+                &lt;url>$REST/db/work/tmp/prox-instance.xml&lt;/url>
                 &lt;!-- Insert file URI here for local testing -->
                 &lt;type/>
                 &lt;prox-id/>
@@ -831,7 +895,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002715:sv-SE:0.1&lt;/urn>
-                    &lt;url>xmldb:exist:///db/work/system/cosml/xproc/publish-cosml-pdf.xpl&lt;/url>
+                    &lt;url>$COSML/xproc/publish-cosml-pdf.xpl&lt;/url>
                     &lt;prox-id>locator-2013-4-10-10-32-24-12830403-&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -843,122 +907,122 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000232:sv-SE:0.6&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/cos-fo-internal.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/cos-fo-internal.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-1&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000074:sv-SE:0.11&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/param.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/param.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-2&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000059:sv-SE:0.2&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/attribute-set.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/attribute-set.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-3&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000070:sv-SE:0.15&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/layout.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/layout.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-4&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000876:sv-SE:0.2&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/bookmarks.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/bookmarks.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-5&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000075:sv-SE:0.17&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/static-content.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/static-content.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-6&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000072:sv-SE:0.10&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/meta-data.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/meta-data.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-7&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000078:sv-SE:0.9&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/toc.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/toc.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-8&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000062:sv-SE:0.9&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/body.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/body.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-9&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000233:sv-SE:0.8&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/sections.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/sections.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-10&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000061:sv-SE:0.29&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/block.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/block.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-11&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000065:sv-SE:0.6&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/inline.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/inline.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-12&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000071:sv-SE:0.6&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/list.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/list.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-13&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000077:sv-SE:0.6&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/table.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/table.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-14&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000079:sv-SE:0.7&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/xref.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/xref.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-15&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000060:sv-SE:0.7&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/back.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/back.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-16&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000064:sv-SE:0.8&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/index.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/index.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-17&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000066:sv-SE:0.2&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/inset.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/inset.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-18&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000069:sv-SE:0.3&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/l10n.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/l10n.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-19&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000063:sv-SE:0.3&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/extension.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/extension.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-20&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000785:sv-SE:0.6&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/demo.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/demo.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-21&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000076:sv-SE:0.10&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/fo/strings.xml&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/fo/strings.xml&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-22&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000230:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/standard-images/logotyp.jpg&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/standard-images/logotyp.jpg&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-23&lt;/prox-id>
                 &lt;/resource>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000426:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/standard-images/tux.jpg&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/standard-images/tux.jpg&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-24&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -970,7 +1034,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002756:sv-SE:0.2&lt;/urn>
-                    &lt;url>xmldb:exist:///db/work/system/cosml/xproc/publish-cosml-html.xpl&lt;/url>
+                    &lt;url>$COSML/xproc/publish-cosml-html.xpl&lt;/url>
                     &lt;prox-id>id-xhtml-xproc&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -982,7 +1046,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002755:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/cosml2html-ti.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/xslt/cosml2html-ti.xsl&lt;/url>
                     &lt;prox-id>id-xhtml-xslt&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -994,7 +1058,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002757:sv-SE:0.2&lt;/urn>
-                    &lt;url>xmldb:exist:///db/work/system/cosml/xproc/xref-check-cosml.xpl&lt;/url>
+                    &lt;url>$COSML/xproc/xref-check-cosml.xpl&lt;/url>
                     &lt;prox-id>id-xproc-xref&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1006,7 +1070,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002754:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/link-target-check-multifile.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/xslt/link-target-check-multifile.xsl&lt;/url>
                     &lt;prox-id>id-xslt-xref&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1018,7 +1082,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00009099:sv-SE:0.1&lt;/urn>
-                    &lt;url>xmldb:exist:///db/work/system/cosml/xproc/mindmap-cosml-modules.xpl&lt;/url>
+                    &lt;url>$COSML/xproc/mindmap-cosml-modules.xpl&lt;/url>
                     &lt;prox-id>id-xproc-mm&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1030,7 +1094,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00009098:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/links2mindmap.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/xslt/links2mindmap.xsl&lt;/url>
                     &lt;prox-id>id-xslt-mm&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1043,7 +1107,7 @@
             &lt;resources>
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00000073:sv-SE:0.4&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/cosml/xslt/normalize-2.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/cosml/xslt/normalize-2.xsl&lt;/url>
                     &lt;prox-id>locator-2013-4-9-16-53-8-39562387-26&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1070,37 +1134,37 @@
                 &lt;!-- Wrapper Pipeline -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002735:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/proxist-wrapper.xpl&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/proxist-wrapper.xpl&lt;/url>
                     &lt;prox-id>id-wrapper-xpl&lt;/prox-id>
                 &lt;/resource>
                 &lt;!-- ProX Instance Update -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002732:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox-fix.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/xslt/prox-fix.xsl&lt;/url>
                     &lt;prox-id>id-prox-fix&lt;/prox-id>
                 &lt;/resource>
                 &lt;!-- URN2URL for XML Input -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002733:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/urn2url.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/xslt/urn2url.xsl&lt;/url>
                     &lt;prox-id>id-urn2url&lt;/prox-id>
                 &lt;/resource>
                 &lt;!-- ProX Instance Conversion to Shell Script -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002731:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox2shell.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/xslt/prox2shell.xsl&lt;/url>
                     &lt;prox-id>id-prox2shell&lt;/prox-id>
                 &lt;/resource>
                 &lt;!-- ProX Instance Conversion to XQ -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00012731:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xslt/prox2xq.xsl&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/xslt/prox2xq.xsl&lt;/url>
                     &lt;prox-id>id-prox2xq&lt;/prox-id>
                 &lt;/resource>
                 &lt;!-- Engine parameters required by ProX to Shell Script conversion -->
                 &lt;resource>
                     &lt;urn>urn:x-cassis:r1:cos:00002734:sv-SE:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/work/system/prox/xml/prox2shell-config.xml&lt;/url>
+                    &lt;url>$REST/db/work/system/prox/xml/prox2shell-config.xml&lt;/url>
                     &lt;prox-id>id-prox2shell-config&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
@@ -1113,7 +1177,7 @@
                 &lt;!-- XForm for proX Blueprint Handling -->
                 &lt;resource>
                     &lt;urn>urn:prox:xform:0.1&lt;/urn>
-                    &lt;url>http://localhost:8080/exist/rest/db/apps/proxist/select-prox.xhtml&lt;/url>
+                    &lt;url>$REST/db/apps/proxist/select-prox.xhtml&lt;/url>
                     &lt;prox-id>id-loc-xform&lt;/prox-id>
                 &lt;/resource>
             &lt;/resources>
