@@ -7,21 +7,15 @@
         <title>ProXist</title>
         <author>
             <personname><firstname>Ari</firstname><surname>Nordström</surname></personname>
-            <address>
-                <city>City</city>
-                <street>Street</street>
-                <postcode>000000</postcode>
-                <country>Country</country>
-            </address>
             <email>ari.nordstrom@gmail.com</email>
         </author>
     </info>
     <section>
         <title>Intro and Overview</title>
-        <para>This document attempts to document the eXist implementation of ProX. In doing so, it
-            also documents ProX itself. The intention here is that the reasonably XML-savvy
-            implementer can, efter reading through the relevant parts, install and run his or her
-            own ProXist environement.</para>
+        <para>This document attempts to describe the eXist implementation of ProX. In doing so, it
+            also documents ProX itself, as ProX does not have a fancy manual on its own. The
+            intention here is that the reasonably XML-savvy implementer can, efter reading through
+            the relevant parts, install and run his or her own ProXist environement.</para>
         <section xml:id="section_wgq_c33_2n">
             <title>Prereqs</title>
             <itemizedlist>
@@ -60,12 +54,15 @@
         <section xml:id="section_mlk_nj3_2n">
             <title>Installation</title>
             <note>
-                <para>As I write this (May, 2014), the XProc support in eXist is somewhat confusing.
-                    ProXist requires Jim Fuller's XML Calabash module with his recent updates, and a
-                    Calabash version with bug fixes for its URI handling problems in bindings. There
-                    is a new Calabash module available, however, installable via the Package
-                    Manager, that seems to support most if not all of the features required by
-                    ProXist, but right now, ProXist does not support it.</para>
+                <para>As I write this (May, 2014, with updates October 2014), the XProc support in
+                    eXist is somewhat confusing. ProXist requires Jim Fuller's XML Calabash module
+                    with his recent updates, and a Calabash version with bug fixes for its URI
+                    handling problems in bindings. </para>
+                <para>There is a new Calabash module available, written by Dmitriy Shabanov,
+                    installable via the Package Manager, that seems to support most if not all of
+                    the features required by ProXist. Right now, ProXist does not support it,
+                    however, as the documentation was pretty much non-existent during the last round
+                    of ProXist updates. I do plan to support it, however.</para>
             </note>
             <procedure>
                 <para>To get the basic ProXist demo running, follow these steps:</para>
@@ -390,7 +387,7 @@
                     <title>The <tag>cmdline</tag> Element</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="images/Bal2013nord-2-012807.jpg" width="400pt"/>
+                            <imagedata fileref="images/Bal2013nord-2-012807.jpg" width="200pt"/>
                         </imageobject>
                     </mediaobject>
                 </figure></para>
