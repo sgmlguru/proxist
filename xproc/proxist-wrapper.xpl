@@ -142,5 +142,5 @@
         <p:input port="source"/>
     </p:identity>
     
-    <!-- Output used to determine further processing in invoking XQuery (proxist/modules/save.xq) -->
+    <!-- Output used to determine further processing in the invoking XQuery (proxist/modules/save.xq) -->
 </p:declare-step>

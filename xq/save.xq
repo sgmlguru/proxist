@@ -42,6 +42,7 @@ let $overwrite :=
 let $store := xmldb:store($save-data-collection, $file-name, $formdata)
 
 (: Runs wrapper XProc that generates XQ for child process, runs child process XProc :)
+
 (:let $result := xmlcalabash:process("xmldb:exist:///db/work/system/prox/xproc/proxist-wrapper.xpl",
     ("-imap=http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml",
     "-oresult=-"),
@@ -69,15 +70,6 @@ let $out := if ($output='out.pdf')
     then xslfo:render($result, "application/pdf", (), $config)
     else $result
     
-(:let $save :=  if ($output='FO') 
-    then xmldb:store('/db/work/tmp','out.pdf',$out)
-    else if ($output='XHTML')
-        then xmldb:store('/db/work/tmp','out.xhtml',$out)
-            else if ($output='HTML')
-                then xmldb:store('/db/work/tmp','out.htm',$out)
-                    else if ($output='MM')
-                        then xmldb:store('/db/work/tmp','out.mm',$out)
-                        else xmldb:store('/db/work/tmp','out.xml',$out):)
 
 let $save := xmldb:store('/db/work/tmp',$output,$out)
 
@@ -90,7 +82,7 @@ return
                     (:if ($overwrite)
                         then <message>ProX instance updated at {$path-name}. Output is {$output}.</message>
                         else <message>New ProX instance saved to {$path-name}. Output is {$output}.</message>:)
-                        <message>{concat('http://localhost:8080/exist/rest/db/work/tmp','/',$output)}</message>
+                    <message>{concat('http://localhost:8080/exist/rest/db/work/tmp','/',$output)}</message>
                 }
             </save-results>
             )

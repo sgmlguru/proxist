@@ -10,7 +10,10 @@
     <xsl:strip-space elements="*"/>
     <xsl:strip-space elements="cmdline script engine-config inputs options params"/>
     
-    <!-- Requires a ProX instance as input -->
+    <!-- This XSLT converts a ProX instance XML to a child process XQuery.
+         The instance is the result of the ProX XForm after config and save,
+         and invoked by the wrapper XProc script that is part of save.xq. -->
+    
     
     <xsl:param name="map-url"/><!--  select="'http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml'" -->
     
@@ -57,7 +60,9 @@
         <xsl:text>let $result := xproc:process("</xsl:text>
         <xsl:choose>
             <xsl:when test="@type='pkg'">
-                <xsl:call-template name="fragment-id"/>
+                <xsl:call-template name="fragment-id">
+                    <xsl:with-param name="href" select="@xlink:href"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="."/>
@@ -134,7 +139,7 @@
                         <xsl:value-of select="port"/>
                     </xsl:attribute>
                     <xsl:attribute name="value">
-                        <xsl:value-of select="value"/>
+                        <xsl:apply-templates select="value"/>
                     </xsl:attribute>
                 </input>
                 
@@ -184,7 +189,7 @@
                 <xsl:value-of select="port"/>
             </xsl:attribute>
             <xsl:attribute name="value">
-                <xsl:value-of select="value"/>
+                <xsl:apply-templates select="value"/>
             </xsl:attribute>
         </output>
         <xsl:if test="following::input|following::output|following::option|following::param">
@@ -208,7 +213,7 @@
                 <xsl:value-of select="name"/>
             </xsl:attribute>
             <xsl:attribute name="value">
-                <xsl:value-of select="value"/>
+                <xsl:apply-templates select="value"/>
             </xsl:attribute>
         </option>
         
@@ -225,7 +230,10 @@
     <xsl:template match="value">
         <xsl:choose>
             <xsl:when test="@type='pkg'">
-                <xsl:call-template name="fragment-id"/>
+                <xsl:text></xsl:text>
+                <xsl:call-template name="fragment-id">
+                    <xsl:with-param name="href" select="@xlink:href"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="@type='external'">
                 <!-- "ti" previously -->
@@ -244,9 +252,9 @@
     </xsl:template>
     
     <xsl:template name="fragment-id">
-        <xsl:variable name="href" select="./@xlink:href"/>
+        <xsl:param name="href"/>
         <xsl:choose>
-            <xsl:when test="contains(@xlink:href,'#')">
+            <xsl:when test="contains($href,'#')">
                 <xsl:value-of select="//package[@id=substring-after($href,'#')]/locator[@type='main']/@xlink:href"/>
             </xsl:when>
             <xsl:otherwise>

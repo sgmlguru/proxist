@@ -1,5 +1,15 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    exclude-result-prefixes="xs" 
+    version="2.0">
+    
     <xsl:output method="xml" indent="yes"/>
+    
+    
+    <!-- Used by wrapper XProc to replace URNs with URLs in input XML document -->
+    
     
     <!-- Mapping Document -->
     <xsl:param name="map-url"/><!--  select="'http://localhost:8080/exist/rest/db/work/system/common/xml/resource-map.xml'" -->
@@ -58,9 +68,11 @@
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
+    
     <xsl:template match="@*" mode="attr">
         <xsl:attribute name="{name(.)}">
             <xsl:value-of select="."/>
         </xsl:attribute>
     </xsl:template>
+    
 </xsl:stylesheet>
