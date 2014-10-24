@@ -26,8 +26,12 @@
                 </listitem>
                 <listitem>
                     <para>For now, a modified Calabash JAR; this is available for download at the
-                        official ProXist Github site. I expect this to change soon so you can use
-                        the standard Calabash download instead.</para>
+                        official ProXist Github site.</para>
+                    <note>
+                        <para>I'm rewriting ProXist for the new XProc eXist module, which means that
+                            the Calabash version used is the one the module is put together
+                            with.</para>
+                    </note>
                 </listitem>
                 <listitem>
                     <para>The ProXist web app for eXist. This will give you the XQueries, XForm and
@@ -69,6 +73,7 @@
                 <step>
                     <para>Install eXist 2.1 or later. TBA: Calabash module.</para>
                 </step>
+                <!--Install XProc module via Package Manager.-->
                 <step>
                     <para>Configure eXist with whatever packages you need, such as a PDF rendering
                         engine if you require something else than FOP. See <xref
@@ -76,6 +81,7 @@
                         <!--Instructions at <uri>Wikibooks - Wolfgang - TBA</uri>-->.</para>
                 </step>
                 <step>
+                    <!--Remove this when ProXist has been ported.-->
                     <para>Get the modified Calabash JAR at <uri>XXX</uri> and replace the standard
                         JAR in XXX.</para>
                 </step>
@@ -83,19 +89,23 @@
                     <para>Install the ProXist web app.</para>
                 </step>
                 <step>
+                    <!--Not applicable once the update is complete. Both are in apps/proxist.-->
                     <para>Unpack the ProX and COSML packages in XXX and XXX. If you want to place
                         them elsewhere, you need to edit XXX with the new paths.</para>
                 </step>
                 <step>
+                    <!--separate COSML, DocBook, etc packages?-->
                     <para>Unpack the example COSML files in XXX. Again, if you change the path, you
                         need to edit XXX.</para>
                 </step>
                 <step>
+                    <!--Should be handled by the wrapper XQ and ProXist app.-->
                     <para>Create a temporary output collection path. This is where ProXist will
                         place whatever files it creates. For now, give it generous permissions (I
                         use <quote>rwxrwxrwx</quote> but that's because the NSA hates me).</para>
                 </step>
                 <step>
+                    <!--XSLT to generate resourcemap? Automated step?-->
                     <para>Edit <filename>resource-map-template.xml</filename><!--ADD PATH--> for any
                         changes done in the previous steps.</para>
                 </step>
@@ -138,15 +148,22 @@
         <para>ProX, basically, is an XML-based abstraction layer that describes XProc pipelines in a
             system context. Think of it as the Calabash command line expressed as XML, but expanding
             on it to define whatever resource (XProc, XSLT, XQ, XML...) the pipeline uses in that
-            system as packages linked to by the XML. For example, there is a <tag>script</tag>
-            element that will link to a <tag>package</tag> element that contains some metadata plus
-            an element with the actual link to the XProc script. If the pipeline uses an XSLT
-            stylesheet divided into a dozen modules, the command line XML includes a link to that
-            package, again with some metadata and tha list of links to the XSLT modules. One or more
-            of these links also identifies any entry points to the XSLT package.</para>
-        <para>And so on. The ProX XML is a complete list of <emphasis>everything</emphasis> the
-            pipeline is allowed to do in the system.</para>
-        <para>But ProX takes things fiurther than that. The <tag>pipeline</tag>, in ProX-speak, is
+            system as packages linked to by the XML. </para>
+        <para>For example, there is a <tag>script</tag> element that will link to a
+                <tag>package</tag> element that contains some metadata plus an element with the
+            actual link to the XProc script. If the pipeline uses an XSLT stylesheet divided into a
+            dozen modules, the command line XML includes a link to that package, again with some
+            metadata and tha list of links to the XSLT modules. One or more of these links also
+            identifies any entry points to the XSLT package.</para>
+        <para>And so on. The ProX XML for a pipeline is a complete list of
+                <emphasis>everything</emphasis> what that pipeline is allowed to do in the
+            system.</para>
+        <note>
+            <para>This is different from what the pipeline <emphasis>can</emphasis> do. The ProX XML
+                should reflect what the user should have access to, in terms of XProc processes, but
+                will not necessarily include everything.</para>
+        </note>
+        <para>But ProX takes things further than that. The <tag>pipeline</tag>, in ProX-speak, is
             part of a <tag>process</tag> that may include other <tag>pipeline</tag>s. For example,
             you might have a <quote>print publishing</quote>
             <tag>process</tag> that includes pipelines for PDF output, Word output, WordPerfect

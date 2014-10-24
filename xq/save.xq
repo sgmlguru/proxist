@@ -1,5 +1,7 @@
 xquery version "1.0";
 
+import module namespace xproc="http://exist-db.org/xproc";
+
 declare namespace xs="http://www.w3.org/2001/XMLSchema";
 declare namespace xf="http://www.w3.org/2002/xforms";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
@@ -40,11 +42,17 @@ let $overwrite :=
 let $store := xmldb:store($save-data-collection, $file-name, $formdata)
 
 (: Runs wrapper XProc that generates XQ for child process, runs child process XProc :)
-let $result := xmlcalabash:process("xmldb:exist:///db/work/system/prox/xproc/proxist-wrapper.xpl",
+(:let $result := xmlcalabash:process("xmldb:exist:///db/work/system/prox/xproc/proxist-wrapper.xpl",
     ("-imap=http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml",
     "-oresult=-"),
-    ("normalized=xmldb:exist:///db/work/tmp/debug-normalized.xml"))
+    ("normalized=xmldb:exist:///db/work/tmp/debug-normalized.xml")):)
 
+let $wrapper-pipeline := "xmldb:exist:///db/work/system/prox/xproc/proxist-wrapper.xpl"
+let $wrapper-opts := (<input type="xml" port="map" url="http://localhost:8080/exist/rest/db/work/tmp/resource-map.xml"/>,
+<option name="normalized" value="xmldb:exist:///db/work/tmp/debug-normalized.xml"/>
+)
+
+let $result := xproc:process($wrapper-pipeline,$wrapper-opts)
 
 (: Analyse result from child process :)
 let $output := if (name($result/*)='fo:root')
